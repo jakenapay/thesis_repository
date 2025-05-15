@@ -1,0 +1,33 @@
+*, body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.nav-links {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.nav {
+    background: linear-gradient(rgba(168, 0, 0, 0.897), rgba(168, 0, 0, 0.897)), url('/assets/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-red {
+    background-color: rgba(168, 0, 0, 0.897);
+}
+
+.text-truncate-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;       /* or inline-block */
+    max-width: 100%;      /* or set a specific width like 200px */
+}

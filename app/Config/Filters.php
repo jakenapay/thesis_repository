@@ -34,6 +34,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'logged_in'     => \App\Filters\LoggedIn::class,
     ];
 
     /**
@@ -103,5 +104,7 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'logged_in' => ['before' => ['thesis/*', 'profile/*', 'home/', 'account/']],
+    ];
 }

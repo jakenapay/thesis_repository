@@ -1,4 +1,6 @@
-*, body, html {
+*,
+body,
+html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -28,6 +30,27 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;       /* or inline-block */
-    max-width: 100%;      /* or set a specific width like 200px */
+    display: block;
+    /* or inline-block */
+    max-width: 100%;
+    /* or set a specific width like 200px */
+}
+
+.transparent-fake {
+    mix-blend-mode: lighten;
+}
+
+.accordion-button:not(.collapsed) {
+    color: #ffffff;
+    /* white text */
+    background-color: rgba(168, 0, 0, 0.897);
+    /* reddish background, adjust to your liking */
+    box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 rgba(0, 0, 0, 0.125);
+}
+
+.btn.bg-red.no-hover-white:hover,
+.btn.bg-red.no-hover-white:focus {
+    background-color: #c0392b !important;
+    /* keep your red shade */
+    color: #fff !important;
 }

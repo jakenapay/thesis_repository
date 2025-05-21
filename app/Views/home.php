@@ -4,19 +4,39 @@
     <div class="row">
         <!-- Left column: User profile -->
         <div class="col-md-8">
-            <div class="card mb-3" style="max-width: 100%;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="<?= base_url('/assets/images/default-avatar.jpg'); ?>" class="img-fluid rounded-start" alt="User Profile">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="row d-flex align-items-stretch justify-content-center">
+                    <!-- User Image Column -->
+                    <div class="col-md-4 col-12 d-flex align-items-center justify-content-center mb-3 mb-md-0 p-0">
+                        <div class="card w-100 text-center">
+                            <img src="<?= $session->get('profile_image'); ?>" class="img-fluid rounded-start p-3" alt="User Profile">
+                        </div>
                     </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Juan Dela Cruz</h5>
-                            <p class="card-text">Bachelor of Science in Information Technology</p>
-                            <p class="card-text"><small class="text-muted">999-999</small></p>
+
+                    <!-- User Details Column -->
+                    <div class="col-md-8 col-12 d-flex">
+                        <div class="card w-100 h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <?= $session->get('first_name') . ' ' . $session->get('middle_name') . ' ' . $session->get('last_name') . ' ' . $session->get('suffix'); ?>
+                                </h5>
+                                <hr>
+                                <h6 class="text-muted fs-7"><?= $session->get('employment_status_status') . ' | ' . $session->get('academic_status_status'); ?></h6>
+                                <h6 class="text-muted fs-7"><small><?= $session->get('college') . ' | ' . $session->get('department'); ?></small></h6>
+                                <p class="card-text"><small class="text-muted"><?= $session->get('email'); ?></small></p>
+                                <div class="d-flex gap-2">
+                                    <a href="<?= base_url('account'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">
+                                        <i class="fas fa-user-edit me-2"></i> Edit Profile
+                                    </a>
+                                    <a href="<?= base_url('logout'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- List of researches -->
@@ -115,25 +135,25 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6 mb-3">
-                            <button class="btn bg-red w-100 h-100 p-3 border">
+                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Thesis and Dissertations</div>
                             </button>
                         </div>
                         <div class="col-6 mb-3">
-                            <button class="btn bg-red w-100 h-100 p-3 border">
+                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-file-alt fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Faculty Research</div>
                             </button>
                         </div>
                         <div class="col-6">
-                            <button class="btn bg-red w-100 h-100 p-3 border">
+                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-folder-open fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Archive and Collections</div>
                             </button>
                         </div>
                         <div class="col-6">
-                            <button class="btn bg-red w-100 h-100 p-3 border">
+                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-file-signature fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Publications</div>
                             </button>

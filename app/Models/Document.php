@@ -4,40 +4,28 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-
-class User extends Model
-{   
-
-    public function __construct()
-    {
-        parent::__construct();
-        date_default_timezone_set('Asia/Manila');
-    }
-    protected $table            = 'users';
+class Document extends Model
+{
+    protected $table            = 'documents';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = [
-        'first_name',
-        'middle_name',
-        'last_name',
-        'suffix',
-        'email',
-        'password',
-        'academic_status',
-        'employment_status',
-        'college',
+    protected $allowedFields    = [
+        'id',
+        'user_id',
+        'authors',
+        'title',
+        'file_path',
+        'type',
+        'status',
+        'adviser_id',
+        'tags',
         'department_id',
-        'agreed_terms',
-        'user_level',
-        'is_adviser',
-        'remember_token',
-        'remember_token_expires',
-        'created_at',
-        'updated_at',
-        'profile_image'
+        'view_count',
+        'download_count',
+        'uploaded_at',
     ];
 
     protected bool $allowEmptyInserts = false;

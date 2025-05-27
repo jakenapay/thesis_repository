@@ -26,7 +26,7 @@
 
 <body>
 
-    <div class="container mt-5 mb-5 d-flex justify-content-center align-items-center vh-100">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="row justify-content-center">
             <div class="col-lg-8">
 

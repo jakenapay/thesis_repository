@@ -105,9 +105,16 @@
                             </div>
 
                             <!-- Department -->
-                            <div class="col-md-6 mb-4">
+                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Department</label>
-                                <input type="text" class="form-control form-control-sm" name="department" required value="<?= $session->get('department'); ?>">
+                                <select class="form-control form-control-sm" name="department" required>
+                                    <option value="" disabled <?= empty($session->get('department')) ? 'selected' : '' ?>>Select Department</option>
+                                    <?php foreach ($departmentData as $status): ?>
+                                        <option value="<?= esc($status['id']) ?>" <?= $session->get('department') == $status['id'] ? 'selected' : '' ?>>
+                                            <?= esc($status['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
 

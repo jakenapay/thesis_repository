@@ -6,7 +6,7 @@
   <div class="card-body">
 
     <!-- Search Bar -->
-    <form action="/thesis/search" method="get" class="d-flex mb-3" role="search">
+    <form action="" method="get" class="d-flex mb-3" role="search">
       <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search">
       <button class="btn btn-danger" type="submit">Search</button>
     </form>

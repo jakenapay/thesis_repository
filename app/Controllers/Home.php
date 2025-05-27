@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\AcademicStatus;
 use App\Models\JobTitle;
+use App\Models\Department;
 
 class Home extends BaseController
 {
@@ -22,12 +23,16 @@ class Home extends BaseController
         $jobTitleModel = new JobTitle();
         $jobTitleData = $jobTitleModel->findAll();
 
+        $departmentModel = new Department();
+        $departmentData = $departmentModel->findAll();
+
         // Get session data
         $session = session();
 
         // Fetch employment_status and academic_status from the session
         $employmentStatusId = $session->get('employment_status');
         $academicStatusId = $session->get('academic_status');
+        $departmentId = $session->get('department_id');
 
         // Fetch corresponding status names using the IDs from the session
         if ($employmentStatusId) {
@@ -44,7 +49,15 @@ class Home extends BaseController
             $academicStatusName = null; // If no academic status ID in session, set to null
         }
 
+        if ($departmentId) {
+            $departmentData = $departmentModel->find($departmentId);
+            $departmentName = $departmentData ? $departmentData['name'] : null;
+        } else {
+            $departmentName = null; // If no department ID in session, set to null
+        }
+
         // Set new session variables with the status names
+        $session->set('department_name', $departmentName);
         $session->set('employment_status_status', $employmentStatusName);
         $session->set('academic_status_status', $academicStatusName);
 
@@ -53,6 +66,7 @@ class Home extends BaseController
             'session' => $session,
             'AcademicStatusData' => $AcademicStatusData,
             'jobTitleData' => $jobTitleData,
+            'departmentData' => $departmentData,
         ];
 
         // Return the view with the data

@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\User;
 use App\Models\AcademicStatus;
 use App\Models\JobTitle;
+use App\Models\Department;
 
 class Auth extends BaseController
 {
@@ -71,8 +72,10 @@ class Auth extends BaseController
             'employment_status' => $user['employment_status'],
             'academic_status'   => $user['academic_status'],
             'college'           => $user['college'],
-            'department'        => $user['department'],
+            'department'        => $user['department_id'],
             'agreed_terms'      => $user['agreed_terms'],
+            'user_level'        => $user['user_level'],
+            'is_adviser'        => $user['is_adviser'],
             'logged_in'         => true,
             'created_at'        => $user['created_at'],
             'updated_at'        => $user['updated_at'],
@@ -200,7 +203,7 @@ class Auth extends BaseController
             'employment_status' => trim($this->request->getPost('employment_status')),
             'academic_status'   => trim($this->request->getPost('academic_status')),
             'college'           => trim($this->request->getPost('college')),
-            'department'        => trim($this->request->getPost('department')),
+            'department_id'        => trim($this->request->getPost('department')),
             'email'             => trim($this->request->getPost('email')),
         ];
 
@@ -226,7 +229,7 @@ class Auth extends BaseController
             'academic_status'   => 'required|alpha_numeric_space',
             'employment_status' => 'required|alpha_numeric_space',
             'college'           => 'required|alpha_numeric_space',
-            'department'        => 'required|alpha_numeric_space',
+            'department'     => 'required|alpha_numeric_space',
         ];
 
         // Check if the email already exists for another user
@@ -279,7 +282,7 @@ class Auth extends BaseController
             'employment_status' => $data['employment_status'],
             'academic_status'   => $data['academic_status'],
             'college'           => $data['college'],
-            'department'        => $data['department'],
+            'department'        => $data['department_id'],
             'logged_in'         => true,
         ];
 

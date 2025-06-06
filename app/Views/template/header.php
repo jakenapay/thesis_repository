@@ -8,8 +8,11 @@
   <!-- Bootstrap CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('/assets/css/style.css'); ?>">
+  <link rel="stylesheet" href="<?= base_url('/assets/css/table.css'); ?>">
   <!-- Font Awesome CDN -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
+  <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -34,16 +37,16 @@
             <a class="nav-link nav-links <?= (strpos($path, 'home') !== false || $path === '/') ? 'active' : '' ?>" href="<?= base_url('home') ?>">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link nav-links <?= strpos($path, 'about') !== false ? 'active' : '' ?>" href="about">About</a>
+            <a class="nav-link nav-links <?= strpos($path, 'about') !== false ? 'active' : '' ?>" href="<?= base_url('about') ?>">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link nav-links <?= strpos($path, 'faq') !== false ? 'active' : '' ?>" href="faq">FAQ</a>
+            <a class="nav-link nav-links <?= strpos($path, 'faq') !== false ? 'active' : '' ?>" href="<?= base_url('faq') ?>">FAQ</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link nav-links <?= strpos($path, 'account') !== false ? 'active' : '' ?>" href="account">My Account</a>
+            <a class="nav-link nav-links <?= strpos($path, 'account') !== false ? 'active' : '' ?>" href="<?= base_url('account') ?>">My Account</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link nav-links <?= strpos($path, 'contact') !== false ? 'active' : '' ?>" href="contact">Contact</a>
+            <a class="nav-link nav-links <?= strpos($path, 'contact') !== false ? 'active' : '' ?>" href="<?= base_url('contact') ?>">Contact</a>
           </li>
         </ul>
       </div>

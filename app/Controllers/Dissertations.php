@@ -4,11 +4,11 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\Document;
 use App\Models\Department;
 use App\Models\User;
+use App\Models\Document;
 
-class Graduates extends BaseController
+class Dissertations extends BaseController
 {
     public function __construct()
     {
@@ -16,17 +16,17 @@ class Graduates extends BaseController
         date_default_timezone_set('Asia/Manila');
     }
 
-    public function index() // Show list of graduate thesis
+    public function index()
     {
         $session = session();
         $data = ['session' => $session];
 
         return view('template/header', $data)
-            . view('documents/graduates/list', $data)
+            . view('documents/dissertations/list', $data)
             . view('template/footer', $data);
     }
 
-    public function createGraduateThesis() // Show form to create a new graduate thesis
+    public function createDissertations() // Show form to create a new graduate thesis
     {
         $session = session();
 
@@ -41,10 +41,10 @@ class Graduates extends BaseController
             ->findAll();
 
         $documentModel = new Document();
-        $submittedGraduateThesis = $documentModel
+        $submittedDissertations = $documentModel
             ->select('documents.*, departments.name as department_name')
             ->join('departments', 'departments.id = documents.department_id', 'left')
-            ->where('documents.type', 'graduate_thesis')
+            ->where('documents.type', 'dissertation')
             ->where('documents.status', 'submitted')
             ->findAll();
 
@@ -52,21 +52,21 @@ class Graduates extends BaseController
             'session' => $session,
             'departmentData' => $departmentData,
             'advisers' => $advisers,
-            'submittedGraduateThesis' => $submittedGraduateThesis,
+            'submittedDissertations' => $submittedDissertations,
         ];
-        
+        // print_r($data);
         return view('template/header', $data)
-            . view('documents/graduates/create', $data)
+            . view('documents/dissertations/create', $data)
             . view('template/footer', $data);
     }
 
-    public function insertGraduateThesis() // Handle the form submission to create a new graduate thesis
+    public function insertDissertations() // Handle the form submission to create a new graduate thesis
     {
         helper(['form', 'url']);
         $session = session();
         $validation = \Config\Services::validation();
         $request = \Config\Services::request();
-        // print_r($request->getPost());
+
         // Validate
         $rules = [
             'user_id'       => 'required|integer',
@@ -86,8 +86,8 @@ class Graduates extends BaseController
         // Handle file
         $file = $request->getFile('thesis_file');
         $fileName = $file->getRandomName();
-        $file->move(ROOTPATH . 'public/assets/uploads/graduates/', $fileName);
-        $filePath = 'assets/uploads/graduates/' . $fileName;
+        $file->move(ROOTPATH . 'public/assets/uploads/dissertations/', $fileName);
+        $filePath = 'assets/uploads/dissertations/' . $fileName;
         
         // Save to `documents`
         $documentModel = new Document();
@@ -95,7 +95,7 @@ class Graduates extends BaseController
             'user_id'       => $request->getPost('user_id'),
             'title'         => $request->getPost('thesis_title'),
             'file_path'     => $filePath,
-            'type'          => 'graduate_thesis',
+            'type'          => 'dissertation',
             'status'        => 'submitted',
             'department_id' => $request->getPost('department_id'),
             'authors'       => $request->getPost('authors'),
@@ -103,6 +103,6 @@ class Graduates extends BaseController
             'adviser_id'    => $request->getPost('adviser_id')
         ]);
 
-        return redirect()->to('documents/graduateThesis')->with('success', 'Thesis uploaded successfully.');
+        return redirect()->to('documents/dissertations')->with('success', 'Thesis uploaded successfully.');
     }
 }

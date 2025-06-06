@@ -1,0 +1,27 @@
+#dissertationsTable {
+    
+}
+
+#dissertationsTable td{
+    font-size: 0.9em;
+}
+
+.dt-length > label:nth-child(2) {
+    margin-left: 0.9em;
+    text-transform: capitalize;
+}
+
+#dt-length-0 {
+    background-color: rgba(168, 0, 0, 0.897);
+    border-radius: 13%;
+    color: #fff;
+}
+
+div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-paging {
+    color: #fff !important;
+}
+
+div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-paging .dt-paging-button.current {
+    background-color: rgba(168, 0, 0, 0.897) !important;
+    border-radius: 13%;
+}

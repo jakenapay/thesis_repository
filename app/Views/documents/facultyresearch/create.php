@@ -1,11 +1,11 @@
 <div class="container mt-4">
     <div class="row d-flex min-vh-100">
         <div class="col-md-8">
-            <form action="<?= base_url('documents/graduateThesis/create'); ?>" method="POST" enctype="multipart/form-data" class="row g-3">
+            <form action="<?= base_url('documents/facultyResearch/create'); ?>" method="POST" enctype="multipart/form-data" class="row g-3">
                 <!-- Contact Card -->
-                <div class="card mb-3 p-0">
+                <div class="card p-0">
                     <div class="card-header bg-red text-light fw-bold d-flex justify-content-between align-items-center">
-                        <span>Upload Graduate Thesis</span>
+                        <span>Upload Faculty Research</span>
                         <!-- <span class="small text-light">Last update: <?= $session->get('updated_at'); ?></span> -->
                     </div>
                     <div class="card-body">
@@ -83,14 +83,14 @@
 
                                 <!-- Thesis File -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Thesis File</label>
+                                    <label class="form-label">File</label>
                                     <input type="file" class="form-control form-control-sm" name="thesis_file" required accept=".pdf">
                                 </div>
 
                                 <!-- Thesis Title -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Thesis Title</label>
-                                    <textarea class="form-control form-control-sm" name="thesis_title" required placeholder="Enter thesis title" rows="3"></textarea>
+                                    <label class="form-label">Title</label>
+                                    <textarea class="form-control form-control-sm" name="thesis_title" required placeholder="Enter dissertation title" rows="3"></textarea>
                                 </div>
 
                                 <!-- Authors -->
@@ -103,7 +103,7 @@
                                 <!-- adviser -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Adviser<small class="text-muted text-red"></small></label>
-                                    <select name="adviser_id" class="form-control form-control-sm">
+                                    <select name="adviser_id" class="form-control form-control-sm" required>
                                         <option value="">Select Adviser</option>
                                         <?php foreach ($advisers as $adviser): ?>
                                             <option value="<?= esc($adviser['id']); ?>">
@@ -125,7 +125,7 @@
                                 </div>
 
                                 <!-- Accept Terms -->
-                                <div class="col-md-12 mb-2">
+                                <div class="col-md-6 mb-2">
                                     <label class="form-label">Accept Terms</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="accept_terms" id="acceptTerms" required>
@@ -150,10 +150,10 @@
                 <div class="card mb-3 p-0">
 
                     <div class="bg-red text-light card-header fw-bold">
-                        Submitted Graduate Thesis
+                        Submitted Faculty Research
                     </div>
                     <div class="card-body">
-                        <table id="graduateThesisTable" class="table table-hover table-sm" style="width:100%">
+                        <table id="facultyResearchTable" class="table table-hover table-sm" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Title</th>
@@ -162,15 +162,15 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <?php if (!empty($submittedGraduateThesis) && is_array($submittedGraduateThesis)): ?>
+                            <?php if (!empty($submittedFacultyResearch) && is_array($submittedFacultyResearch)): ?>
                                 <tbody>
-                                    <?php foreach ($submittedGraduateThesis as $graduateThesis): ?>
+                                    <?php foreach ($submittedFacultyResearch as $facultyResearch): ?>
                                         <tr>
-                                            <td><?= esc($graduateThesis['title']); ?></td>
-                                            <td><?= esc($graduateThesis['authors']); ?></td>
-                                            <td><?= esc($graduateThesis['department_name'] ?? ''); ?></td>
+                                            <td><?= esc($facultyResearch['title']); ?></td>
+                                            <td><?= esc($facultyResearch['authors']); ?></td>
+                                            <td><?= esc($facultyResearch['department_name'] ?? ''); ?></td>
                                             <td>
-                                                <a href="<?= base_url('documents/graduateThesis/view/' . esc($graduateThesis['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
+                                                <a href="<?= base_url('documents/facultyResearch/view/' . esc($facultyResearch['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
@@ -186,7 +186,7 @@
                     <!-- DataTables JS initialization -->
                     <script>
                         $(document).ready(function() {
-                            let table = new DataTable('#graduateThesisTable');
+                            let table = new DataTable('#facultyResearchTable');
                         });
                     </script>
                 </div>
@@ -199,3 +199,12 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>

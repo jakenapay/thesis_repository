@@ -18,20 +18,31 @@
                         <div class="card w-100 h-100">
                             <div class="card-body">
                                 <h5 class="card-title">
-                                    <?= $session->get('first_name') . ' ' . $session->get('middle_name') . ' ' . $session->get('last_name') . ' ' . $session->get('suffix'); ?>
-                                </h5>
-                                <hr>
-                                <h6 class="text-muted fs-7"><?= $session->get('employment_status_status') . ' | ' . $session->get('academic_status_status'); ?></h6>
-                                <h6 class="text-muted fs-7"><small><?= $session->get('college') . ' | ' . $session->get('department'); ?></small></h6>
-                                <p class="card-text"><small class="text-muted"><?= $session->get('email'); ?></small></p>
-                                <div class="d-flex gap-2">
-                                    <a href="<?= base_url('account'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">
-                                        <i class="fas fa-user-edit me-2"></i> Edit Profile
-                                    </a>
-                                    <a href="<?= base_url('logout'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">
-                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                    </a>
-                                </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title mb-0">
+                                            <?= $session->get('first_name') . ' ' . $session->get('middle_name') . ' ' . $session->get('last_name') . ' ' . $session->get('suffix'); ?>
+                                        </h5>
+                                        <div class="d-flex gap-2">
+                                            <?php if ($session->get('is_adviser') == 1): ?>
+                                                <p class="card-text mb-0 fs-6 text-capitalize bg-success text-light px-2 rounded">Adviser</p>
+                                            <?php endif; ?>
+                                            <p class="card-text mb-0 fs-6 text-capitalize bg-red text-light px-2 rounded">
+                                                <?= $session->get('user_level'); ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h6 class="text-muted fs-7"><?= $session->get('employment_status_status') . ' | ' . $session->get('academic_status_status'); ?></h6>
+                                    <h6 class="text-muted fs-7"><small><?= $session->get('college') . ' | ' . $session->get('department_name'); ?></small></h6>
+                                    <p class="card-text"><small class="text-muted"><?= $session->get('email'); ?></small></p>
+                                    <div class="d-flex gap-2">
+                                        <a href="<?= base_url('account'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">
+                                            <i class="fas fa-user-edit me-2"></i> Edit Profile
+                                        </a>
+                                        <a href="<?= base_url('logout'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                        </a>
+                                    </div>
                             </div>
                         </div>
                     </div>

@@ -32,7 +32,7 @@ class Home extends BaseController
         // Fetch employment_status and academic_status from the session
         $employmentStatusId = $session->get('employment_status');
         $academicStatusId = $session->get('academic_status');
-        $departmentId = $session->get('department_id');
+        $departmentId = $session->get('department');
 
         // Fetch corresponding status names using the IDs from the session
         if ($employmentStatusId) {
@@ -55,12 +55,11 @@ class Home extends BaseController
         } else {
             $departmentName = null; // If no department ID in session, set to null
         }
-
         // Set new session variables with the status names
         $session->set('department_name', $departmentName);
         $session->set('employment_status_status', $employmentStatusName);
         $session->set('academic_status_status', $academicStatusName);
-
+        
         // Combine all data
         $data = [
             'session' => $session,
@@ -68,7 +67,7 @@ class Home extends BaseController
             'jobTitleData' => $jobTitleData,
             'departmentData' => $departmentData,
         ];
-
+        // print_r($data); // Debugging line to check data structure
         // Return the view with the data
         return view('home', $data);
     }

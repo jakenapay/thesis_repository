@@ -26,6 +26,7 @@ class Document extends Model
         'view_count',
         'download_count',
         'uploaded_at',
+        'is_deleted'
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -57,4 +58,18 @@ class Document extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function viewed($documentId) {
+        $this->set('view_count', 'view_count + 1', false)
+             ->where('id', $documentId)
+             ->update();
+        return true;
+    }
+
+    public function downloaded($documentId) {
+        $this->set('download_count', 'download_count + 1', false)
+             ->where('id', $documentId)
+             ->update();
+        return true;
+    }
 }

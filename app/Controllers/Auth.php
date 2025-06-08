@@ -163,7 +163,7 @@ class Auth extends BaseController
             'academic_status'   => trim($request->getPost('academic_status')),
             'employment_status' => trim($request->getPost('employment_status')),
             'college'           => trim($request->getPost('college')),
-            'department'        => trim($request->getPost('department')),
+            'department_id'        => trim($request->getPost('department')),
             'agreed_terms'      => $request->getPost('agree') ? 1 : 0,
         ];
 

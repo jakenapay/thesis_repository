@@ -69,4 +69,15 @@ class User extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getAdvisers($department_id = null) {
+        $query = $this->where('user_level', 'faculty')
+                      ->where('is_adviser', 1);
+        
+        if ($department_id !== null) {
+            $query->where('department_id', $department_id);
+        }
+        
+        return $query->findAll();
+    }
 }

@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\User;
 use App\Models\AcademicStatus;
 use App\Models\JobTitle;
+use App\Models\Department;
 
 class Auth extends BaseController
 {
@@ -29,6 +30,10 @@ class Auth extends BaseController
 
     public function login()
     {
+        if (session()->get('logged_in')) {
+            return redirect()->to(base_url('home'));
+        }
+
         return view('auth/login');
     }
 
@@ -71,11 +76,14 @@ class Auth extends BaseController
             'employment_status' => $user['employment_status'],
             'academic_status'   => $user['academic_status'],
             'college'           => $user['college'],
-            'department'        => $user['department'],
+            'department'        => $user['department_id'],
             'agreed_terms'      => $user['agreed_terms'],
+            'user_level'        => $user['user_level'],
+            'is_adviser'        => $user['is_adviser'],
             'logged_in'         => true,
             'created_at'        => $user['created_at'],
             'updated_at'        => $user['updated_at'],
+            'profile_image'     => $user['profile_image'] ?? 'default.png', // Default image if not set
         ]);
 
         // Redirect to the dashboard or home page
@@ -184,8 +192,7 @@ class Auth extends BaseController
 
     public function edit($user_id)
     {
-
-        if (!$this->request->getMethod() == 'post') {
+        if ($this->request->getMethod() !== 'POST') {
             return redirect()->back()->with('error', 'Invalid request method.');
         }
 
@@ -200,11 +207,21 @@ class Auth extends BaseController
             'employment_status' => trim($this->request->getPost('employment_status')),
             'academic_status'   => trim($this->request->getPost('academic_status')),
             'college'           => trim($this->request->getPost('college')),
-            'department'        => trim($this->request->getPost('department')),
+            'department_id'        => trim($this->request->getPost('department')),
             'email'             => trim($this->request->getPost('email')),
-            'password'          => password_hash(trim($this->request->getPost('password')), PASSWORD_DEFAULT),
-            'confirm_password'  => password_hash(trim($this->request->getPost('confirm_password')), PASSWORD_DEFAULT),
         ];
+
+        // Only hash and check password if provided
+        $password = trim($this->request->getPost('password'));
+        $confirmPassword = trim($this->request->getPost('confirm_password'));
+
+        if (!empty($password) && !empty($confirmPassword)) {
+            // Hash the password if new password is provided
+            if ($password !== $confirmPassword) {
+                return redirect()->back()->withInput()->with('error', 'Passwords do not match.');
+            }
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
 
         // Validate the data
         $validationRules = [
@@ -212,28 +229,22 @@ class Auth extends BaseController
             'middle_name'       => 'permit_empty|min_length[2]|max_length[50]|alpha_space',
             'last_name'         => 'required|min_length[2]|max_length[50]|alpha_space',
             'suffix'            => 'permit_empty|max_length[10]|alpha',
-            'email'             => 'required|valid_email|is_unique[users.email]',
-            'password'          => 'max_length[255]',
-            'confirm_password'  => 'matches[password]',
+            'email'             => 'required|valid_email',
             'academic_status'   => 'required|alpha_numeric_space',
             'employment_status' => 'required|alpha_numeric_space',
             'college'           => 'required|alpha_numeric_space',
-            'department'        => 'required|alpha_numeric_space'
+            'department'     => 'required|alpha_numeric_space',
         ];
 
-        // Check if the email already exists
+        // Check if the email already exists for another user
         $existingUser = $userModel->where('email', $this->request->getPost('email'))->first();
         if ($existingUser && $existingUser['id'] != $user_id) {
             return redirect()->back()->withInput()->with('error', 'Email already exists.');
         }
 
-        if (empty($data['password']) && empty($data['confirm_password'])) {
-            unset($data['password']);
-            unset($data['confirm_password']);
-        }
-
-        if ($data['password'] !== $data['confirm_password']) {
-            return redirect()->back()->withInput()->with('error', 'Passwords do not match.');
+        // Perform validation and show specific errors
+        if (!$this->validate($validationRules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
 
         // Handle profile image upload if available
@@ -243,17 +254,15 @@ class Auth extends BaseController
             $currentUser = $userModel->find($user_id);
             if (!empty($currentUser) && !empty($currentUser['profile_image'])) {
                 $currentImagePath = FCPATH . 'assets/images/users/' . basename($currentUser['profile_image']);
-                $data['profile_image'] = $currentUser['profile_image'];
                 if (file_exists($currentImagePath)) {
                     unlink($currentImagePath);
                 }
             }
 
-            // Generate a new file name and move the file into the users images directory
+            // Generate a new file name and move the file into the user's images directory
             $newName = $file->getRandomName();
             $destinationPath = FCPATH . 'assets/images/users/';
             if (!$file->move($destinationPath, $newName)) {
-                // Handle the error if the file couldn't be moved
                 return redirect()->back()->with('error', 'Failed to upload profile image.');
             }
 
@@ -261,15 +270,12 @@ class Auth extends BaseController
             $data['profile_image'] = base_url('assets/images/users/' . $newName);
         }
 
-        // Remove debug output in production
-        // foreach ($data as $key => $value) {
-        //     echo $key . ': ' . $value . '<br>';
-        // }
-
         // Update the user data
-        $userModel->update($user_id, $data);
+        if (!$userModel->update($user_id, $data)) {
+            return redirect()->back()->with('error', 'Failed to update user data.');
+        }
 
-        // Ensure profile_image is set in session only if it exists
+        // Update session data
         $sessionData = [
             'user_id'           => $user_id,
             'email'             => $data['email'],
@@ -280,7 +286,7 @@ class Auth extends BaseController
             'employment_status' => $data['employment_status'],
             'academic_status'   => $data['academic_status'],
             'college'           => $data['college'],
-            'department'        => $data['department'],
+            'department'        => $data['department_id'],
             'logged_in'         => true,
         ];
 
@@ -289,7 +295,7 @@ class Auth extends BaseController
         }
         $this->session->set($sessionData);
 
-        // Redirect to the dashboard or home page
+        // Redirect to the account page
         return redirect()->to('account')->with('success', 'Profile updated successfully!');
     }
 }

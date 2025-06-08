@@ -146,28 +146,28 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6 mb-3">
-                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                            <a href="<?= base_url('documents/graduateThesis/'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Thesis and Dissertations</div>
-                            </button>
+                            </a>
                         </div>
                         <div class="col-6 mb-3">
-                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                            <a href="<?= base_url('documents/facultyResearch'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-file-alt fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Faculty Research</div>
-                            </button>
+                            </a>
                         </div>
                         <div class="col-6">
-                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                            <a href="<?= base_url('#'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-folder-open fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Archive and Collections</div>
-                            </button>
+                            </a>
                         </div>
                         <div class="col-6">
-                            <button class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                            <a href="<?= base_url('documents/published'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-file-signature fa-2x mb-2 text-white"></i>
                                 <div class="text-white">Publications</div>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -13,6 +13,10 @@ $routes->get('about', 'About::index');
 $routes->get('faq', 'Faq::index');
 $routes->get('account', 'Account::index');
 $routes->get('contact', 'Contact::index');
+$routes->get('analytics', 'Analytics::index');
+
+// Analytics
+$routes->get('getAnalyticsData', 'Analytics::getAnalyticsData');
 
 // Authentication
 $routes->get('login', 'Auth::login');
@@ -28,16 +32,22 @@ $routes->post('edit/(:num)', 'Auth::edit/$1');
 $routes->get('documents/graduateThesis', 'Graduates::index');
 $routes->get('documents/graduateThesis/create', 'Graduates::createGraduateThesis'); // Display the form to create a new graduate thesis
 $routes->post('documents/graduateThesis/create', 'Graduates::insertGraduateThesis'); // Handle the form submission to create a new graduate thesis
+$routes->get('documents/graduateThesis/view/(:num)', 'Graduates::view/$1'); // View graduate thesis with ID parameter
+$routes->get('documents/graduateThesis/download/(:num)', 'Graduates::download/$1'); // Download specific document
 
 // Dissertations
 $routes->get('documents/dissertations', 'Dissertations::index');
 $routes->get('documents/dissertations/create', 'Dissertations::createDissertations'); // Display the form to create a new dissertation
 $routes->post('documents/dissertations/create/', 'Dissertations::insertDissertations'); // Handle the form submission to create a new dissertation
+$routes->get('documents/dissertations/view/(:num)', 'Dissertations::view/$1'); // View dissertations thesis with ID parameter
+$routes->get('documents/dissertations/download/(:num)', 'Dissertations::download/$1'); // Download specific document
 
 // Faculty Research
 $routes->get('documents/facultyResearch', 'FacultyResearch::index');
 $routes->get('documents/facultyResearch/create', 'FacultyResearch::createFacultyResearch'); // Display the form to create a new dissertation
 $routes->post('documents/facultyResearch/create/', 'FacultyResearch::insertFacultyResearch'); // Handle the form submission to create a new dissertation
+$routes->get('documents/facultyResearch/view/(:num)', 'FacultyResearch::view/$1'); // View faculty research thesis with ID parameter
+$routes->get('documents/facultyResearch/download/(:num)', 'FacultyResearch::download/$1'); // Download specific document
 
 // List of submitted documents, for librarian and adviser
 $routes->get('documents/submitted/', 'Documents::submitted'); // Display the list of submitted documents; graduate thesis, dissertations, and faculty research

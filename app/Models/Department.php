@@ -47,4 +47,9 @@ class Department extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getDepartmentById(int $departmentId): ?array
+    {
+        return $this->find($departmentId) ?? null;
+    }
 }

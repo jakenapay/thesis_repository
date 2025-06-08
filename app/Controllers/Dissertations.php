@@ -18,8 +18,18 @@ class Dissertations extends BaseController
 
     public function index()
     {
+        // Use model 
+        $documentModel = new Document();
         $session = session();
+
         $data = ['session' => $session];
+        $data['dissertations'] = $documentModel
+            ->select('documents.*, departments.name as department_name')
+            ->join('departments', 'departments.id = documents.department_id', 'left')
+            ->where('documents.type', 'dissertation')
+            ->where('documents.status', 'published')
+            ->where('documents.is_deleted', 0)
+            ->findAll();
 
         return view('template/header', $data)
             . view('documents/dissertations/list', $data)
@@ -29,18 +39,14 @@ class Dissertations extends BaseController
     public function createDissertations() // Show form to create a new graduate thesis
     {
         $session = session();
-
-        $departmentId = $session->get('department');
         $departmentModel = new Department();
-        $departmentData = $departmentModel->findAll();
-
         $usersModel = new User();
-        $advisers = $usersModel->where('department_id', $departmentId)
-            ->where('user_level', 'faculty')
-            ->where('is_adviser', 1)
-            ->findAll();
-
         $documentModel = new Document();
+
+        $departmentData = $departmentModel->findAll();
+        $departmentId = $session->get('department');
+        $advisers = $usersModel->getAdvisers($departmentId);
+
         $submittedDissertations = $documentModel
             ->select('documents.*, departments.name as department_name')
             ->join('departments', 'departments.id = documents.department_id', 'left')
@@ -88,7 +94,7 @@ class Dissertations extends BaseController
         $fileName = $file->getRandomName();
         $file->move(ROOTPATH . 'public/assets/uploads/dissertations/', $fileName);
         $filePath = 'assets/uploads/dissertations/' . $fileName;
-        
+
         // Save to `documents`
         $documentModel = new Document();
         $documentModel->insert([
@@ -104,5 +110,75 @@ class Dissertations extends BaseController
         ]);
 
         return redirect()->to('documents/dissertations')->with('success', 'Thesis uploaded successfully.');
+    }
+
+    public function view($documentId)
+    {
+        $session = session();
+        $departmentId = $session->get('department');
+        $documentModel = new Document();
+        $usersModel = new User();
+        $departmentModel = new Department();
+
+        // Check the document id if existing
+        $dissertations = $documentModel
+            ->select('documents.*, departments.name as department_name')
+            ->join('departments', 'departments.id = documents.department_id', 'left')
+            ->where('documents.type', 'dissertation')
+            ->where('documents.id', $documentId)
+            ->findAll();
+
+        // No found, go to home
+        if (empty($dissertations)) {
+            return redirect()->to('/home');
+        }
+
+        $advisers = $usersModel->getAdvisers($departmentId);
+        $departmentData = $departmentModel->findAll();
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+
+        if ($documentModel->viewed($documentId)) {
+            $data = [
+                'session' => $session,
+                'dissertations' => $dissertations,
+                'advisers' => $advisers,
+                'department' => $departmentData
+            ];
+            return view('template/header', $data)
+                . view('documents/dissertations/view', $data)
+                . view('template/footer', $data);
+        }
+    }
+
+    public function download($documentId)
+    {
+        if (empty($documentId)) {
+            return redirect()->to('/');
+        }
+
+        $documentModel = new Document();
+        $document = $documentModel->find($documentId);
+
+        if (!$document) {
+            return redirect()->to('/')->with('error', 'Document not found');
+        }
+
+        $filePath = ROOTPATH . 'public/' . $document['file_path'];
+
+        if (!file_exists($filePath)) {
+            return redirect()->to('/')->with('error', 'File not found');
+        }
+
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $newFileName = $document['title'] . '.' . $extension;
+
+        // Update download count first
+        $documentModel->downloaded($documentId);
+
+        // Then return the file download response
+        return $this->response->download($filePath, null)->setFileName($newFileName);
     }
 }

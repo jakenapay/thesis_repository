@@ -14,16 +14,24 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <!-- Error messag -->
-                            <?php if (session()->getFlashdata('error')): ?>
-                                <div class="alert alert-danger alert-dismissible fade show mt-3 text-center small py-2 px-3" role="alert" style="font-size: 0.9rem;">
-                                    <span class="small"><?= session()->getFlashdata('error') ?></span>
-                                </div>
+                            <!-- Error message -->
+                            <?php if ($error = session()->getFlashdata('error')): ?>
+                                <?php if (is_array($error)): ?>
+                                    <?php foreach ($error as $err): ?>
+                                        <div class="alert alert-danger alert-dismissible fade show mt-3 text-center small py-2 px-3" role="alert" style="font-size: 0.9rem;">
+                                            <span class="small"><?= esc($err) ?></span>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="alert alert-danger alert-dismissible fade show mt-3 text-center small py-2 px-3" role="alert" style="font-size: 0.9rem;">
+                                        <span class="small"><?= esc($error) ?></span>
+                                    </div>
+                                <?php endif; ?>
                             <?php endif; ?>
 
-                            <?php if (session()->getFlashdata('success')): ?>
+                            <?php if ($success = session()->getFlashdata('success')): ?>
                                 <div class="alert alert-success alert-dismissible fade show mt-3 text-center small py-2 px-3" role="alert" style="font-size: 0.9rem;">
-                                    <span class="small"><?= session()->getFlashdata('success') ?></span>
+                                    <span class="small"><?= esc($success) ?></span>
                                 </div>
                             <?php endif; ?>
                             <!-- End of error message -->
@@ -46,14 +54,14 @@
                                         required
                                         placeholder="Enter dissertation title"
                                         value="<?= trim(esc($dissertations[0]['title'])) ?>"
-                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] ? '' : 'disabled'); ?>>
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- Department -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Department/Unit</label>
                                     <select name="department_id" class="form-control form-control-sm" required
-                                        <?= ($session->get('user_id') != $dissertations[0]['user_id']) ? 'disabled' : ''; ?>>
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id'] && $dissertations[0]['status'] != 'rejected') ? '' : 'disabled'; ?>>
                                         <option value="">Select Department</option>
                                         <?php foreach ($department as $dept): ?>
                                             <option value="<?= esc($dept['id']); ?>"
@@ -66,7 +74,7 @@
                                                     }
                                                 }
                                                 ?>
-                                            </option>
+                                            </opt ion>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -76,14 +84,17 @@
                                     <label class="form-label">Authors</label>
                                     <!-- <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" value=""> -->
                                     <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" value="<?= trim(esc($dissertations[0]['authors'])) ?>"
-                                        <?= ($session->get('user_id') != $dissertations[0]['user_id']) ? 'disabled' : ''; ?>>
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- adviser -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Adviser<small class="text-muted text-red"></small></label>
                                     <select name="adviser_id" class="form-control form-control-sm" required
-                                        <?= ($session->get('user_id') != $dissertations[0]['user_id']) ? 'disabled' : ''; ?>>
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && 
+                                             $dissertations[0]['status'] == 'rejected' && 
+                                             $session->get('user_id') != $dissertations[0]['adviser_id'] && 
+                                             $dissertations[0]['status'] != 'rejected') ? '' : 'disabled'; ?>>
                                         <option value="">Select Adviser</option>
                                         <?php foreach ($advisers as $adviser): ?>
                                             <option value="<?= esc($adviser['id']); ?>"
@@ -105,13 +116,12 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-
                                 <!-- tags -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Tags <?= ($session->get('user_id') == $dissertations[0]['user_id']) ? '<small class="text-muted text-red">(optional)</small>' : ''; ?></label>
                                     <input type="text" class="form-control form-control-sm" name="tags" placeholder="Enter tags separated by commas"
                                         value="<?= trim(esc($dissertations[0]['tags'])) ?>"
-                                        <?= ($session->get('user_id') != $dissertations[0]['user_id']) ? 'disabled' : ''; ?>>
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- Accept Terms
@@ -125,6 +135,54 @@
                                     </div>
                                 </div> -->
                             </div>
+
+                            <!-- Status -->
+                            <?php
+                            $user_level = $session->get('user_level');
+                            $is_adviser = $session->get('is_adviser');
+                            $current_status = $dissertations[0]['status'];
+
+                            $options = [];
+
+                            if ($user_level === 'faculty' && $is_adviser == 1) {
+                                $options = ['submitted', 'endorsed', 'rejected'];
+                            } elseif ($user_level === 'librarian') {
+                                $options = ['submitted', 'published', 'rejected'];
+                            }
+
+                            $status_labels = [
+                                'submitted' => 'Submitted',
+                                'endorsed' => 'Endorsed',
+                                'published' => 'Published',
+                                'rejected' => 'Rejected'
+                            ];
+                            ?>
+                            <br>
+                            <?php if ($user_level == 'librarian' || $user_level == 'faculty') { ?>
+                                <h6 class="card-title"><?= ($is_adviser == 1 && $user_level == 'faculty') ? "Adviser's" : "Librarian's" ?> Panel</h6>
+                                <hr class="">
+                                <div class="row mb-3">
+
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label">Status</label>
+                                        <select name="status" class="form-control form-control-sm" required>
+                                            <?php foreach ($options as $opt): ?>
+                                                <option value="<?= $opt ?>" <?= ($current_status == $opt) ? 'selected' : '' ?>>
+                                                    <?= $status_labels[$opt] ?> <?= ($current_status == $opt) ? '(Current)' : '' ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <!-- Remarks-->
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label" for="remarks">Feedbacks <span class="text-muted">(optional)</span></label>
+                                        <textarea name="remarks" id="remarks" class="form-control form-control-sm"></textarea>
+                                    </div>
+                                </div>
+
+                            <?php } ?>
+
                             <br>
                             <hr class="">
                             <!-- Submit Button -->
@@ -133,8 +191,15 @@
                                     <i class="fas fa-download me-2"></i>Download
                                 </a>
                                 <?php
-                                if ($session->get('user_id') == $dissertations[0]['user_id']) {
-                                    echo '<button type="submit" class="btn btn-danger btn-sm px-5">
+                                // If the current user ID is match with the adviser ID = user can save edit
+                                if ($session->get('user_id') == $dissertations[0]['adviser_id'] || $session->get('user_level') === 'librarian') {
+                                    echo '<button type="submit" name="action" value="update" class="btn btn-danger btn-sm px-5">
+                                        <i class="fas fa-sync-alt me-2"></i>Update
+                                        </button>';
+                                }
+
+                                if ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id']) {
+                                    echo '<button type="submit" name="action" value="edit"  class="btn btn-danger btn-sm px-5">
                                         <i class="fas fa-sync-alt me-2"></i>Save Edit
                                         </button>';
                                 }

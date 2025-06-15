@@ -1,3 +1,47 @@
+<?php
+$uri = service('uri');
+$segments = $uri->getSegments();
+
+$isDocument = $segments[0] ?? '';
+$path       = $segments[1] ?? '';
+$action     = $segments[2] ?? '';
+
+$displayPath = match ($path) {
+  'graduateThesis' => 'Graduate Thesis',
+  'facultyResearch' => 'Faculty Research',
+  default => ucwords(str_replace('/', ' ', $path)),
+};
+?>
+
+<?php if ($isDocument && empty($action) && !empty($path)) { ?>
+  <div class="card mb-3">
+    <div class="bg-red text-light card-header fw-bold">
+      <?= "Submit " . $displayPath; ?>
+    </div>
+    <div class="card-body">
+      <p class="text-muted mb-3">Please upload your <?= strtolower($displayPath); ?> document in PDF format.</p>
+      <hr>
+      <a href="<?= base_url('documents/' . $path . '/create'); ?>" class="btn btn-danger">
+        <i class="fas fa-upload me-1"></i> Submit
+      </a>
+    </div>
+  </div>
+<?php } else if ($isDocument && $action === 'create' && !empty($path)) { ?>
+  <div class="card mb-3">
+    <div class="bg-red text-light card-header fw-bold">
+      <?= "View list of " . $displayPath; ?>
+    </div>
+    <div class="card-body">
+      <p class="text-muted mb-3">View list of submitted <?= strtolower($displayPath); ?>.</p>
+      <hr>
+      <a href="<?= base_url('documents/' . $path); ?>" class="btn btn-danger">
+        <i class="fas fa-list me-1"></i> View
+      </a>
+    </div>
+  </div>
+<?php } ?>
+
+
 <div class="card">
   <!-- Header and Quote -->
   <div class="bg-red text-light card-header fw-bold">
@@ -21,20 +65,6 @@
       <li class="list-group-item"><a href="/thesis/category/IT">Information Technology</a></li>
       <li class="list-group-item"><a href="/thesis/category/CS">Computer Science</a></li>
       <li class="list-group-item"><a href="/thesis/category/IS">Information Systems</a></li>
-    </ul>
-  </div>
-</div>
-
-<div class="card mt-3">
-  <div class="bg-red text-light card-header fw-bold">
-    Browse
-  </div>
-  <div class="card-body">
-    <!-- Category List -->
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><a href="">Collections</a></li>
-      <li class="list-group-item"><a href="">College and Units</a></li>
-      <li class="list-group-item"><a href="">Authors</a></li>
     </ul>
   </div>
 </div>

@@ -34,6 +34,7 @@ $routes->get('documents/graduateThesis/create', 'Graduates::createGraduateThesis
 $routes->post('documents/graduateThesis/create', 'Graduates::insertGraduateThesis'); // Handle the form submission to create a new graduate thesis
 $routes->get('documents/graduateThesis/view/(:num)', 'Graduates::view/$1'); // View graduate thesis with ID parameter
 $routes->get('documents/graduateThesis/download/(:num)', 'Graduates::download/$1'); // Download specific document
+$routes->post('documents/graduateThesis/edit/(:num)', 'Graduates::edit/$1'); // Edit specific document
 
 // Dissertations
 $routes->get('documents/dissertations', 'Dissertations::index');
@@ -41,6 +42,7 @@ $routes->get('documents/dissertations/create', 'Dissertations::createDissertatio
 $routes->post('documents/dissertations/create/', 'Dissertations::insertDissertations'); // Handle the form submission to create a new dissertation
 $routes->get('documents/dissertations/view/(:num)', 'Dissertations::view/$1'); // View dissertations thesis with ID parameter
 $routes->get('documents/dissertations/download/(:num)', 'Dissertations::download/$1'); // Download specific document
+$routes->post('documents/dissertations/edit/(:num)', 'Dissertations::edit/$1'); // Edit specific document
 
 // Faculty Research
 $routes->get('documents/facultyResearch', 'FacultyResearch::index');
@@ -48,11 +50,13 @@ $routes->get('documents/facultyResearch/create', 'FacultyResearch::createFaculty
 $routes->post('documents/facultyResearch/create/', 'FacultyResearch::insertFacultyResearch'); // Handle the form submission to create a new dissertation
 $routes->get('documents/facultyResearch/view/(:num)', 'FacultyResearch::view/$1'); // View faculty research thesis with ID parameter
 $routes->get('documents/facultyResearch/download/(:num)', 'FacultyResearch::download/$1'); // Download specific document
+$routes->post('documents/facultyResearch/edit/(:num)', 'FacultyResearch::edit/$1'); // Edit specific document
 
 // List of submitted documents, for librarian and adviser
 $routes->get('documents/submitted/', 'Documents::submitted'); // Display the list of submitted documents; graduate thesis, dissertations, and faculty research
 $routes->get('documents/endorsed/', 'Documents::endorsed'); // Display the list of endorsed documents; graduate thesis, dissertations, and faculty research
 $routes->get('documents/published/', 'Documents::published'); // Display the list of published documents; graduate thesis, dissertations, and faculty research
+$routes->post('documents/published/edit/(:num)', 'Dissertations::edit/$1'); // Edit specific document
 
 
 

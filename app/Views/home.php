@@ -148,7 +148,7 @@
                         <div class="col-6 mb-3">
                             <a href="<?= base_url('documents/graduateThesis/'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                 <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>
-                                <div class="text-white">Thesis and Dissertations</div>
+                                <div class="text-white">Thesis</div>
                             </a>
                         </div>
                         <div class="col-6 mb-3">
@@ -158,9 +158,9 @@
                             </a>
                         </div>
                         <div class="col-6">
-                            <a href="<?= base_url('#'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
-                                <i class="fas fa-folder-open fa-2x mb-2 text-white"></i>
-                                <div class="text-white">Archive and Collections</div>
+                            <a href="<?= base_url('documents/dissertations'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                                <i class="fas fas fa-book fa-2x mb-2 text-white"></i>
+                                <div class="text-white">Dissertations</div>
                             </a>
                         </div>
                         <div class="col-6">

@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Document;
 use App\Models\Department;
 use App\Models\User;
+use App\Models\Feedbacks;
 
 class FacultyResearch extends BaseController
 {
@@ -179,6 +180,102 @@ class FacultyResearch extends BaseController
             return $this->response->download($filePath, null)->setFileName($newFileName);
         } else {
             return redirect()->back();
+        }
+    }
+
+    public function edit($documentId)
+    {
+        $documentModel = new Document();
+        $feedbacksModel = new Feedbacks();
+        $action = $this->request->getPost('action');
+        if ($action === 'update') {
+            $rules = [
+                'status' => 'required|in_list[submitted,endorsed,published,rejected]',
+                'remarks' => [
+                    'rules' => 'permit_empty|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
+                    'errors' => [
+                        'regex_match' => 'Remarks can only include letters, numbers, and basic punctuation.'
+                    ]
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+            }
+
+            $userId = $this->request->getPost('user_id');
+            echo "User ID: " . $userId . "<br>";
+
+            if (empty($userId)) {
+                return redirect()->back()->withInput()->with('error', 'Invalid account.');
+            }
+
+            // Update status of the $documentId
+            $db = \Config\Database::connect();
+            $db->transBegin();
+
+            $status = $this->request->getPost('status');
+            $remarks = strip_tags(trim($this->request->getPost('remarks')));
+            $remarks = htmlspecialchars($remarks, ENT_QUOTES, 'UTF-8');
+
+            $data = [
+                'status' => $status,
+            ];
+
+            try {
+                $documentModel->update($documentId, $data);
+
+                $feedbacksModel->insert([
+                    'document_id' => $documentId,
+                    'user_id'     => $userId,
+                    'content'     => $remarks,
+                ]);
+
+                if ($db->transStatus() === false) {
+                    throw new \Exception('Transaction error');
+                }
+
+                $db->transCommit();
+                return redirect()->back()->with('success', 'Document updated successfully');
+            } catch (\Exception $e) {
+                $db->transRollback();
+                return redirect()->back()->withInput()->with('error', 'Failed to update document');
+            }
+        } elseif ($action === 'edit') {
+            $rules = [
+                'thesis_title' => [
+                    'label' => 'Title',
+                    'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()\':"-]+$/]',
+                    'errors' => ['regex_match' => 'Title contains invalid characters.']
+                ],
+                'authors' => [
+                    'label' => 'Authors',
+                    'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()\':"-]+$/]',
+                    'errors' => ['regex_match' => 'Authors contain invalid characters.']
+                ],
+                'tags' => [
+                    'label' => 'Tags',
+                    'rules' => 'permit_empty|regex_match[/^[a-zA-Z0-9\s,.-]+$/]',
+                    'errors' => ['regex_match' => 'Tags contain invalid characters.']
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+            }
+
+            $data = [
+                'title'   => esc(trim($this->request->getPost('thesis_title'))),
+                'authors' => esc(trim($this->request->getPost('authors'))),
+                'tags'    => esc(trim($this->request->getPost('tags'))),
+            ];
+
+            try {
+                $documentModel->update($documentId, $data);
+                return redirect()->back()->with('success', 'Document info updated successfully');
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Error while updating document');
+            }
         }
     }
 }

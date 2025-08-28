@@ -74,8 +74,8 @@
                                                     }
                                                 }
                                                 ?>
-                                            </opt ion>
-                                        <?php endforeach; ?>
+                                                </opt ion>
+                                            <?php endforeach; ?>
                                     </select>
                                 </div>
 
@@ -91,10 +91,10 @@
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Adviser<small class="text-muted text-red"></small></label>
                                     <select name="adviser_id" class="form-control form-control-sm" required
-                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && 
-                                             $dissertations[0]['status'] == 'rejected' && 
-                                             $session->get('user_id') != $dissertations[0]['adviser_id'] && 
-                                             $dissertations[0]['status'] != 'rejected') ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] &&
+                                            $dissertations[0]['status'] == 'rejected' &&
+                                            $session->get('user_id') != $dissertations[0]['adviser_id'] &&
+                                            $dissertations[0]['status'] != 'rejected') ? '' : 'disabled'; ?>>
                                         <option value="">Select Adviser</option>
                                         <?php foreach ($advisers as $adviser): ?>
                                             <option value="<?= esc($adviser['id']); ?>"
@@ -118,9 +118,22 @@
                                 </div>
                                 <!-- tags -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Tags <?= ($session->get('user_id') == $dissertations[0]['user_id']) ? '<small class="text-muted text-red">(optional)</small>' : ''; ?></label>
+                                    <label class="form-label">Tags</label>
                                     <input type="text" class="form-control form-control-sm" name="tags" placeholder="Enter tags separated by commas"
                                         value="<?= trim(esc($dissertations[0]['tags'])) ?>"
+                                        <?= ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id']) ? '' : 'disabled'; ?>>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">Status</label>
+                                    <input type="text" class="<?= ($dissertations[0]['status'] == 'rejected') ? 'bg-danger text-light' : '' ?> form-control form-control-sm text-capitalize" name="status" value="<?= (!empty($dissertations[0]['status'])) ? $dissertations[0]['status'] : '' ?>" readonly>
+                                </div>
+
+                                <!-- Thesis File -->
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label">File <?= ($session->get('user_id') == $dissertations[0]['user_id']) ? '<small class="text-muted text-red">(optional)</small>' : ''; ?></label>
+                                    <input type="file" class="form-control form-control-sm" name="thesis_file" accept=".pdf"
                                         <?= ($session->get('user_id') == $dissertations[0]['user_id'] && $dissertations[0]['status'] == 'rejected' && $session->get('user_id') != $dissertations[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
@@ -158,7 +171,7 @@
                             ];
                             ?>
                             <br>
-                            <?php if ($user_level == 'librarian' || $user_level == 'faculty') { ?>
+                            <?php if ($user_level == 'librarian' && $session->get('user_id') == $dissertations[0]['adviser_id'] || $user_level == 'faculty' && $session->get('user_id') == $dissertations[0]['adviser_id']) { ?>
                                 <h6 class="card-title"><?= ($is_adviser == 1 && $user_level == 'faculty') ? "Adviser's" : "Librarian's" ?> Panel</h6>
                                 <hr class="">
                                 <div class="row mb-3">
@@ -176,7 +189,7 @@
 
                                     <!-- Remarks-->
                                     <div class="col-md-6 mb-4">
-                                        <label class="form-label" for="remarks">Feedbacks <span class="text-muted">(optional)</span></label>
+                                        <label class="form-label" for="remarks">Feedbacks</label>
                                         <textarea name="remarks" id="remarks" class="form-control form-control-sm"></textarea>
                                     </div>
                                 </div>
@@ -202,8 +215,36 @@
                                     echo '<button type="submit" name="action" value="edit"  class="btn btn-danger btn-sm px-5">
                                         <i class="fas fa-sync-alt me-2"></i>Save Edit
                                         </button>';
+                                    echo '<button type="submit" name="action" value="resubmit"  class="btn btn-danger btn-sm px-5">
+                                        <i class="fas fas fa-save me-2"></i>Resubmit
+                                        </button>';
                                 }
                                 ?>
+                            </div>
+                            <br>
+                            <hr class="">
+                            <h6 class="card-title mt-2">Feedbacks</h6>
+                            <br>
+                            <div class="row mb-3">
+                                <div class="col-md-12 mb-4">
+                                    <?php if (!empty($feedbacks)): ?>
+                                        <!-- loop through feedbacks -->
+                                        <?php foreach ($feedbacks as $fb): ?>
+                                            <p class="p-0 m-0 mt-2 text-capitalize"><?= esc($fb['first_name'] . " " . $fb['last_name']); ?>
+                                                <span class="text-muted small">
+                                                    <?= esc($fb['user_level']) ?>
+                                                    <?= ($fb['is_adviser'] == 1) ? ' (Adviser)' : '' ?>
+                                                </span>
+                                            </p>
+                                            <div class="form-floating">
+                                                <textarea class="form-control form-control-sm" id="feedbacks" name="feedbacks" rows="5" readonly><?= esc($fb['content']) ?></textarea>
+                                                <label for="feedbacks"><?= date('F j, Y h:i A', strtotime($fb['created_at'])); ?></label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <p class="text-muted text-center">No feedbacks</p>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

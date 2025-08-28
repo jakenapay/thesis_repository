@@ -4,7 +4,7 @@
 
             <div class="card mb-3 p-0">
                 <div class="bg-red text-light card-header fw-bold">
-                    List of Dissertations
+                    List of Published Dissertations
                 </div>
                 <div class="card-body">
                     <table id="dissertationsTable" class="table table-hover table-sm" style="width:100%">

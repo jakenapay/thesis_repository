@@ -33,7 +33,7 @@
                                     </div>
                                     <hr>
                                     <h6 class="text-muted fs-7"><?= $session->get('employment_status_status') . ' | ' . $session->get('academic_status_status'); ?></h6>
-                                    <h6 class="text-muted fs-7"><small><?= $session->get('college') . ' | ' . $session->get('department_name'); ?></small></h6>
+                                    <h6 class="text-muted fs-7"><small><?= $session->get('college_name') . ' | ' . $session->get('department_name'); ?></small></h6>
                                     <p class="card-text"><small class="text-muted"><?= $session->get('email'); ?></small></p>
                                     <div class="d-flex gap-2">
                                         <a href="<?= base_url('account'); ?>" class="btn btn-sm btn-danger d-flex align-items-center">

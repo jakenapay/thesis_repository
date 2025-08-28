@@ -120,6 +120,7 @@ class FacultyResearch extends BaseController
         $documentModel = new Document();
         $usersModel = new User();
         $departmentModel = new Department();
+        $feedbacksModel = new Feedbacks();
 
         // Check the document id if existing
         $facultyResearch = $documentModel
@@ -136,6 +137,11 @@ class FacultyResearch extends BaseController
 
         $advisers = $usersModel->getAdvisers($departmentId);
         $departmentData = $departmentModel->findAll();
+        $feedbacks = $feedbacksModel
+            ->select('feedbacks.*, users.first_name, users.last_name, users.is_adviser, users.user_level')
+            ->join('users', 'users.id = feedbacks.user_id', 'left')
+            ->where('feedbacks.document_id', $documentId)
+            ->findAll();
 
         // echo '<pre>';
         // print_r($data);
@@ -146,7 +152,8 @@ class FacultyResearch extends BaseController
                 'session' => $session,
                 'facultyResearch' => $facultyResearch,
                 'advisers' => $advisers,
-                'department' => $departmentData
+                'department' => $departmentData,
+                'feedbacks' => $feedbacks,
             ];
             return view('template/header', $data)
                 . view('documents/facultyResearch/view', $data)
@@ -175,7 +182,7 @@ class FacultyResearch extends BaseController
 
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         $newFileName = $document['title'] . '.' . $extension;
-        
+
         if ($documentModel->downloaded($documentId)) {
             return $this->response->download($filePath, null)->setFileName($newFileName);
         } else {
@@ -187,12 +194,13 @@ class FacultyResearch extends BaseController
     {
         $documentModel = new Document();
         $feedbacksModel = new Feedbacks();
+        $userId = $this->request->getPost('user_id');
         $action = $this->request->getPost('action');
         if ($action === 'update') {
             $rules = [
                 'status' => 'required|in_list[submitted,endorsed,published,rejected]',
                 'remarks' => [
-                    'rules' => 'permit_empty|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
+                    'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
                     'errors' => [
                         'regex_match' => 'Remarks can only include letters, numbers, and basic punctuation.'
                     ]
@@ -203,8 +211,7 @@ class FacultyResearch extends BaseController
                 return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
             }
 
-            $userId = $this->request->getPost('user_id');
-            echo "User ID: " . $userId . "<br>";
+
 
             if (empty($userId)) {
                 return redirect()->back()->withInput()->with('error', 'Invalid account.');
@@ -270,11 +277,97 @@ class FacultyResearch extends BaseController
                 'tags'    => esc(trim($this->request->getPost('tags'))),
             ];
 
+            if (empty($userId)) {
+                return redirect()->back()->withInput()->with('error', 'Invalid account.');
+            }
+
+            // Check if the document exists
+            $document = $documentModel->find($documentId);
+            if (!$document) {
+                return redirect()->back()->withInput()->with('error', 'Document not found.');
+            }
+            log_message('info', 'Document found: ' . print_r($document, true));
+
+            // Check if the user is authorized to update the document
+            if ($document['user_id'] !== $userId) {
+                return redirect()->back()->withInput()->with('error', 'You are not authorized to update this document.');
+            }
+
+            // Get the document's current file path
+            $currentFilePath = $document['file_path'];
+            log_message('info', 'OLD DOCUMENT PATH: ' . print_r($currentFilePath, true));
+
+            // Check if the current file path is in folder
+            if (strpos($currentFilePath, 'assets/uploads/facultyResearch/') === false) {
+                return redirect()->back()->withInput()->with('error', 'Invalid file path.');
+            }
+
+            // Handle file
+            $file = $this->request->getFile('thesis_file');
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $fileName = $file->getRandomName();
+                $targetPath = ROOTPATH . 'public/assets/uploads/facultyResearch/';
+
+                if (!is_dir($targetPath)) {
+                    mkdir($targetPath, 0777, true);
+                }
+
+                if ($file->move($targetPath, $fileName)) {
+                    $filePath = 'assets/uploads/facultyResearch/' . $fileName;
+                    $data['file_path'] = $filePath;
+                    log_message('info', 'Uploaded to: ' . $filePath);
+
+                    if (file_exists(ROOTPATH . 'public/' . $currentFilePath)) {
+                        unlink(ROOTPATH . 'public/' . $currentFilePath);
+                    }
+                } else {
+                    log_message('error', 'File move failed: ' . $file->getErrorString());
+                }
+            }
+
             try {
                 $documentModel->update($documentId, $data);
                 return redirect()->back()->with('success', 'Document info updated successfully');
             } catch (\Exception $e) {
                 return redirect()->back()->withInput()->with('error', 'Error while updating document');
+            }
+        } else if ($action === 'resubmit') {
+            // If userId is not set, redirect back with error
+            if (empty($userId)) {
+                return redirect()->back()->withInput()->with('error', 'Invalid account.');
+            }
+
+            // Check if document exists
+            $document = $documentModel->find($documentId);
+            if (!$document) {
+                return redirect()->back()->withInput()->with('error', 'Document not found.');
+            }
+
+            // Check if the user is authorized to resubmit the document
+            if ($document['user_id'] !== $userId) {
+                return redirect()->back()->withInput()->with('error', 'Account is not authorized.');
+            }
+
+            // Check if the document is in 'rejected' status
+            if ($document['status'] !== 'rejected') {
+                return redirect()->back()->withInput()->with('error', 'Document is not rejected.');
+            }
+
+            // Update the document status
+            $data = [
+                'status' => 'submitted',
+            ];
+
+            $db = \Config\Database::connect();
+            $db->transBegin();
+
+            try {
+                $documentModel->update($documentId, $data);
+                $db->transCommit();
+                return redirect()->back()->with('success', 'Document resubmitted successfully');
+            } catch (\Exception $e) {
+                $db->transRollback();
+                return redirect()->back()->withInput()->with('error', 'Error while resubmitting document');
             }
         }
     }

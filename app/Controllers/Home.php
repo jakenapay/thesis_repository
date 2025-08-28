@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\AcademicStatus;
 use App\Models\JobTitle;
 use App\Models\Department;
+use App\Models\CollegeModel;
 
 class Home extends BaseController
 {
@@ -26,6 +27,9 @@ class Home extends BaseController
         $departmentModel = new Department();
         $departmentData = $departmentModel->findAll();
 
+        $collegeModel = new CollegeModel();
+        $collegeData = $collegeModel->findAll();
+
         // Get session data
         $session = session();
 
@@ -33,6 +37,7 @@ class Home extends BaseController
         $employmentStatusId = $session->get('employment_status');
         $academicStatusId = $session->get('academic_status');
         $departmentId = $session->get('department');
+        $collegeId = $session->get('college');
 
         // Fetch corresponding status names using the IDs from the session
         if ($employmentStatusId) {
@@ -55,10 +60,19 @@ class Home extends BaseController
         } else {
             $departmentName = null; // If no department ID in session, set to null
         }
+
+        if ($collegeId) {
+            $collegeData = $collegeModel->find($collegeId);
+            $collegeName = $collegeData ? $collegeData['name'] : null;
+        } else {
+            $collegeName = null;
+        }
+
         // Set new session variables with the status names
         $session->set('department_name', $departmentName);
         $session->set('employment_status_status', $employmentStatusName);
         $session->set('academic_status_status', $academicStatusName);
+        $session->set('college_name', $collegeName);
         
         // Combine all data
         $data = [

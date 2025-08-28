@@ -4,7 +4,7 @@
 
             <div class="card mb-3 p-0">
                 <div class="bg-red text-light card-header fw-bold">
-                    List of Faculty Research
+                    List of Published Faculty Research
                 </div>
                 <div class="card-body">
                     <table id="facultyResearchTable" class="table table-hover table-sm" style="width:100%">

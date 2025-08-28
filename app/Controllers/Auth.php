@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\AcademicStatus;
 use App\Models\JobTitle;
 use App\Models\Department;
+use App\Models\CollegeModel;
 
 class Auth extends BaseController
 {
@@ -99,6 +100,12 @@ class Auth extends BaseController
         $jobTitleModel = new JobTitle();
         $jobTitleData = $jobTitleModel->findAll();
 
+        $departmentModel = new Department();
+        $departmentsData = $departmentModel->findAll();
+
+        $collegeModel = new CollegeModel();
+        $collegesData = $collegeModel->findAll();
+
         // Get session data
         $session = session();
 
@@ -107,6 +114,8 @@ class Auth extends BaseController
             'session' => $session,
             'AcademicStatusData' => $AcademicStatusData,
             'jobTitleData' => $jobTitleData,
+            'departmentsData' => $departmentsData,
+            'collegesData' => $collegesData,
         ];
 
         return view('auth/register', $data);
@@ -165,6 +174,7 @@ class Auth extends BaseController
             'college'           => trim($request->getPost('college')),
             'department_id'        => trim($request->getPost('department')),
             'agreed_terms'      => $request->getPost('agree') ? 1 : 0,
+            'user_level'        => 'masters', // Default user level
         ];
 
 

@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\AcademicStatus;
 use App\Models\JobTitle;
 use App\Models\Department;
+use App\Models\CollegeModel;
 
 class Account extends BaseController
 {
@@ -28,6 +29,9 @@ class Account extends BaseController
         $departmentModel = new Department();
         $departmentData = $departmentModel->findAll();
 
+        $collegeModel = new CollegeModel();
+        $collegeData = $collegeModel->findAll();
+
         // Get session data
         $session = session();
 
@@ -37,6 +41,7 @@ class Account extends BaseController
             'AcademicStatusData' => $AcademicStatusData,
             'jobTitleData' => $jobTitleData,
             'departmentData' => $departmentData,
+            'collegeData' => $collegeData,
         ];
 
         return view('template/header', $data)

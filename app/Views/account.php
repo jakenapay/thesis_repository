@@ -101,7 +101,15 @@
                             <!-- College -->
                             <div class="col-md-6 mb-2">
                                 <label class="form-label">College</label>
-                                <input type="text" class="form-control form-control-sm" name="college" required value="<?= $session->get('college'); ?>">
+                                <!-- <input type="text" class="form-control form-control-sm" name="college" required value="<?= $session->get('college'); ?>"> -->
+                                <select class="form-control form-control-sm" name="college" required>
+                                    <option value="" disabled <?= empty($session->get('college')) ? 'selected' : '' ?>>Select College</option>
+                                    <?php foreach ($collegeData as $college): ?>
+                                        <option value="<?= esc($college['id']) ?>" <?= $session->get('college') == $college['id'] ? 'selected' : '' ?>>
+                                            <?= esc($college['name']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             <!-- Department -->

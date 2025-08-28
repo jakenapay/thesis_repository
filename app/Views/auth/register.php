@@ -11,7 +11,8 @@
     <!-- Font Awesome CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
-        body, html {
+        body,
+        html {
             width: 100%;
             height: 100vh;
         }
@@ -135,11 +136,21 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
                                             <label class="form-label">College</label>
-                                            <input type="text" class="form-control form-control-sm" name="college" placeholder="e.g., College of Engineering">
+                                            <select name="college" class="form-control form-control-sm" required>
+                                                <option value="">Select College</option>
+                                                <?php foreach ($collegesData as $college): ?>
+                                                    <option value="<?= esc($college['id']) ?>"><?= esc($college['name']) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                         <div class="col-md-6 mb-2">
                                             <label class="form-label">Department</label>
-                                            <input type="text" class="form-control form-control-sm" name="department" placeholder="e.g., Computer Engineering">
+                                            <select name="department" class="form-control form-control-sm" required>
+                                                <option value="">Select Department</option>
+                                                <?php foreach ($departmentsData as $dept): ?>
+                                                    <option value="<?= esc($dept['id']) ?>"><?= esc($dept['name']) ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                     </div>
 

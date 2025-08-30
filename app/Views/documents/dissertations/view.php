@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <div class="row d-flex min-vh-100">
-        <div class="col-md-8">
+        <div class="col-md-8 mb-3">
             <form action="<?= base_url('documents/dissertations/edit/' . $dissertations[0]['id']); ?>" method="POST" enctype="multipart/form-data" class="row g-3">
                 <!-- Contact Card -->
                 <div class="card p-0">
@@ -43,7 +43,7 @@
                             <h6 class="card-title">Document Information</h6>
                             <hr class="">
 
-                            <div class="row mb-3">
+                            <div class="row">
                                 <!-- Thesis Title -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Title</label>
@@ -70,7 +70,7 @@
                                                 <?php
                                                 if ($dissertations[0]['department_id'] == $dept['id']) {
                                                     if ($session->get('user_id') == $dissertations[0]['user_id']) {
-                                                        echo ' (Current)';
+                                                        echo ' (Me)';
                                                     }
                                                 }
                                                 ?>
@@ -226,7 +226,7 @@
                             <h6 class="card-title mt-2">Feedbacks</h6>
                             <br>
                             <div class="row mb-3">
-                                <div class="col-md-12 mb-4">
+                                <div class="col-md-12">
                                     <?php if (!empty($feedbacks)): ?>
                                         <!-- loop through feedbacks -->
                                         <?php foreach ($feedbacks as $fb): ?>
@@ -244,6 +244,8 @@
                                     <?php else: ?>
                                         <p class="text-muted text-center">No feedbacks</p>
                                     <?php endif; ?>
+                                    <hr>
+                                    <p class="m-0 text-muted fst-italic">Uploaded on: <?= date('F j, Y', strtotime($dissertations[0]['uploaded_at'])); ?></p>
                                 </div>
                             </div>
                         </div>

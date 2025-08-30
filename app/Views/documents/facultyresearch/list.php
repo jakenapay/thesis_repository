@@ -4,15 +4,17 @@
 
             <div class="card mb-3 p-0">
                 <div class="bg-red text-light card-header fw-bold">
-                    List of Published Faculty Research
+                    List of Faculty Research
                 </div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                     <table id="facultyResearchTable" class="table table-hover table-sm" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Title</th>
                                 <th>Author</th>
+                                <th>Adviser</th>
                                 <th>Department</th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -22,7 +24,17 @@
                                     <tr>
                                         <td><?= esc($research['title']); ?></td>
                                         <td><?= esc($research['authors']); ?></td>
+                                        <td class="text-capitalize"><?= esc($research['adviser_name']); ?></td>
                                         <td><?= esc($research['department_name'] ?? ''); ?></td>
+                                        <?php if ($research['status'] == 'submitted') { ?>
+                                            <td class="bg-warning text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php } else if ($research['status'] == 'endorsed') { ?>
+                                            <td class="bg-info text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php } else if ($research['status'] == 'published') { ?>
+                                            <td class="bg-success text-light text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php } else { ?>
+                                            <td class="bg-danger text-light text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php } ?>
                                         <td>
                                             <a href="<?= base_url('documents/facultyResearch/view/' . esc($research['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                 <i class="fas fa-eye"></i>

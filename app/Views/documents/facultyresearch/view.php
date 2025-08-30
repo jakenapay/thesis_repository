@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <div class="row d-flex min-vh-100">
-        <div class="col-md-8">
+        <div class="col-md-8 mb-3">
             <form action="<?= base_url('documents/facultyResearch/edit/' . $facultyResearch[0]['id']); ?>" method="POST" enctype="multipart/form-data" class="row g-3">
                 <!-- Contact Card -->
                 <div class="card p-0">
@@ -105,7 +105,7 @@
                                                 <?php
                                                 if ($facultyResearch[0]['adviser_id'] == $adviser['id']) {
                                                     if ($session->get('user_id') == $facultyResearch[0]['user_id']) {
-                                                        echo ' (Current)';
+                                                        echo ' (Me)';
                                                     }
                                                 }
                                                 ?>
@@ -224,7 +224,7 @@
                             <h6 class="card-title mt-2">Feedbacks</h6>
                             <br>
                             <div class="row mb-3">
-                                <div class="col-md-12 mb-4">
+                                <div class="col-md-12">
                                     <?php if (!empty($feedbacks)): ?>
                                         <!-- loop through feedbacks -->
                                         <?php foreach ($feedbacks as $fb): ?>
@@ -241,6 +241,8 @@
                                     <?php else: ?>
                                         <p class="text-muted text-center">No feedbacks</p>
                                     <?php endif; ?>
+                                    <hr>
+                                    <p class="m-0 text-muted fst-italic">Uploaded on: <?= date('F j, Y', strtotime($facultyResearch[0]['uploaded_at'])); ?></p>
                                 </div>
                             </div>
                         </div>

@@ -25,10 +25,11 @@ class Dissertations extends BaseController
 
         $data = ['session' => $session];
         $data['dissertations'] = $documentModel
-            ->select('documents.*, departments.name as department_name')
+            ->select('documents.*, departments.name as department_name, CONCAT(users.first_name, " ", users.last_name, " ", users.suffix) AS adviser_name')
             ->join('departments', 'departments.id = documents.department_id', 'left')
+            ->join('users', 'users.id = documents.adviser_id', 'left')
             ->where('documents.type', 'dissertation')
-            ->where('documents.status', 'published')
+            ->where('documents.status <>', 'rejected')
             ->where('documents.is_deleted', 0)
             ->findAll();
 

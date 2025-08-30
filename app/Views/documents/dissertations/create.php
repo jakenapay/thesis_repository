@@ -106,6 +106,7 @@
                                     <select name="adviser_id" class="form-control form-control-sm" required>
                                         <option value="">Select Adviser</option>
                                         <?php foreach ($advisers as $adviser): ?>
+                                            <?php if ($session->get('user_id') != $adviser['id']) { ?>
                                             <option value="<?= esc($adviser['id']); ?>">
                                                 <?= ucwords(strtolower(trim(
                                                     esc($adviser['first_name']) . ' ' .
@@ -114,6 +115,7 @@
                                                         esc($adviser['suffix'])
                                                 ))); ?>
                                             </option>
+                                            <?php } ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>

@@ -4,15 +4,17 @@
 
             <div class="card mb-3 p-0">
                 <div class="bg-red text-light card-header fw-bold">
-                    List of Published Dissertations
+                    List of Dissertations
                 </div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                     <table id="dissertationsTable" class="table table-hover table-sm" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Title</th>
                                 <th>Author</th>
+                                <th>Adviser</th>
                                 <th>Department</th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -22,7 +24,17 @@
                                     <tr>
                                         <td><?= esc($dissertation['title']); ?></td>
                                         <td><?= esc($dissertation['authors']); ?></td>
+                                        <td class="text-capitalize"><?= esc($dissertation['adviser_name']); ?></td>
                                         <td><?= esc($dissertation['department_name'] ?? ''); ?></td>
+                                        <?php if ($dissertation['status'] == 'submitted') { ?>
+                                            <td class="bg-warning text-capitalize"><?= esc($dissertation['status']); ?></td>
+                                        <?php } else if ($dissertation['status'] == 'endorsed') { ?>
+                                            <td class="bg-info text-capitalize"><?= esc($dissertation['status']); ?></td>
+                                        <?php } else if ($dissertation['status'] == 'published') { ?>
+                                            <td class="bg-success text-light text-capitalize"><?= esc($dissertation['status']); ?></td>
+                                        <?php } else { ?>
+                                            <td class="bg-danger text-light text-capitalize"><?= esc($dissertation['status']); ?></td>
+                                        <?php } ?>
                                         <td>
                                             <a href="<?= base_url('documents/dissertations/view/' . esc($dissertation['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                 <i class="fas fa-eye"></i>

@@ -4,15 +4,17 @@
 
             <div class="card mb-3 p-0">
                 <div class="bg-red text-light card-header fw-bold">
-                    List of Published Graduate Thesis
+                    List of Graduate Thesis
                 </div>
-                <div class="card-body">
-                    <table id="graduateThesisTable" class="table table-hover table-sm" style="width:100%">
+                <div class="card-body table-responsive">
+                    <table id="graduateThesisTable" class="table table-hover table-sm table-responsive" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Title</th>
                                 <th>Author</th>
+                                <th>Adviser</th>
                                 <th>Department</th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -22,7 +24,17 @@
                                     <tr>
                                         <td><?= esc($thesis['title']); ?></td>
                                         <td><?= esc($thesis['authors']); ?></td>
+                                        <td class="text-capitalize"><?= esc($thesis['adviser_name']); ?></td>
                                         <td><?= esc($thesis['department_name'] ?? ''); ?></td>
+                                        <?php if ($thesis['status'] == 'submitted') { ?>
+                                            <td class="bg-warning text-capitalize"><?= esc($thesis['status']); ?></td>
+                                        <?php } else if ($thesis['status'] == 'endorsed') { ?>
+                                            <td class="bg-info text-capitalize"><?= esc($thesis['status']); ?></td>
+                                        <?php } else if ($thesis['status'] == 'published') { ?>
+                                            <td class="bg-success text-light text-capitalize"><?= esc($thesis['status']); ?></td>
+                                        <?php } else { ?>
+                                            <td class="bg-danger text-light text-capitalize"><?= esc($dissertation['status']); ?></td>
+                                        <?php } ?>
                                         <td>
                                             <a href="<?= base_url('documents/graduateThesis/view/' . esc($thesis['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                 <i class="fas fa-eye"></i>

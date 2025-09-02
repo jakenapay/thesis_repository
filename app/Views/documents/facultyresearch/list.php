@@ -1,7 +1,13 @@
 <div class="container mt-4">
     <div class="row d-flex min-vh-100">
         <div class="col-md-8">
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger text-center"><?= session()->getFlashdata('error') ?></div>
+            <?php endif; ?>
 
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success text-center"><?= session()->getFlashdata('success') ?></div>
+            <?php endif; ?>
             <div class="card mb-3 p-0">
                 <div class="bg-red text-light card-header fw-bold">
                     List of Faculty Research

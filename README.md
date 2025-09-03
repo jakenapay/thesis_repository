@@ -9,9 +9,9 @@ This project is based on **CodeIgniter 4**.
 ## Features
 
 - Organized codebase for thesis research and development
-- Supports multiple languages: **PHP** (primary), **JavaScript**, **CSS**, **HTML**, **Hack**
+- Supports multiple languages: **PHP CodeIgniter 4** (primary), **JavaScript**, **CSS**, **HTML**, **MySQL**
 - Modular and extensible structure
-- Publicly accessible for collaboration, feedback, and peer review
+- Publicly accessible for submission, publication, feedback, and adviser review
 
 ---
 
@@ -19,7 +19,8 @@ This project is based on **CodeIgniter 4**.
 
 - **PHP** (main application, CodeIgniter 4 framework)
 - **JavaScript**, **CSS**, **HTML** (frontend)
-- **Hack** (optional components)
+- **MySQL**, **PhpMyAdmin** (backend)
+- **Bootstrap** (optional components)
 
 ---
 
@@ -60,14 +61,20 @@ If `composer.json` is missing or incomplete, you may need to re-create it or fet
 
 ---
 
-### 4. Web Server Configuration
+### 4. Set up Database in MySQL
+
+- Get the SQL file provided and create a new database "thesis_repository" and import the SQL file.
+
+---
+
+### 5. Web Server Configuration
 
 - The *public* directory is your web root. Point your web server's document root to `project-root/public`.
 - Do **not** expose the project root or any folder other than `public` to the web.
 
 ---
 
-### 5. Running the Application
+### 6. Running the Application
 
 With PHP installed (minimum version 8.1):
 

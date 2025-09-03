@@ -1,69 +1,122 @@
-# CodeIgniter 4 Application Starter
+# Thesis Repository
 
-## What is CodeIgniter?
+Welcome to the **Thesis Repository**! This repository is designed to support thesis research and development, providing a structured environment for code, data, and documentation related to academic or technical projects.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+This project is based on **CodeIgniter 4**.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+---
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Features
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- Organized codebase for thesis research and development
+- Supports multiple languages: **PHP** (primary), **JavaScript**, **CSS**, **HTML**, **Hack**
+- Modular and extensible structure
+- Publicly accessible for collaboration, feedback, and peer review
 
-## Installation & updates
+---
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## Technologies Used
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+- **PHP** (main application, CodeIgniter 4 framework)
+- **JavaScript**, **CSS**, **HTML** (frontend)
+- **Hack** (optional components)
 
-## Setup
+---
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## Getting Started
 
-## Important Change with index.php
+### 1. Clone the Repository
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+```bash
+git clone https://github.com/jakenapay/thesis_repository.git
+cd thesis_repository
+```
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+### 2. Install Dependencies
 
-**Please** read the user guide for a better explanation of how CI4 works!
+This repository uses **Composer** for PHP dependency management. If the `vendor/` directory and other files are missing (e.g., due to `.gitignore`), you need to install Composer dependencies.
 
-## Repository Management
+If you don't have Composer installed, follow the official guide: https://getcomposer.org/download/
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Then run:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+```bash
+composer install
+```
+
+If `composer.json` is missing or incomplete, you may need to re-create it or fetch a fresh CodeIgniter 4 `composer.json` as a base.
+
+---
+
+### 3. Setting Up Environment
+
+- Copy the included `env` file to `.env`:
+
+    ```bash
+    cp env .env
+    ```
+
+- Edit `.env` to set your `baseURL` and database configuration as needed.
+
+---
+
+### 4. Web Server Configuration
+
+- The *public* directory is your web root. Point your web server's document root to `project-root/public`.
+- Do **not** expose the project root or any folder other than `public` to the web.
+
+---
+
+### 5. Running the Application
+
+With PHP installed (minimum version 8.1):
+
+```bash
+php spark serve
+```
+
+Then visit [http://localhost:8080](http://localhost:8080) in your browser.
+
+---
 
 ## Server Requirements
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+- **PHP** 8.1 or higher
+- PHP extensions required:
+    - intl
+    - mbstring
+    - json (enabled by default)
+    - mysqlnd (for MySQL)
+    - libcurl (for HTTP client)
+- Composer (to install dependencies)
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+---
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+## Running Tests
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+- Install dev dependencies: `composer install`
+- Copy `phpunit.xml.dist` to `phpunit.xml` and edit as needed.
+- Run tests:
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-# thesis_repository
+    ```bash
+    vendor/bin/phpunit
+    ```
+
+---
+
+## Contribution
+
+Contributions are welcome! Fork the repository and open a pull request or submit an issue.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## References
+
+- [CodeIgniter 4 User Guide](https://codeigniter.com/user_guide/)
+- [Composer Documentation](https://getcomposer.org/doc/)

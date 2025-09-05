@@ -1,69 +1,171 @@
-# CodeIgniter 4 Application Starter
+# LPU Thesis Repository System
 
-## What is CodeIgniter?
+A centralized digital archive system designed to store, manage, and showcase academic research outputs from Lyceum of the Philippines University (LPU) students.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🎯 Project Purpose
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+This system serves as a comprehensive platform for:
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- **Preservation** of student research for future reference
+- **Accessibility** for students, faculty, and researchers to review completed theses
+- **Recognition** of outstanding academic work produced by LPU students
+- **Support** for ongoing research by providing examples and references
 
-## Installation & updates
+---
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## 🛠️ Tech Stack
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+- **Backend:** CodeIgniter 4 (PHP Framework)
+- **Database:** MySQL
+- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
+- **Server:** Apache (via XAMPP)
+- **Architecture:** MVC Pattern
 
-## Setup
+---
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## 📋 Prerequisites
 
-## Important Change with index.php
+- PHP 8.1+ (minimum requirement)
+- XAMPP (includes Apache, MySQL, PHP)
+- Composer (for dependency management)
+- Git (optional, for cloning)
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+---
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## 🚀 Installation Instructions
 
-**Please** read the user guide for a better explanation of how CI4 works!
+1. **Install XAMPP**
+   - Download and install XAMPP.
+   - Start Apache and MySQL services from XAMPP Control Panel.
 
-## Repository Management
+2. **Clone/Download the Project**
+   - Use Git or download as ZIP and extract to `htdocs` folder.
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+3. **Install Dependencies**
+   - Run `composer install` inside the project directory.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+4. **Database Setup**
+   - Open phpMyAdmin (`http://localhost/phpmyadmin`)
+   - Create a new database:
+     - Click "New" in the left sidebar
+     - Enter database name: `lpu_thesis_repository`
+     - Click "Create"
+   - Import the SQL file:
+     - Select your newly created database
+     - Click the "Import" tab
+     - Click "Choose file" and select the provided `.sql` file
+     - Click "Import" to execute
 
-## Server Requirements
+5. **Environment Configuration**
+   - Update database settings in `app/Config/Database.php`
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+6. **Configure Base URL**
+   - Update `app/Config/App.php` with your application's base URL
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+7. **Set Folder Permissions**
+   - Create upload directories, e.g. `writable/uploads`, and ensure proper permissions
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+---
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+## 🌐 Access the Application
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-# thesis_repository
+- **Main URL:** [http://localhost/thesis_repository/](http://localhost/thesis_repository/)
+- **Login Page:** [http://localhost/thesis_repository/login](http://localhost/thesis_repository/login)
+- **Register Page:** [http://localhost/thesis_repository/register](http://localhost/thesis_repository/register)
+
+---
+
+## 🧪 Testing Setup (Optional)
+
+- Install testing dependencies (`composer install --dev`)
+- Configure test database
+- Update test database settings in `app/Config/Database.php`
+- Run tests via CodeIgniter's testing tools
+
+---
+
+## 🔧 Additional Configuration
+
+### File Upload Settings
+
+- Ensure PHP allows file uploads in `php.ini` (`file_uploads = On`)
+- Set appropriate file size limits (`upload_max_filesize`, `post_max_size`)
+
+### Security Settings
+
+- Ensure `app/Config/Filters.php` has proper security filters
+- Configure CSRF protection if needed
+- Set proper file permissions for upload directories
+
+---
+
+## 📁 Project Structure
+
+```
+thesis_repository/
+├── app/
+├── public/
+├── writable/
+│   └── uploads/
+├── vendor/
+├── composer.json
+└── ...
+```
+
+---
+
+## ✨ Features
+
+- **Document Management:** Upload, view, download academic papers
+- **User Authentication:** Role-based access (students, faculty, advisers, librarians)
+- **Review System:** Feedback and approval workflow for submitted documents
+- **Search & Browse:** Easy discovery of research works
+- **Analytics:** Track document views and downloads
+- **Department-based Organization:** Documents organized by academic departments
+
+---
+
+## 🎯 Document Types
+
+- **Graduate Thesis:** Undergraduate research papers
+- **Dissertations:** Graduate-level research papers
+- **Faculty Research:** Research works by faculty members
+
+---
+
+## 👥 Target Users
+
+- **LPU Students and Faculty:** Full access with valid credentials
+- **Guests:** Limited access to abstracts or public information
+- **Advisers:** Review and provide feedback
+- **Librarians:** Manage and publish documents
+
+---
+
+## 🚨 Troubleshooting
+
+**Common Issues:**
+
+- **Database Connection Error:** Check MySQL service and credentials in `Database.php`
+- **SQL Import Failed:** Ensure the database is created first, then import
+- **File Upload Errors:** Verify upload directory permissions and PHP settings
+- **Base URL Issues:** Ensure correct path in `App.php` matches your folder structure
+- **Missing Dependencies:** Run `composer install`
+
+**Default Admin Account:**
+
+- Check the imported SQL file for default user credentials, or create an admin user through the registration page.
+
+---
+
+## ✅ Verification
+
+- Access the homepage successfully
+- Register a new user account
+- Login with credentials
+- Upload a test document
+- View analytics dashboard
+
+---

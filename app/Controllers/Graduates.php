@@ -175,7 +175,7 @@ class Graduates extends BaseController
             return redirect()->to('/')->with('error', 'Document not found');
         }
 
-        $filePath = ROOTPATH . 'public/' . $document['file_path'];
+        $filePath = FCPATH . $document['file_path'];
 
         if (!file_exists($filePath)) {
             return redirect()->to('/')->with('error', 'File not found');
@@ -187,7 +187,8 @@ class Graduates extends BaseController
         if ($documentModel->downloaded($documentId)) {
             return $this->response->download($filePath, null)->setFileName($newFileName);
         } else {
-            return redirect()->back();
+            // Redirect back with an error message to tell the user what happened.
+            return redirect()->back()->with('error', 'Could not process the download request. Please try again.');
         }
     }
 

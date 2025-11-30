@@ -37,7 +37,8 @@ class User extends Model
         'remember_token_expires',
         'created_at',
         'updated_at',
-        'profile_image'
+        'profile_image',
+        'status'
     ];
 
     protected bool $allowEmptyInserts = false;

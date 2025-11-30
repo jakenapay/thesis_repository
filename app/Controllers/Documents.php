@@ -105,7 +105,10 @@ class Documents extends BaseController
 
     public function published()
     {
-        // $session = session();
+        $session = session();
+        $data = [
+           'session' => $session,
+        ];
         // if ($session->get('user_level') != 'librarian') {
         //     return redirect()->to(base_url());
         // }

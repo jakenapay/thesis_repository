@@ -48,6 +48,11 @@
           <li class="nav-item">
             <a class="nav-link nav-links <?= strpos($path, 'contact') !== false ? 'active' : '' ?>" href="<?= base_url('contact') ?>">Contact</a>
           </li>
+          <?php if ( $session->get('user_level') == 'admin' || $session->get('user_level') == 'librarian' ) : ?>
+            <li class="nav-item">
+              <a class="nav-link nav-links <?= strpos($path, 'analytics') !== false ? 'active' : '' ?>" href="<?= base_url('analytics') ?>">Analytics</a>
+            </li>
+          <?php endif; ?>
         </ul>
       </div>
     </div>

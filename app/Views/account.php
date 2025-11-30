@@ -130,19 +130,34 @@
                             <h6 class="card-title">Login Information</h6>
                             <hr class="">
 
-                            <div class="mb-2">
+                            <div class="mb-4 col-md-6">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-control form-control-sm" required>
+                                    <option value="" disabled <?= empty($session->get('status')) ? 'selected' : '' ?>>Select Status</option>
+                                    <option value="1" <?= $session->get('status') == 1 ? 'selected' : '' ?>>Active</option>
+                                    <option value="0" <?= $session->get('status') == 0 ? 'selected' : '' ?>>Inactive</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4 col-md-6">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" class="form-control form-control-sm" name="email" required value="<?= $session->get('email'); ?>">
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-2">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" class="form-control form-control-sm" name="password" value="">
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <label class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control form-control-sm" name="confirm_password" value="">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control form-control-sm" name="password" value="">
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control form-control-sm" name="confirm_password" value="">
+                            </div>
+
+                            <!-- Note -->
+                            <div class="col-md-12 mb-4">
+                                <div class="bg-light border-secondary p-2 border-1 rounded-3 form-control form-control-sm" style="border-style: dashed;">
+                                    <i class="fas fa-info-circle me-2 text-muted"></i><small class="text-muted">Leave blank to keep current password</small>
                                 </div>
                             </div>
 

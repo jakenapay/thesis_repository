@@ -1,0 +1,53 @@
+// DONE
+Document
+-once submitted cannot be edited
+-once endorsed cannot be edited
+-once rejected can be edit
+
+// DONE
+Adviser
+-update status to endorsed
+-update to rejected
+
+-
+// DONE 
+masters
+dissertations
+faculty
+librarian
+admin
+
+// DONE
+published
+-
+
+// DONE
+analytics
+-for everyone
+
+
+------------------
+June 22, 2025 - ALL DONE
+add comment section for user side (from adviser/librarian) // DONE
+add reupload documents if rejected // DONE
+add status for masters/students // DONE
+list of department // DONE
+
+back logs
+DONE -Dapat hindi naikikita ng ibang faculty yung change status ng docuement 
+DONE -all types of docs status should be shown in list of docs
+	DONE - graduate thesis page
+	DONE - faculty research page
+	DONE - dissertation page
+DONE -add types of docs in table, and who uploaded
+DONE - faculty (who are adviser) are unable to select themselves as their own adviser
+back logs
+DONE -add success message to every successful upload of thesis/dissertations/fac-research
+
+========
+DELETE DOCUMENT
+1. delete feedback of the document [TABLE: feedback]
+2. delete document [TABLE: documents]
+
+Qs
+1. if the document is endorsed already, advisers are still able to make the document status to submitted? like revert back.

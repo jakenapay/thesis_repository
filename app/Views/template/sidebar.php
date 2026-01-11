@@ -13,7 +13,7 @@ $displayPath = match ($path) {
 };
 ?>
 
-<?php if ($isDocument && empty($action) && !empty($path)) { ?>
+<?php if ($isDocument && empty($action) && !empty($path) && $path != 'published') { ?>
   <div class="card mb-3">
     <div class="bg-red text-light card-header fw-bold">
       <?= "Submit " . $displayPath; ?>

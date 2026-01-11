@@ -54,14 +54,14 @@
                                         required
                                         placeholder="Enter dissertation title"
                                         value="<?= trim(esc($graduateThesis[0]['title'])) ?>"
-                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- Department -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Department/Unit</label>
                                     <select name="department_id" class="form-control form-control-sm" required
-                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id'] && $graduateThesis[0]['status'] != 'rejected') ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id'] && $graduateThesis[0]['status'] != 'revise') ? '' : 'disabled'; ?>>
                                         <option value="">Select Department</option>
                                         <?php foreach ($department as $dept): ?>
                                             <option value="<?= esc($dept['id']); ?>"
@@ -84,15 +84,15 @@
                                     <label class="form-label">Authors</label>
                                     <!-- <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" value=""> -->
                                     <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" value="<?= trim(esc($graduateThesis[0]['authors'])) ?>"
-                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- adviser -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Adviser<small class="text-muted text-red"></small></label>
                                     <select name="adviser_id" class="form-control form-control-sm" required
-                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id'] &&
-                                            $graduateThesis[0]['status'] != 'rejected') ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id'] &&
+                                            $graduateThesis[0]['status'] != 'revise') ? '' : 'disabled'; ?>>
                                         <option value="">Select Adviser</option>
                                         <?php foreach ($advisers as $adviser): ?>
                                             <option value="<?= esc($adviser['id']); ?>"
@@ -105,7 +105,7 @@
                                                 ))); ?>
                                                 <?php
                                                 if ($graduateThesis[0]['adviser_id'] == $adviser['id']) {
-                                                    if ($session->get('user_id') == $graduateThesis[0]['user_id']) {
+                                                    if ($session->get('user_id') == $graduateThesis[0]['adviser_id'] && $session->get('is_adviser') == 1) {
                                                         echo ' (Me)';
                                                     }
                                                 }
@@ -120,20 +120,20 @@
                                     <label class="form-label">Tags</label>
                                     <input type="text" class="form-control form-control-sm" name="tags" placeholder="Enter tags separated by commas"
                                         value="<?= trim(esc($graduateThesis[0]['tags'])) ?>"
-                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- Status -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Status</label>
-                                    <input type="text" class="<?= ($graduateThesis[0]['status'] == 'rejected') ? 'bg-danger text-light' : '' ?> form-control form-control-sm text-capitalize" name="status" value="<?= (!empty($graduateThesis[0]['status'])) ? $graduateThesis[0]['status'] : '' ?>" readonly>
+                                    <input type="text" class="<?= ($graduateThesis[0]['status'] == 'revise') ? 'bg-danger text-light' : '' ?> form-control form-control-sm text-capitalize" name="status" value="<?= (!empty($graduateThesis[0]['status'])) ? $graduateThesis[0]['status'] : '' ?>" readonly>
                                 </div>
 
                                 <!-- Thesis File -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">File <?= ($session->get('user_id') == $graduateThesis[0]['user_id']) ? '<small class="text-muted text-red">(optional)</small>' : ''; ?></label>
                                     <input type="file" class="form-control form-control-sm" name="thesis_file" accept=".pdf"
-                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
+                                        <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
 
                                 <!-- Accept Terms
@@ -157,16 +157,16 @@
                             $options = [];
 
                             if ($user_level === 'faculty' && $is_adviser == 1) {
-                                $options = ['submitted', 'endorsed', 'rejected'];
+                                $options = ['submitted', 'endorsed', 'revise'];
                             } elseif ($user_level === 'librarian') {
-                                $options = ['submitted', 'published', 'rejected'];
+                                $options = ['endorsed', 'published', 'revise'];
                             }
 
                             $status_labels = [
                                 'submitted' => 'Submitted',
                                 'endorsed' => 'Endorsed',
                                 'published' => 'Published',
-                                'rejected' => 'Rejected'
+                                'revise' => 'Revise'
                             ];
                             ?>
                             <br>
@@ -210,7 +210,7 @@
                                         </button>';
                                 }
 
-                                if ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'rejected' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) {
+                                if ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) {
                                     echo '<button type="submit" name="action" value="edit"  class="btn btn-danger btn-sm px-5">
                                         <i class="fas fa-sync-alt me-2"></i>Save Edit
                                         </button>';

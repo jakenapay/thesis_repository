@@ -39,7 +39,7 @@
                                         <?php } else if ($thesis['status'] == 'published') { ?>
                                             <td class="bg-success text-light text-capitalize"><?= esc($thesis['status']); ?></td>
                                         <?php } else { ?>
-                                            <td class="bg-danger text-light text-capitalize"><?= esc($dissertation['status']); ?></td>
+                                            <td class="bg-danger text-light text-capitalize"><?= esc($thesis['status']); ?></td>
                                         <?php } ?>
                                         <td>
                                             <a href="<?= base_url('documents/graduateThesis/view/' . esc($thesis['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">

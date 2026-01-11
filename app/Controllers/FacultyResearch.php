@@ -29,7 +29,8 @@ class FacultyResearch extends BaseController
             ->join('departments', 'departments.id = documents.department_id', 'left')
             ->join('users', 'users.id = documents.adviser_id', 'left')
             ->where('documents.type', 'faculty_research')
-            ->where('documents.status <>', 'rejected')
+            ->where('documents.user_id', $session->get('user_id'))
+            // ->where('documents.status <>', 'revise') # Remove the revise filter to show all documents
             ->where('documents.is_deleted', 0)
             ->findAll();
 
@@ -199,7 +200,7 @@ class FacultyResearch extends BaseController
         $action = $this->request->getPost('action');
         if ($action === 'update') {
             $rules = [
-                'status' => 'required|in_list[submitted,endorsed,published,rejected]',
+                'status' => 'required|in_list[submitted,endorsed,published,revise]',
                 'remarks' => [
                     'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
                     'errors' => [
@@ -349,9 +350,9 @@ class FacultyResearch extends BaseController
                 return redirect()->back()->withInput()->with('error', 'Account is not authorized.');
             }
 
-            // Check if the document is in 'rejected' status
-            if ($document['status'] !== 'rejected') {
-                return redirect()->back()->withInput()->with('error', 'Document is not rejected.');
+            // Check if the document is in 'revise' status
+            if ($document['status'] !== 'revise') {
+                return redirect()->back()->withInput()->with('error', 'Document is not revise.');
             }
 
             // Update the document status

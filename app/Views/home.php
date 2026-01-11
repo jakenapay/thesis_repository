@@ -141,7 +141,7 @@
 
             <div class="card mt-3 mb-5">
                 <div class="bg-red text-light card-header fw-bold">
-                    Links
+                    Repository
                 </div>
                 <div class="card-body">
                     <div class="row text-center">

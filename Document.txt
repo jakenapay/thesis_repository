@@ -51,3 +51,38 @@ DELETE DOCUMENT
 
 Qs
 1. if the document is endorsed already, advisers are still able to make the document status to submitted? like revert back.
+
+
+12/5/25
+
+=======
+DONE: 
+# reject word = revise
+# in list of thesis
+# show even if revise 
+# links word to repository
+# thesis submitted by me
+# dissertation submitted by me
+# faculty research submitted by me
+#    --- all only me
+
+
+==== 
+Next update:
+v2 user management to activate
+v2 user mngmt for its details
+
+v2 require all input box in submitting
+v2 pdf only accepts
+
+
+v2 add feedback on resubmit
+
+v2 admin and librarian have access in analytics
+
+v2 admin = librarian
+
+v2 export excel report from analytics
+v2 report generation module for admin and librarian
+
+v2 adviser and librarian table for to be reviewed panel where they can see which they can approve or published

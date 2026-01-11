@@ -19,7 +19,7 @@ class Analytics extends BaseController
     public function index()
     {
         $session = session();
-        if (!$session->has('user_id') || $session->get('user_level') !== 'admin') {
+        if (!$session->has('user_id') || ($session->get('user_level') !== 'admin' && $session->get('user_level') !== 'librarian')) {
             return redirect()->to(base_url('login'));
         }
 

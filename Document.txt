@@ -57,7 +57,7 @@ Qs
 
 =======
 DONE: 
-# reject word = revise
+# 
 # in list of thesis
 # show even if revise 
 # links word to repository
@@ -68,7 +68,11 @@ DONE:
 
 
 ==== 
-Next update:
+Taken Notes for Next update:
+V2 = Version 2.0 Patch Update
+
+v2 reject word = revise
+
 v2 user management to activate
 v2 user mngmt for its details
 
@@ -76,7 +80,7 @@ v2 require all input box in submitting
 v2 pdf only accepts
 
 
-v2 add feedback on resubmit
+v2 add feedback on resubmit (student when reuploading doc)
 
 v2 admin and librarian have access in analytics
 
@@ -86,3 +90,38 @@ v2 export excel report from analytics
 v2 report generation module for admin and librarian
 
 v2 adviser and librarian table for to be reviewed panel where they can see which they can approve or published
+
+V2 logs/history for admin only
+
+v2 librarian cannot manage users
+
+
+===
+
+
+=make the repository under the pendings
+==for faculty > adviser & librarian
+
+=make the search working for author, title, and tags
+
+=make the download into view and view docu inside the new tab
+
+=if endorsed = button name into endorsed
+=if librarian put published in statusm then the button will become publish instead of update
+=same for revision
+
+=export in analytics
+==to be follow: format
+
+== under profile:
+====list for review (adviser)
+====list for publish (librarian)
+
+=Repository panel:
+==remove the thesis btns
+==remove the faculty research btns
+==remove the disseratation btns
+
+new system
+*attendance monitoring of faculty
+*electric bill system & water bill system

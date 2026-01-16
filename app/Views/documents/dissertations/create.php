@@ -63,7 +63,7 @@
                             <div class="row mb-3">
                                 <!-- Department -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Department/Unit</label>
+                                    <label class="form-label">Department/Unit<span class="text-danger"> *</span></label>
                                     <?php
                                     // Find the department name based on the department id stored in session
                                     $departmentName = '';
@@ -83,26 +83,25 @@
 
                                 <!-- Thesis File -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Thesis File</label>
+                                    <label class="form-label">Thesis File<span class="text-danger"> *</span></label>
                                     <input type="file" class="form-control form-control-sm" name="thesis_file" required accept=".pdf">
                                 </div>
 
                                 <!-- Thesis Title -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Thesis Title</label>
+                                    <label class="form-label">Thesis Title<span class="text-danger"> *</span></label>
                                     <textarea class="form-control form-control-sm" name="thesis_title" required placeholder="Enter dissertation title" rows="3"></textarea>
                                 </div>
 
                                 <!-- Authors -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Authors</label>
-                                    <!-- <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names"> -->
+                                    <label class="form-label">Authors<span class="text-danger"> *</span></label>
                                     <textarea class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" rows="3"></textarea>
                                 </div>
 
                                 <!-- adviser -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Adviser<small class="text-muted text-red"></small></label>
+                                    <label class="form-label">Adviser<span class="text-danger"> *</span></label>
                                     <select name="adviser_id" class="form-control form-control-sm" required>
                                         <option value="">Select Adviser</option>
                                         <?php foreach ($advisers as $adviser): ?>
@@ -122,13 +121,13 @@
 
                                 <!-- tags -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Tags <small class="text-muted text-red">(optional)</small></label>
+                                    <label class="form-label">Tags<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control form-control-sm" name="tags" placeholder="Enter tags separated by commas">
                                 </div>
 
                                 <!-- Accept Terms -->
                                 <div class="col-md-6 mb-2">
-                                    <label class="form-label">Accept Terms</label>
+                                    <label class="form-label">Accept Terms<span class="text-danger"> *</span></label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="accept_terms" id="acceptTerms" required>
                                         <label class="form-check-label" for="acceptTerms">

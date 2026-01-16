@@ -71,13 +71,15 @@ DONE:
 Taken Notes for Next update:
 V2 = Version 2.0 Patch Update
 
-v2 reject word = revise
+DONE v2 reject word = revise
 
 v2 user management to activate
 v2 user mngmt for its details
+== User mgmt status:
+===== Table created.
 
-v2 require all input box in submitting
-v2 pdf only accepts
+DONE v2 require all input box in submitting
+DONE v2 pdf only accepts
 
 
 v2 add feedback on resubmit (student when reuploading doc)

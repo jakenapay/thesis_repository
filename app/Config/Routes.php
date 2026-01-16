@@ -25,6 +25,7 @@ $routes->group('', ['filter' => 'logged_in'], function ($routes) {
     $routes->get('home', 'Home::index');
     $routes->get('account', 'Account::index');
     $routes->get('analytics', 'Analytics::index');
+    $routes->get('users', 'Users::index');
     $routes->get('getAnalyticsData', 'Analytics::getAnalyticsData');
     $routes->get('logout', 'Auth::logout');
     $routes->post('edit/(:num)', 'Auth::edit/$1');

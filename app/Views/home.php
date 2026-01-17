@@ -86,61 +86,6 @@
 
             <div class="card mt-3">
                 <div class="bg-red text-light card-header fw-bold">
-                    Gallery
-                </div>
-                <div class="card-body p-0">
-                    <!-- Bootstrap Carousel -->
-                    <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="<?= base_url('/assets/images/background.jpg'); ?>" class="d-block w-100" alt="Gallery Image 1">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="<?= base_url('/assets/images/background2.jpg'); ?>" class="d-block w-100" alt="Gallery Image 2">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="<?= base_url('/assets/images/background3.jpg'); ?>" class="d-block w-100" alt="Gallery Image 3">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mt-3">
-                <div class="bg-red text-light card-header fw-bold">
-                    Announcements
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <strong>New Research Submission Guidelines</strong>
-                            <p>All students are advised to follow the updated guidelines for submitting their research papers to the thesis repository.</p>
-                            <p><small class="text-muted">Effective Date: March 1, 2024</small></p>
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Repository Maintenance</strong>
-                            <p>The thesis repository will undergo scheduled maintenance. Access may be limited during this time.</p>
-                            <p><small class="text-muted">Date: March 10, 2024</small></p>
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Research Approval Updates</strong>
-                            <p>Check your dashboard for the latest updates on the status of your submitted research papers.</p>
-                            <p><small class="text-muted">Updated: Daily</small></p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card mt-3 mb-5">
-                <div class="bg-red text-light card-header fw-bold">
                     Repository
                 </div>
                 <div class="card-body">
@@ -173,6 +118,60 @@
                 </div>
             </div>
 
+            <div class="card mt-3">
+                <div class="bg-red text-light card-header fw-bold">
+                    Gallery
+                </div>
+                <div class="card-body p-0">
+                    <!-- Bootstrap Carousel -->
+                    <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="<?= base_url('/assets/images/background.jpg'); ?>" class="d-block w-100" alt="Gallery Image 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="<?= base_url('/assets/images/background2.jpg'); ?>" class="d-block w-100" alt="Gallery Image 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="<?= base_url('/assets/images/background3.jpg'); ?>" class="d-block w-100" alt="Gallery Image 3">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3  mb-5">
+                <div class="bg-red text-light card-header fw-bold">
+                    Announcements
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>New Research Submission Guidelines</strong>
+                            <p>All students are advised to follow the updated guidelines for submitting their research papers to the thesis repository.</p>
+                            <p><small class="text-muted">Effective Date: March 1, 2024</small></p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Repository Maintenance</strong>
+                            <p>The thesis repository will undergo scheduled maintenance. Access may be limited during this time.</p>
+                            <p><small class="text-muted">Date: March 10, 2024</small></p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Research Approval Updates</strong>
+                            <p>Check your dashboard for the latest updates on the status of your submitted research papers.</p>
+                            <p><small class="text-muted">Updated: Daily</small></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Right column: Sidebar -->

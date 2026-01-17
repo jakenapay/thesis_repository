@@ -12,10 +12,11 @@
                 <div class="bg-red text-light card-header fw-bold">
                     List of Users
                 </div>
-                <div class="card-body table-responsive">
+                <div class="card-body table-responsive table-sm">
                     <table id="usersTable" class="table table-hover table-sm" style="width:100%">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>No.</th>
                                 <th>ID</th>
                                 <th>First Name</th>
@@ -30,16 +31,20 @@
                                 <th>Profile Image</th>
                                 <th>User Level</th>
                                 <th>Status</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
-                                <th></th>
+                                <!-- <th>Created At</th>
+                                <th>Updated At</th> -->
                             </tr>
                         </thead>
                         <?php if (!empty($userData) && is_array($userData)): ?>
                             <tbody>
                                 <?php foreach ($userData as $user): ?>
                                     <tr>                                        
-                                        # No. of loop
+                                         <!-- No. of loop -->
+                                         <td>
+                                             <a href="<?= base_url('users/view/' . esc($user['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
+                                                 <i class="fas fa-pen"></i>
+                                             </a>
+                                         </td>
                                         <?php $no = isset($no) ? $no + 1 : 1; ?>
                                         <td><?= esc($no); ?></td>
                                         <td><?= esc($user['id']); ?></td>
@@ -60,13 +65,8 @@
                                         <?php } else { ?>
                                             <td class="bg-danger text-light text-capitalize">Inactive</td>
                                         <?php } ?>
-                                        <td><?= esc($user['created_at']); ?></td>
-                                        <td><?= esc($user['updated_at']); ?></td>
-                                        <td>
-                                            <a href="<?= base_url('documents/facultyResearch/view/' . esc($user['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
-                                                <i class="fas fa-pen"></i>
-                                            </a>
-                                        </td>
+                                        <!-- <td><?= esc($user['created_at']); ?></td>
+                                        <td><?= esc($user['updated_at']); ?></td> -->
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

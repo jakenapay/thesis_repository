@@ -72,20 +72,15 @@ Taken Notes for Next update:
 V2 = Version 2.0 Patch Update
 
 DONE v2 reject word = revise
-
-v2 user management to activate
-v2 user mngmt for its details
-== User mgmt status:
-===== Table created.
-
+DONE v2 user management to activate
+DONE v2 user mngmt for its details
 DONE v2 require all input box in submitting
 DONE v2 pdf only accepts
-
+DONE v2 admin and librarian have access in analytics
+DONE v2 librarian cannot manage users
+DONE make the repository under the 
 
 v2 add feedback on resubmit (student when reuploading doc)
-
-v2 admin and librarian have access in analytics
-
 v2 admin = librarian
 
 v2 export excel report from analytics
@@ -95,13 +90,6 @@ v2 adviser and librarian table for to be reviewed panel where they can see which
 
 V2 logs/history for admin only
 
-v2 librarian cannot manage users
-
-
-===
-
-
-=make the repository under the pendings
 ==for faculty > adviser & librarian
 
 =make the search working for author, title, and tags

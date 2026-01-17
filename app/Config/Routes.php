@@ -30,6 +30,10 @@ $routes->group('', ['filter' => 'logged_in'], function ($routes) {
     $routes->get('logout', 'Auth::logout');
     $routes->post('edit/(:num)', 'Auth::edit/$1');
 
+    // User management (for admin)
+    $routes->get('users/view/(:num)', 'Users::view/$1');
+    $routes->post('users/edit/(:num)', 'Users::edit/$1');
+
     // Graduate Thesis
     $routes->get('documents/graduateThesis', 'Graduates::index');
     $routes->get('documents/graduateThesis/create', 'Graduates::createGraduateThesis');

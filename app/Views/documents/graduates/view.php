@@ -46,7 +46,7 @@
                             <div class="row mb-3">
                                 <!-- Thesis Title -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Title</label>
+                                    <label class="form-label">Title<span class="text-danger"> *</span></label>
                                     <input
                                         type="text"
                                         class="form-control form-control-sm"
@@ -59,7 +59,7 @@
 
                                 <!-- Department -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Department/Unit</label>
+                                    <label class="form-label">Department/Unit<span class="text-danger"> *</span></label>
                                     <select name="department_id" class="form-control form-control-sm" required
                                         <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id'] && $graduateThesis[0]['status'] != 'revise') ? '' : 'disabled'; ?>>
                                         <option value="">Select Department</option>
@@ -81,7 +81,7 @@
 
                                 <!-- Authors -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Authors</label>
+                                    <label class="form-label">Authors<span class="text-danger"> *</span></label>
                                     <!-- <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" value=""> -->
                                     <input type="text" class="form-control form-control-sm" name="authors" required placeholder="Enter authors full names" value="<?= trim(esc($graduateThesis[0]['authors'])) ?>"
                                         <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
@@ -89,7 +89,7 @@
 
                                 <!-- adviser -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Adviser<small class="text-muted text-red"></small></label>
+                                    <label class="form-label">Adviser<span class="text-danger"> *</span></label>
                                     <select name="adviser_id" class="form-control form-control-sm" required
                                         <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id'] &&
                                             $graduateThesis[0]['status'] != 'revise') ? '' : 'disabled'; ?>>
@@ -117,7 +117,7 @@
 
                                 <!-- tags -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Tags</label>
+                                    <label class="form-label">Tags<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control form-control-sm" name="tags" placeholder="Enter tags separated by commas"
                                         value="<?= trim(esc($graduateThesis[0]['tags'])) ?>"
                                         <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
@@ -125,13 +125,13 @@
 
                                 <!-- Status -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">Status</label>
+                                    <label class="form-label">Status<span class="text-danger"> *</span></label>
                                     <input type="text" class="<?= ($graduateThesis[0]['status'] == 'revise') ? 'bg-danger text-light' : '' ?> form-control form-control-sm text-capitalize" name="status" value="<?= (!empty($graduateThesis[0]['status'])) ? $graduateThesis[0]['status'] : '' ?>" readonly>
                                 </div>
 
                                 <!-- Thesis File -->
                                 <div class="col-md-6 mb-4">
-                                    <label class="form-label">File <?= ($session->get('user_id') == $graduateThesis[0]['user_id']) ? '<small class="text-muted text-red">(optional)</small>' : ''; ?></label>
+                                    <label class="form-label">File<?= ($session->get('user_id') == $graduateThesis[0]['user_id']) ? '<span class="text-danger"> *</span>' : ''; ?></label>
                                     <input type="file" class="form-control form-control-sm" name="thesis_file" accept=".pdf"
                                         <?= ($session->get('user_id') == $graduateThesis[0]['user_id'] && $graduateThesis[0]['status'] == 'revise' && $session->get('user_id') != $graduateThesis[0]['adviser_id']) ? '' : 'disabled'; ?>>
                                 </div>
@@ -176,7 +176,7 @@
                                 <div class="row mb-3">
 
                                     <div class="col-md-6 mb-4">
-                                        <label class="form-label">Status</label>
+                                        <label class="form-label">Status<span class="text-danger"> *</span></label>
                                         <select name="status" class="form-control form-control-sm" required>
                                             <?php foreach ($options as $opt): ?>
                                                 <option value="<?= $opt ?>" <?= ($current_status == $opt) ? 'selected' : '' ?>>
@@ -185,20 +185,28 @@
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-
+                                    
                                     <!-- Remarks-->
                                     <div class="col-md-6 mb-4">
-                                        <label class="form-label" for="remarks">Feedbacks</label>
+                                        <label class="form-label" for="remarks">Feedbacks<span class="text-danger"> *</span></label>
                                         <textarea name="remarks" id="remarks" class="form-control form-control-sm"></textarea>
                                     </div>
                                 </div>
 
+                            <?php } else if ($user_level == 'masters' && $graduateThesis[0]['user_id'] == $session->get('user_id') && $graduateThesis[0]['status'] == 'revise' || $user_level == 'faculty' && $graduateThesis[0]['user_id'] == $session->get('user_id') && $graduateThesis[0]['status'] == 'revise' ) { ?>
+                                    <!-- Remarks-->
+                                    <div class="col-md-6 mb-4 ">
+                                        <label class="form-label" for="remarks">Remarks for Resubmission<span class="text-danger"> *</span></label>
+                                        <textarea name="remarks" id="remarks" class="form-control form-control-sm"></textarea>
+                                    </div>
                             <?php } ?>
-
                             <br>
                             <hr class="">
                             <!-- Submit Button -->
                             <div class="col-md-12 mb-2 d-flex justify-content-end gap-2">
+                                <a href="<?= base_url('documents/viewDocument/' . $graduateThesis[0]['id']); ?>" class="btn btn-danger btn-sm px-5" target="_blank">
+                                    <i class="fas fa-eye me-2"></i>View Document
+                                </a>
                                 <a href="<?= base_url('documents/graduateThesis/download/' . $graduateThesis[0]['id']); ?>" class="btn btn-danger btn-sm px-5">
                                     <i class="fas fa-download me-2"></i>Download
                                 </a>

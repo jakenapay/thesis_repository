@@ -6,6 +6,7 @@ use App\Models\AcademicStatus;
 use App\Models\JobTitle;
 use App\Models\Department;
 use App\Models\CollegeModel;
+use App\Models\Document;
 
 class Home extends BaseController
 {
@@ -30,9 +31,26 @@ class Home extends BaseController
         $collegeModel = new CollegeModel();
         $collegeData = $collegeModel->findAll();
 
+        $documentModel = new Document();
+
         // Get session data
         $session = session();
 
+        if ($session->get('user_level') === 'librarian') {
+            $shortcutDocs = $documentModel->getDocument('endorsed');
+        } else if ($session->get('user_level') === 'faculty' && $session->get('user_id')) {
+            $shortcutDocs = $documentModel->getDocument('submitted', $session->get('user_id'));
+        } else if ($session->get('user_level') === 'admin') {
+            $shortcutDocs = $documentModel->getDocument();
+        } else {
+            $shortcutDocs = [];
+        }
+        
+        // TESTING PURPOSES
+        // echo '<pre>';
+        // print_r($shortcutDocs);
+        // echo '</pre>';
+        // exit;
         // Fetch employment_status and academic_status from the session
         $employmentStatusId = $session->get('employment_status');
         $academicStatusId = $session->get('academic_status');
@@ -80,7 +98,10 @@ class Home extends BaseController
             'AcademicStatusData' => $AcademicStatusData,
             'jobTitleData' => $jobTitleData,
             'departmentData' => $departmentData,
+            'shortcutDocs' => $shortcutDocs,
         ];
+
+        // print_r($data['shortcutDocs']);
         // print_r($data); // Debugging line to check data structure
         // Return the view with the data
         return view('home', $data);

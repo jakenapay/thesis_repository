@@ -63,4 +63,7 @@ $routes->group('', ['filter' => 'logged_in'], function ($routes) {
     $routes->get('documents/endorsed/', 'Documents::endorsed');
     $routes->get('documents/published/', 'Documents::published');
     $routes->post('documents/published/edit/(:num)', 'Dissertations::edit/$1');
+
+    $routes->get('documents/viewDocument/(:num)', 'Documents::viewDocument/$1');
+    $routes->post('search', 'Documents::search');
 });

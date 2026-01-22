@@ -336,6 +336,19 @@ class Graduates extends BaseController
                 return redirect()->back()->withInput()->with('error', 'Invalid account.');
             }
 
+            $rules = [
+                'remarks' => [
+                    'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
+                    'errors' => [
+                        'regex_match' => 'Remarks can only include letters, numbers, and basic punctuation.'
+                    ]
+                ],
+            ];
+
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+            }
+
             // Check if document exists
             $document = $documentModel->find($documentId);
             if (!$document) {
@@ -346,6 +359,9 @@ class Graduates extends BaseController
             if ($document['user_id'] !== $userId) {
                 return redirect()->back()->withInput()->with('error', 'Account is not authorized.');
             }
+
+            $remarks = strip_tags(trim($this->request->getPost('remarks')));
+            $remarks = htmlspecialchars($remarks, ENT_QUOTES, 'UTF-8');
 
             // Check if the document is in 'revise' status
             if ($document['status'] !== 'revise') {
@@ -362,6 +378,18 @@ class Graduates extends BaseController
 
             try {
                 $documentModel->update($documentId, $data);
+
+                $feedbacksModel->insert([
+                    'document_id' => $documentId,
+                    'user_id'     => $userId,
+                    'content'     => $remarks,
+                ]);
+
+                if ($db->transStatus() === false) {
+                    throw new \Exception('Transaction error');
+                }
+                
+
                 $db->transCommit();
                 return redirect()->back()->with('success', 'Document resubmitted successfully');
             } catch (\Exception $e) {

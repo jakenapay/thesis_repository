@@ -79,39 +79,39 @@ DONE v2 pdf only accepts
 DONE v2 admin and librarian have access in analytics
 DONE v2 librarian cannot manage users
 DONE make the repository under the 
+DONE v2 add feedback on resubmit (student when reuploading doc)
 
-v2 add feedback on resubmit (student when reuploading doc)
-v2 admin = librarian
+DONE v2 adviser and librarian table for to be reviewed panel where they can see which they can approve or published
 
-v2 export excel report from analytics
-v2 report generation module for admin and librarian
+DONE ==for faculty > adviser & librarian (only masters users are unable to access this)
+DONE WIP (CURRENT TASK) =make the search working for author, title, and tags
 
-v2 adviser and librarian table for to be reviewed panel where they can see which they can approve or published
+DONE == under profile:
+DONE ====list for review (adviser)
+DONE ====list for publish (librarian)
 
-V2 logs/history for admin only
+DONE =Repository panel:
+DONE ==remove the thesis btns
+DONE ==remove the faculty research btns
+DONE ==remove the disseratation btns
 
-==for faculty > adviser & librarian
 
-=make the search working for author, title, and tags
-
-=make the download into view and view docu inside the new tab
+WIP =make the download into view and view docu inside the new tab
 
 =if endorsed = button name into endorsed
 =if librarian put published in statusm then the button will become publish instead of update
 =same for revision
 
+v2 export excel report from analytics
+v2 report generation module for admin and librarian
+
+v2 admin = librarian
+V2 logs/history for admin only
+
 =export in analytics
 ==to be follow: format
 
-== under profile:
-====list for review (adviser)
-====list for publish (librarian)
-
-=Repository panel:
-==remove the thesis btns
-==remove the faculty research btns
-==remove the disseratation btns
-
+=
 new system
 *attendance monitoring of faculty
 *electric bill system & water bill system

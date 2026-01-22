@@ -50,37 +50,55 @@
 
             </div>
 
-            <!-- List of researches -->
             <div class="card mt-3">
                 <div class="bg-red text-light card-header fw-bold">
-                    List of Researches
+                    List of Documents
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Research Title</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
+                <div class="card-body table-responsive">
+                    <table id="researchTable" class="table table-hover table-sm" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Adviser</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <?php if (!empty($shortcutDocs) && is_array($shortcutDocs)): ?>
                             <tbody>
-                                <!-- Sample rows (these can be dynamic later) -->
-                                <tr>
-                                    <td>Smart Irrigation System using IoT</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Online Voting System with Blockchain</td>
-                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Facial Recognition Attendance Monitoring</td>
-                                    <td><span class="badge bg-danger">Declined</span></td>
-                                </tr>
+                                <?php foreach ($shortcutDocs as $research):
+                                    $typeMap = ['graduate_thesis' => 'graduateThesis', 'dissertation' => 'dissertations', 'faculty_research' => 'facultyResearch'];
+                                    $type = esc($research['type']);
+                                    $viewUrl = isset($typeMap[$type]) ? 'documents/' . $typeMap[$type] . '/view/' . esc($research['id'], 'url') : '#';
+                                    ?>
+                                    <tr>
+                                        <td><?= esc($research['title']); ?></td>
+                                        <td><?= esc($research['authors']); ?></td>
+                                        <td class="text-capitalize"><?= esc($research['adviser_name']); ?></td>
+                                        <td><?= esc($research['department_name'] ?? ''); ?></td>
+                                        <?php if ($research['status'] == 'submitted'): ?>
+                                            <td class="bg-warning text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php elseif ($research['status'] == 'endorsed'): ?>
+                                            <td class="bg-info text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php elseif ($research['status'] == 'published'): ?>
+                                            <td class="bg-success text-light text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php else: ?>
+                                            <td class="bg-danger text-light text-capitalize"><?= esc($research['status']); ?></td>
+                                        <?php endif; ?>
+                                        <td>
+                                            <a href="<?= base_url($viewUrl); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
-                        </table>
-                    </div>
+                        <?php else: ?>
+                            <tbody></tbody>
+                        <?php endif; ?>
+                    </table>
                 </div>
             </div>
 
@@ -90,30 +108,39 @@
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
-                        <div class="col-6 mb-3">
-                            <a href="<?= base_url('documents/graduateThesis/'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
-                                <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>
-                                <div class="text-white">Thesis</div>
-                            </a>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <a href="<?= base_url('documents/facultyResearch'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
-                                <i class="fas fa-file-alt fa-2x mb-2 text-white"></i>
-                                <div class="text-white">Faculty Research</div>
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a href="<?= base_url('documents/dissertations'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
-                                <i class="fas fas fa-book fa-2x mb-2 text-white"></i>
-                                <div class="text-white">Dissertations</div>
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a href="<?= base_url('documents/published'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
-                                <i class="fas fa-file-signature fa-2x mb-2 text-white"></i>
-                                <div class="text-white">Publications</div>
-                            </a>
-                        </div>
+                        <?php if ($session->get('user_level') != 'librarian'): ?>
+                            <div class="col-6 mb-3">
+                                <a href="<?= base_url('documents/graduateThesis/'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                                    <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>
+                                    <div class="text-white">Thesis </div>
+                                </a>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <a href="<?= base_url('documents/facultyResearch'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                                    <i class="fas fa-file-alt fa-2x mb-2 text-white"></i>
+                                    <div class="text-white">Faculty Research</div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="<?= base_url('documents/dissertations'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                                    <i class="fas fas fa-book fa-2x mb-2 text-white"></i>
+                                    <div class="text-white">Dissertations</div>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="<?= base_url('documents/published'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                                    <i class="fas fa-file-signature fa-2x mb-2 text-white"></i>
+                                    <div class="text-white">Publications</div>
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div class="col-12">
+                                <a href="<?= base_url('documents/published'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
+                                    <i class="fas fa-file-signature fa-2x mb-2 text-white"></i>
+                                    <div class="text-white">Publications</div>
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

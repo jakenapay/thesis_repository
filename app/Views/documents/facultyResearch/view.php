@@ -192,6 +192,12 @@
                                     </div>
                                 </div>
 
+                            <?php } else if ($user_level == 'masters' && $facultyResearch[0]['user_id'] == $session->get('user_id') && $facultyResearch[0]['status'] == 'revise' || $user_level == 'faculty' && $facultyResearch[0]['user_id'] == $session->get('user_id') && $facultyResearch[0]['status'] == 'revise' ) { ?>
+                                    <!-- Remarks-->
+                                    <div class="col-md-6 mb-4 ">
+                                        <label class="form-label" for="remarks">Remarks for Resubmission<span class="text-danger"> *</span></label>
+                                        <textarea name="remarks" id="remarks" class="form-control form-control-sm"></textarea>
+                                    </div>
                             <?php } ?>
 
                             <br>

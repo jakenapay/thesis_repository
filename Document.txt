@@ -102,14 +102,20 @@ WIP =make the download into view and view docu inside the new tab
 =if librarian put published in statusm then the button will become publish instead of update
 =same for revision
 
-v2 export excel report from analytics
-v2 report generation module for admin and librarian
+DONE (might need revision) v2 export excel report from analytics
+DONE v2 report generation module for admin and librarian
 
 v2 admin = librarian
 V2 logs/history for admin only
 
-=export in analytics
-==to be follow: format
+DONE =export in analytics
+WAITING FOR FEEDBACK: to be follow: format
+
+BACKLOGS:
+(adviser@gmail.com)
+1. When faculty submitted a faculty research, while submitted, they shouldn't be able to see the adviser's panel.
+2. 
+
 
 =
 new system

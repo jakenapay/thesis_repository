@@ -11,11 +11,21 @@
         <div class="col-md-12">
             <div class="card mb-3">
                 <div class="bg-red text-light card-header fw-bold">
-                    Analytics
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>Analytics</div>
+                        <div class="buttons-menu">
+                            <button id="refreshButton" class="btn btn-sm btn-outline-light me-2" title="Refresh">
+                                <i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh
+                            </button>
+                            <button id="exportButton" class="btn btn-sm btn-outline-light" title="Export">
+                                <i class="fas fa-file-export" aria-hidden="true"></i> Export
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row d-flex justify-content-center">
-                        <div class="row text-center mb-4">
+                        <div class="row text-center mb-4 align-items-center justify-content-center">
                             <div class="col-md-3">
                                 <div class="border rounded p-3 bg-red text-light shadow-sm">
                                     <h6>Total Theses</h6>
@@ -28,12 +38,12 @@
                                     <h4 id="totalUsers">0</h4>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <div class="border rounded p-3 bg-red text-light shadow-sm">
                                     <h6>Total Downloads</h6>
                                     <h4 id="totalDownloads">0</h4>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-3">
                                 <div class="border rounded p-3 bg-red text-light shadow-sm">
                                     <h6>Total Views</h6>
@@ -41,14 +51,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row text-center mb-4">
+                        <!-- <div class="row text-center mb-4">
                             <div class="col-md-12">
                                 <div class="border rounded p-3 bg-red text-light shadow-sm">
                                     <h6>Average Downloads per Thesis</h6>
                                     <h4 id="avgDownloadRatio">0</h4>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-8 p-2">
                             <div class="border rounded p-3">
@@ -68,12 +78,12 @@
                                 <canvas id="submissionChart" height="100"></canvas>
                             </div>
                         </div>
-                        <div class="col-md-6 p-2">
+                        <!-- <div class="col-md-6 p-2">
                             <div class="border rounded p-3">
                                 <h6 class="text-center">Top 5 Most Viewed/Downloaded Theses</h6>
                                 <canvas id="popularChart" height="200"></canvas>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-6 p-2">
                             <div class="border rounded p-3">
                                 <h6 class="text-center">Top Contributors</h6>
@@ -93,6 +103,17 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+    // Refresh Button
+    document.getElementById('refreshButton').addEventListener('click', function() {
+        location.reload();
+    });
+
+    // Export button
+    document.getElementById('exportButton').addEventListener('click', function() {
+        window.location.href = '<?= base_url('exportAnalytics') ?>';
+    });
+
     let delayed = false;
     fetch('<?= base_url('getAnalyticsData') ?>')
         .then(response => response.json())
@@ -201,36 +222,36 @@
             });
 
             // Graph 4: Popular Theses (Views & Downloads)
-            const ctxPopular = document.getElementById('popularChart').getContext('2d');
-            new Chart(ctxPopular, {
-                type: 'bar',
-                data: {
-                    labels: data.popularData.labels,
-                    datasets: [{
-                            label: 'Views',
-                            data: data.popularData.views,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Downloads',
-                            data: data.popularData.downloads,
-                            backgroundColor: 'rgba(255, 206, 86, 0.7)',
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+            // const ctxPopular = document.getElementById('popularChart').getContext('2d');
+            // new Chart(ctxPopular, {
+            //     type: 'bar',
+            //     data: {
+            //         labels: data.popularData.labels,
+            //         datasets: [{
+            //                 label: 'Views',
+            //                 data: data.popularData.views,
+            //                 backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            //                 borderColor: 'rgba(54, 162, 235, 1)',
+            //                 borderWidth: 1
+            //             },
+            //             {
+            //                 label: 'Downloads',
+            //                 data: data.popularData.downloads,
+            //                 backgroundColor: 'rgba(255, 206, 86, 0.7)',
+            //                 borderColor: 'rgba(255, 206, 86, 1)',
+            //                 borderWidth: 1
+            //             }
+            //         ]
+            //     },
+            //     options: {
+            //         responsive: true,
+            //         scales: {
+            //             y: {
+            //                 beginAtZero: true
+            //             }
+            //         }
+            //     }
+            // });
 
             // Graph 5: Top Contributors
             const ctxContributors = document.getElementById('contributorChart').getContext('2d');
@@ -260,7 +281,7 @@
             document.getElementById('totalUsers').textContent = data.totals.users;
             document.getElementById('totalDownloads').textContent = data.totals.downloads;
             document.getElementById('totalViews').textContent = data.totals.views;
-            document.getElementById('avgDownloadRatio').textContent = data.totals.avgRatio;
+            // document.getElementById('avgDownloadRatio').textContent = data.totals.avgRatio;
 
 
 

@@ -137,7 +137,7 @@ class Analytics extends BaseController
         $totalDownloads = $documentModel->selectSum('download_count')->where('is_deleted', 0)->first()['download_count'] ?? 0;
         $totalViews = $documentModel->selectSum('view_count')->where('is_deleted', 0)->first()['view_count'] ?? 0;
 
-        $avgDownloadRatio = $totalTheses > 0 ? round($totalDownloads / $totalTheses, 2) : 0;
+        // $avgDownloadRatio = $totalTheses > 0 ? round($totalDownloads / $totalTheses, 2) : 0;
 
 
 
@@ -152,8 +152,95 @@ class Analytics extends BaseController
                 'users' => $totalUsers,
                 'downloads' => (int)$totalDownloads,
                 'views' => (int)$totalViews,
-                'avgRatio' => $avgDownloadRatio
+                // 'avgRatio' => $avgDownloadRatio
             ]
         ]);
+    }
+    
+    public function exportAnalytics()
+    {
+        $documentModel = new Document();
+        $userModel = new User();
+        $departmentModel = new Department();
+
+        $totalTheses = $documentModel->where('is_deleted', 0)->countAllResults(false);
+        $totalUsers = $userModel->countAllResults(false);
+        $totalDownloads = $documentModel->selectSum('download_count')->where('is_deleted', 0)->first()['download_count'] ?? 0;
+        $totalViews = $documentModel->selectSum('view_count')->where('is_deleted', 0)->first()['view_count'] ?? 0;
+
+        // Count by type
+        $typeQuery = $documentModel
+            ->select('type, COUNT(*) as count')
+            ->where('is_deleted', 0)
+            ->groupBy('type')
+            ->findAll();
+
+        $typeLabels = [
+            'faculty_research' => 'Faculty Research',
+            'dissertation' => 'Dissertations',
+            'graduate_thesis' => 'Graduate Thesis'
+        ];
+
+        // Count by department
+        $deptQuery = $documentModel
+            ->select('departments.name as department, COUNT(documents.id) as count')
+            ->join('departments', 'departments.id = documents.department_id')
+            ->where('documents.is_deleted', 0)
+            ->groupBy('department')
+            ->findAll();
+
+        // Count by status
+        $statusQuery = $documentModel
+            ->select('status, COUNT(*) as count')
+            ->where('is_deleted', 0)
+            ->groupBy('status')
+            ->findAll();
+
+        $fileName = 'Analytics_Report_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        
+        $output = fopen('php://output', 'w');
+        
+        // Header
+        fputcsv($output, ['ANALYTICS REPORT']);
+        fputcsv($output, ['Generated: ' . date('Y-m-d H:i:s')]);
+        fputcsv($output, []);
+
+        // Summary Metrics
+        fputcsv($output, ['SUMMARY METRICS']);
+        fputcsv($output, ['Metric', 'Count']);
+        fputcsv($output, ['Total Documents', $totalTheses]);
+        fputcsv($output, ['Total Users', $totalUsers]);
+        fputcsv($output, ['Total Downloads', $totalDownloads]);
+        fputcsv($output, ['Total Views', $totalViews]);
+        fputcsv($output, []);
+
+        // Documents by Type
+        fputcsv($output, ['DOCUMENTS BY TYPE']);
+        fputcsv($output, ['Type', 'Count']);
+        foreach ($typeQuery as $row) {
+            fputcsv($output, [$typeLabels[$row['type']] ?? $row['type'], $row['count']]);
+        }
+        fputcsv($output, []);
+
+        // Documents by Department
+        fputcsv($output, ['DOCUMENTS BY DEPARTMENT']);
+        fputcsv($output, ['Department', 'Count']);
+        foreach ($deptQuery as $row) {
+            fputcsv($output, [$row['department'], $row['count']]);
+        }
+        fputcsv($output, []);
+
+        // Documents by Status
+        fputcsv($output, ['DOCUMENTS BY STATUS']);
+        fputcsv($output, ['Status', 'Count']);
+        foreach ($statusQuery as $row) {
+            fputcsv($output, [ucfirst($row['status']), $row['count']]);
+        }
+        
+        fclose($output);
+        exit;
     }
 }

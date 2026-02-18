@@ -84,7 +84,7 @@ class Auth extends BaseController
             'status'            => $user['status'],
             'profile_image'     => $user['profile_image'] ?? 'default.png', // Default image if not set
         ]);
-
+        logAction('LOGIN', 'USER', $user['id'], 'User logged in successfully');
         return redirect()->to('/home')->with('success', 'Login successful!');
     }
 
@@ -172,6 +172,8 @@ class Auth extends BaseController
         $userModel = new User();
         $userModel->insert($data);
 
+        logAction('USER_REGISTERED', 'USER', $newUserId, 'New user registered: ' . $data['email']);
+
         return redirect()->to('/login')->with('success', 'Registration successful!');
     }
 
@@ -179,6 +181,7 @@ class Auth extends BaseController
     {
         $this->session->destroy();
         $this->session->remove(['user_id', 'email', 'first_name', 'middle_name', 'last_name', 'suffix', 'employment_status', 'academic_status', 'college', 'department', 'agreed_terms', 'user_level', 'is_adviser', 'logged_in', 'created_at', 'updated_at', 'profile_image']);
+        logAction('LOGOUT', 'USER', $userId, 'User logged out');
         return redirect()->to('/login')->with('success', 'Logout successful!');
     }
 
@@ -273,7 +276,7 @@ class Auth extends BaseController
             $sessionData['profile_image'] = $data['profile_image'];
         }
         $this->session->set($sessionData);
-
+        logAction('PROFILE_UPDATED', 'USER', $user_id, 'User updated their profile');
         return redirect()->to('account')->with('success', 'Profile updated successfully!');
     }
 }

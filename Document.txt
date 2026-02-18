@@ -98,14 +98,14 @@ DONE ==remove the disseratation btns
 
 WIP =make the download into view and view docu inside the new tab
 
-=if endorsed = button name into endorsed
-=if librarian put published in statusm then the button will become publish instead of update
-=same for revision
+(TO CANCEL) if endorsed = button name into endorsed
+(TO CANCEL) if librarian put published in statusm then the button will become publish instead of update
+=same for revision 
 
 DONE (might need revision) v2 export excel report from analytics
 DONE v2 report generation module for admin and librarian
 
-v2 admin = librarian
+WIP v2 admin = librarian
 V2 logs/history for admin only
 
 DONE =export in analytics

@@ -64,6 +64,7 @@ class FacultyResearch extends BaseController
             'submittedFacultyResearch' => $submittedFacultyResearch,
         ];
 
+        logAction('VIEW_CREATE_FACULTY_RESEARCH_FORM', 'USER', $session->get('user_id'), 'User accessed the create faculty research form');
         return view('template/header', $data)
             . view('documents/facultyResearch/create', $data)
             . view('template/footer', $data);
@@ -111,8 +112,8 @@ class FacultyResearch extends BaseController
             'tags'          => $request->getPost('tags'),
             'adviser_id'    => $request->getPost('adviser_id')
         ]);
-
-        return redirect()->to('documents/facultyResearch')->with('success', 'Thesis uploaded successfully.');
+        logAction('CREATE_FACULTY_RESEARCH', 'DOCUMENT', $documentModel->getInsertID(), 'User created a new faculty research: ' . $request->getPost('thesis_title'));
+        return redirect()->to('documents/facultyResearch')->with('success', 'Faculty research uploaded successfully.');
     }
 
     public function view($documentId)
@@ -329,6 +330,7 @@ class FacultyResearch extends BaseController
 
             try {
                 $documentModel->update($documentId, $data);
+                logAction('EDIT_FACULTY_RESEARCH', 'DOCUMENT', $documentId, 'Faculty research edited successfully');
                 return redirect()->back()->with('success', 'Document info updated successfully');
             } catch (\Exception $e) {
                 return redirect()->back()->withInput()->with('error', 'Error while updating document');
@@ -395,7 +397,8 @@ class FacultyResearch extends BaseController
                 
 
                 $db->transCommit();
-                return redirect()->back()->with('success', 'Document resubmitted successfully');
+                logAction('RESUBMIT_FACULTY_RESEARCH', 'DOCUMENT', $documentId, 'Faculty research resubmitted successfully');
+                return redirect()->back()->with('success', 'Faculty research resubmitted successfully');
             } catch (\Exception $e) {
                 $db->transRollback();
                 return redirect()->back()->withInput()->with('error', 'Error while resubmitting document');

@@ -67,4 +67,9 @@ $routes->group('', ['filter' => 'logged_in'], function ($routes) {
     $routes->get('documents/viewDocument/(:num)', 'Documents::viewDocument/$1');
     $routes->post('search', 'Documents::search');
     $routes->get('exportAnalytics', 'Analytics::exportAnalytics');
+
+    // Logs Management (Admin and Librarian only)
+    $routes->get('admin/logs', 'Log::index');
+    $routes->get('admin/logs/export', 'Log::exportLogs');
+    $routes->get('admin/logs/user/(:num)', 'Log::userLogs/$1');
 });

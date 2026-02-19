@@ -84,6 +84,7 @@ class Auth extends BaseController
             'status'            => $user['status'],
             'profile_image'     => $user['profile_image'] ?? 'default.png', // Default image if not set
         ]);
+        
         logAction('LOGIN', 'USER', $user['id'], 'User logged in successfully');
         return redirect()->to('/home')->with('success', 'Login successful!');
     }
@@ -141,7 +142,6 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
         }
 
-
         $userModel = new User();
         $existingUser = $userModel->where('email', $request->getPost('email'))->first();
         if ($existingUser) {
@@ -162,7 +162,7 @@ class Auth extends BaseController
             'academic_status'   => trim($request->getPost('academic_status')),
             'employment_status' => trim($request->getPost('employment_status')),
             'college'           => trim($request->getPost('college')),
-            'department_id'        => trim($request->getPost('department')),
+            'department_id'     => trim($request->getPost('department')),
             'agreed_terms'      => $request->getPost('agree') ? 1 : 0,
             'user_level'        => 'masters',
             'status'            => 0,
@@ -171,17 +171,23 @@ class Auth extends BaseController
 
         $userModel = new User();
         $userModel->insert($data);
+        $newUserId = $userModel->insertID(); // ADD THIS LINE - Get the inserted ID
 
         logAction('USER_REGISTERED', 'USER', $newUserId, 'New user registered: ' . $data['email']);
 
         return redirect()->to('/login')->with('success', 'Registration successful!');
     }
-
+    
     public function logout()
     {
+        // Get user ID before destroying session
+        $userId = $this->session->get('user_id');
+        
+        // Log the action before destroying session
+        logAction('LOGOUT', 'USER', $userId, 'User logged out');
+
         $this->session->destroy();
         $this->session->remove(['user_id', 'email', 'first_name', 'middle_name', 'last_name', 'suffix', 'employment_status', 'academic_status', 'college', 'department', 'agreed_terms', 'user_level', 'is_adviser', 'logged_in', 'created_at', 'updated_at', 'profile_image']);
-        logAction('LOGOUT', 'USER', $userId, 'User logged out');
         return redirect()->to('/login')->with('success', 'Logout successful!');
     }
 

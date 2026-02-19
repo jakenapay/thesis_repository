@@ -333,7 +333,7 @@ class Dissertations extends BaseController
 
             try {
                 $documentModel->update($documentId, $data);
-                logAction('EDIT_DOCUMENT', 'DOCUMENT', $documentId, 'Document edited successfully');
+                logAction('EDIT_DISSERTATION', 'DOCUMENT', $documentId, 'Dissertation edited successfully');
                 return redirect()->back()->with('success', 'Document info updated successfully');
             } catch (\Exception $e) {
                 return redirect()->back()->withInput()->with('error', 'Error while updating document');
@@ -400,7 +400,7 @@ class Dissertations extends BaseController
 
 
                 $db->transCommit();
-                logAction('RESUBMIT_DOCUMENT', 'DOCUMENT', $documentId, 'Document resubmitted successfully');
+                logAction('RESUBMIT_DISSERTATION', 'DOCUMENT', $documentId, 'Dissertation resubmitted successfully');
                 return redirect()->back()->with('success', 'Document resubmitted successfully');
             } catch (\Exception $e) {
                 $db->transRollback();

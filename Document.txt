@@ -106,7 +106,7 @@ DONE (might need revision) v2 export excel report from analytics
 DONE v2 report generation module for admin and librarian
 
 WIP v2 admin = librarian
-V2 logs/history for admin only
+wip V2 logs/history for admin only
 
 DONE =export in analytics
 WAITING FOR FEEDBACK: to be follow: format

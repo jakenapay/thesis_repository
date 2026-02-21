@@ -77,7 +77,6 @@ class Document extends Model
         $query = $this->select('documents.id, documents.title, documents.authors, documents.status, documents.adviser_id, documents.department_id, users.first_name, users.last_name, users.middle_name, departments.name as department_name, CONCAT(users.first_name, " ", users.middle_name, " ", users.last_name) as adviser_name, documents.type')
                     ->join('users', 'users.id = documents.adviser_id', 'left')
                     ->join('departments', 'departments.id = documents.department_id', 'left');
-        var_dump($status, $adviser_id, $user_id); // Debugging line to check the values of the parameters die
         if ($status === null) { // Admin
             return $query->findAll();
         } else if ($status === 'endorsed') { // Librarian

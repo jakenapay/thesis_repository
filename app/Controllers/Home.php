@@ -39,9 +39,11 @@ class Home extends BaseController
         if ($session->get('user_level') === 'librarian') {
             $shortcutDocs = $documentModel->getDocument('endorsed');
         } else if ($session->get('user_level') === 'faculty' && $session->get('user_id')) {
-            $shortcutDocs = $documentModel->getDocument('submitted', $session->get('user_id'));
+            $shortcutDocs = $documentModel->getDocument('submitted', adviser_id: $session->get('user_id'));
         } else if ($session->get('user_level') === 'admin') {
             $shortcutDocs = $documentModel->getDocument();
+        } else if ($session->get('user_level') === 'masters' && $session->get('user_id')) {
+            $shortcutDocs = $documentModel->getDocument('submitted', user_id: $session->get('user_id'));
         } else {
             $shortcutDocs = [];
         }

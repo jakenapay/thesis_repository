@@ -73,11 +73,10 @@ class Document extends Model
         return true;
     }
 
-    public function getDocument($status = null, $adviser_id = null) {
+    public function getDocument($status = null, $adviser_id = null, $user_id = null) {
         $query = $this->select('documents.id, documents.title, documents.authors, documents.status, documents.adviser_id, documents.department_id, users.first_name, users.last_name, users.middle_name, departments.name as department_name, CONCAT(users.first_name, " ", users.middle_name, " ", users.last_name) as adviser_name, documents.type')
                     ->join('users', 'users.id = documents.adviser_id', 'left')
                     ->join('departments', 'departments.id = documents.department_id', 'left');
-
         if ($status === null) { // Admin
             return $query->findAll();
         } else if ($status === 'endorsed') { // Librarian
@@ -87,7 +86,11 @@ class Document extends Model
             return $query->where('documents.status', $status)
                         ->where('documents.adviser_id', $adviser_id)
                         ->findAll();
-        } else {
+        } else if ($status === 'submitted' && $user_id !== null) { // Masters
+            return $query->whereIn('documents.status', ['published', 'submitted', 'revise'])
+                        ->where('documents.user_id', $user_id)
+                        ->findAll();
+        } else if ($status !== null) {
             return $query->where('documents.status', $status)
                         ->findAll();
         }

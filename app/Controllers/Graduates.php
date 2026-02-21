@@ -63,7 +63,7 @@ class Graduates extends BaseController
             'advisers' => $advisers,
             'submittedGraduateThesis' => $submittedGraduateThesis,
         ];
-
+        logAction('VIEW_CREATE_GRADUATE_THESIS_FORM', 'USER', $session->get('user_id'), 'User accessed the create graduate thesis form');
         return view('template/header', $data)
             . view('documents/graduates/create', $data)
             . view('template/footer', $data);
@@ -111,7 +111,7 @@ class Graduates extends BaseController
             'tags'          => $request->getPost('tags'),
             'adviser_id'    => $request->getPost('adviser_id')
         ]);
-
+        logAction('CREATE_GRADUATE_THESIS', 'DOCUMENT', $documentModel->getInsertID(), 'User created a new graduate thesis: ' . $request->getPost('thesis_title'));
         return redirect()->to('documents/graduateThesis')->with('success', 'Thesis uploaded successfully.');
     }
 
@@ -242,6 +242,7 @@ class Graduates extends BaseController
                 }
 
                 $db->transCommit();
+                logAction('UPDATE_GRADUATE_THESIS', 'DOCUMENT', $documentId, 'Graduate thesis updated successfully');
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();
@@ -326,6 +327,7 @@ class Graduates extends BaseController
 
             try {
                 $documentModel->update($documentId, $data);
+                logAction('EDIT_GRADUATE_THESIS', 'DOCUMENT', $documentId, 'Graduate thesis edited successfully');
                 return redirect()->back()->with('success', 'Document info updated successfully');
             } catch (\Exception $e) {
                 return redirect()->back()->withInput()->with('error', $e->getMessage());
@@ -391,6 +393,7 @@ class Graduates extends BaseController
                 
 
                 $db->transCommit();
+                logAction('RESUBMIT_GRADUATE_THESIS', 'DOCUMENT', $documentId, 'Graduate thesis resubmitted successfully');
                 return redirect()->back()->with('success', 'Document resubmitted successfully');
             } catch (\Exception $e) {
                 $db->transRollback();

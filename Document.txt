@@ -71,50 +71,46 @@ DONE:
 Taken Notes for Next update:
 V2 = Version 2.0 Patch Update
 
-DONE v2 reject word = revise
-DONE v2 user management to activate
-DONE v2 user mngmt for its details
-DONE v2 require all input box in submitting
-DONE v2 pdf only accepts
-DONE v2 admin and librarian have access in analytics
-DONE v2 librarian cannot manage users
-DONE make the repository under the 
-DONE v2 add feedback on resubmit (student when reuploading doc)
-
-DONE v2 adviser and librarian table for to be reviewed panel where they can see which they can approve or published
-
-DONE ==for faculty > adviser & librarian (only masters users are unable to access this)
-DONE WIP (CURRENT TASK) =make the search working for author, title, and tags
-
-DONE == under profile:
-DONE ====list for review (adviser)
-DONE ====list for publish (librarian)
-
-DONE =Repository panel:
-DONE ==remove the thesis btns
-DONE ==remove the faculty research btns
-DONE ==remove the disseratation btns
-
-
-WIP =make the download into view and view docu inside the new tab
-
-(TO CANCEL) if endorsed = button name into endorsed
-(TO CANCEL) if librarian put published in statusm then the button will become publish instead of update
-=same for revision 
-
-DONE (might need revision) v2 export excel report from analytics
-DONE v2 report generation module for admin and librarian
-
-WIP v2 admin = librarian
-wip V2 logs/history for admin only
-
-DONE =export in analytics
+	1. DONE v2 reject word = revise
+	2. DONE v2 user management to activate
+	3. DONE v2 user mngmt for its details
+	4. DONE v2 require all input box in submitting
+	5. DONE v2 pdf only accepts
+	6. DONE v2 admin and librarian have access in analytics
+	7. DONE v2 librarian cannot manage users
+	8. DONE make the repository under the 
+	9. DONE v2 add feedback on resubmit (student when reuploading doc)
+	10. DONE v2 adviser and librarian table for to be reviewed panel where they can see which they can approve or published
+	11. DONE ==for faculty > adviser & librarian (only masters users are unable to access this)
+	12. DONE WIP (CURRENT TASK) =make the search working for author, title, and tags 
+	13. DONE == under profile:
+	14. DONE ====list for review (adviser)
+	15. DONE ====list for publish (librarian)
+	16. DONE =Repository panel:
+	17. DONE ==remove the thesis btns
+	18. DONE ==remove the faculty research btns
+	19. DONE ==remove the disseratation btns 
+	20. WIP =make the download into view and view docu inside the new tab
+	21. (CANCELLED) if endorsed = button name into endorsed
+	22. (CANCELLED) if librarian put published in statusm then the button will become publish instead of update
+	23. DONE (might need revision) v2 export excel report from analytics
+	24. DONE v2 report generation module for admin and librarian
+	25. WIP v2 admin = librarian
+	26. wip V2 logs/history for admin only
+	27. DONE =export in analytics
 WAITING FOR FEEDBACK: to be follow: format
 
 BACKLOGS:
 (adviser@gmail.com)
 1. When faculty submitted a faculty research, while submitted, they shouldn't be able to see the adviser's panel.
-2. 
+2. when revise, update btn to (save button)
+
+
+=== 
+v2.1
+1. NEW Student (PHD)
+2. DONE THESIS Assigned to me, Faculty atm, disseratation atm
+
 
 
 =

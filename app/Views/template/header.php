@@ -55,6 +55,9 @@
           <?php endif; ?>
           <?php if ( $session->get('user_level') == 'admin' || $session->get('user_level') == 'librarian' ) : ?>
             <li class="nav-item">
+              <a class="nav-link nav-links <?= strpos($path, 'logs') !== false ? 'active' : '' ?>" href="<?= base_url('logs') ?>">Logs</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link nav-links <?= strpos($path, 'analytics') !== false ? 'active' : '' ?>" href="<?= base_url('analytics') ?>">Analytics</a>
             </li>
           <?php endif; ?>

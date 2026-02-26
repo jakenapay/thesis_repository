@@ -34,6 +34,29 @@ class Log extends Model
                     ->findAll();
     }
 
+    /**
+     * Get distinct actions
+     */
+    public function getDistinctActions()
+    {
+        return $this->distinct()
+                    ->select('action')
+                    ->orderBy('action', 'ASC')
+                    ->findAll();
+    }
+
+    /**
+     * Get distinct resource types
+     */
+    public function getDistinctResourceTypes()
+    {
+        return $this->distinct()
+                    ->select('resource_type')
+                    ->where('resource_type IS NOT NULL')
+                    ->orderBy('resource_type', 'ASC')
+                    ->findAll();
+    }
+
     public function getRecentLogs($limit = 100, $filters = [])
     {
         $query = $this->select('logs.*, 

@@ -54,7 +54,7 @@
                     <button id="refreshButton" class="btn btn-sm btn-outline-secondary me-2" title="Refresh">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
-                    <a href="<?= base_url('admin/logs/export') . '?' . http_build_query($filters) ?>" class="btn btn-sm btn-outline-success">
+                    <a href="<?= base_url('logs/export') . '?' . http_build_query($filters) ?>" class="btn btn-sm btn-outline-success">
                         <i class="fas fa-download"></i> Export CSV
                     </a>
                 </div>
@@ -70,7 +70,7 @@
             </h5>
         </div>
         <div class="card-body filter-section">
-            <form method="GET" action="<?= base_url('admin/logs') ?>" class="row g-3">
+            <form method="GET" action="<?= base_url('logs') ?>" class="row g-3">
                 <div class="col-md-2">
                     <label for="action" class="form-label fw-bold">Action</label>
                     <select class="form-select form-select-sm" id="action" name="action">
@@ -118,7 +118,7 @@
                     <button type="submit" class="btn btn-primary btn-sm">
                         <i class="fas fa-search"></i> Filter
                     </button>
-                    <a href="<?= base_url('admin/logs') ?>" class="btn btn-secondary btn-sm">
+                    <a href="<?= base_url('logs') ?>" class="btn btn-secondary btn-sm">
                         <i class="fas fa-redo"></i> Reset
                     </a>
                 </div>

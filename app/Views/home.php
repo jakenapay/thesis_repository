@@ -112,19 +112,19 @@
                             <div class="col-6 mb-3">
                                 <a href="<?= base_url('documents/graduateThesis/'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                     <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>
-                                    <div class="text-white">Thesis </div>
+                                    <div class="text-white">Thesis assigned to me</div>
                                 </a>
                             </div>
                             <div class="col-6 mb-3">
                                 <a href="<?= base_url('documents/facultyResearch'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                     <i class="fas fa-file-alt fa-2x mb-2 text-white"></i>
-                                    <div class="text-white">Faculty Research</div>
+                                    <div class="text-white">Faculty Research assigned to me</div>
                                 </a>
                             </div>
                             <div class="col-6">
                                 <a href="<?= base_url('documents/dissertations'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                     <i class="fas fas fa-book fa-2x mb-2 text-white"></i>
-                                    <div class="text-white">Dissertations</div>
+                                    <div class="text-white">Dissertations assigned to me</div>
                                 </a>
                             </div>
                             <div class="col-6">

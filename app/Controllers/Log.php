@@ -21,32 +21,11 @@ class Log extends BaseController
         }
 
         $logModel = new LogModel();
-        
-        // Get filter parameters from request
-        $filters = [
-            'action' => $this->request->getGet('action'),
-            'resource_type' => $this->request->getGet('resource_type'),
-            'user_id' => $this->request->getGet('user_id'),
-            'date' => $this->request->getGet('date'),
-            'start_date' => $this->request->getGet('start_date'),
-            'end_date' => $this->request->getGet('end_date'),
-        ];
-
-        // Get unique actions for filter dropdown
-        $actions = $logModel->getDistinctActions();
-
-        // Get unique resource types for filter dropdown
-        $resourceTypes = $logModel->getDistinctResourceTypes();
-
-        // Get logs with filters
-        $logs = $logModel->getRecentLogs(500, $filters);
+        $logs = $logModel->getLogsWithUserDetails();
 
         $data = [
             'session' => $session,
             'logs' => $logs,
-            'actions' => $actions,
-            'resourceTypes' => $resourceTypes,
-            'filters' => $filters
         ];
 
         return view('template/header', $data)

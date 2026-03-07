@@ -95,15 +95,11 @@ V2 = Version 2.0 Patch Update
 	22. (CANCELLED) if librarian put published in statusm then the button will become publish instead of update
 	23. DONE (might need revision) v2 export excel report from analytics
 	24. DONE v2 report generation module for admin and librarian
-	25. WIP v2 admin = librarian
+	25. WIP v2 admin = librarian (Admin are super admins that has a feature which librarians cannot do.)
 	26. wip V2 logs/history for admin only
 	27. DONE =export in analytics
 WAITING FOR FEEDBACK: to be follow: format
 
-BACKLOGS:
-(adviser@gmail.com)
-1. When faculty submitted a faculty research, while submitted, they shouldn't be able to see the adviser's panel.
-2. when revise, update btn to (save button)
 
 
 === 
@@ -117,3 +113,9 @@ v2.1
 new system
 *attendance monitoring of faculty
 *electric bill system & water bill system
+ 
+
+BACKLOGS:
+(adviser@gmail.com)
+1. When faculty submitted a faculty research, while submitted, they shouldn't be able to see the adviser's panel.
+2. when revise, update btn to (save button)

@@ -18,10 +18,18 @@ class Log extends Model
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
 
+    public function getLogsWithUserDetails()
+    {
+        return $this->select('logs.*, users.first_name, users.last_name')
+                    ->join('users', 'users.id = logs.user_id', 'left')
+                    ->orderBy('logs.id', 'DESC')
+                    ->findAll();
+    }
+
     public function getLogsByUser($user_id, $limit = 50)
     {
         return $this->where('user_id', $user_id)
-                    ->orderBy('created_at', 'DESC')
+                    ->orderBy('logs.id', 'ASC')
                     ->limit($limit)
                     ->findAll();
     }

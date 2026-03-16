@@ -270,8 +270,38 @@ class FacultyResearch extends BaseController
                 ],
             ];
 
+            // If document is in 'revise' status, also validate remarks
+            $document = $documentModel->find($documentId);
+            if (!$document) {
+                return redirect()->back()->withInput()->with('error', 'Document not found.');
+            }
+
+            if ($document['status'] === 'revise') {
+                $rules['remarks'] = [
+                    'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
+                    'errors' => [
+                        'regex_match' => 'Remarks can only include letters, numbers, and basic punctuation.'
+                    ]
+                ];
+            }
+
             if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
+            }
+
+            if (empty($userId)) {
+                return redirect()->back()->withInput()->with('error', 'Invalid account.');
+            }
+
+            // Check if the user is authorized
+            if ($document['user_id'] !== $userId) {
+                return redirect()->back()->withInput()->with('error', 'You are not authorized to update this document.');
+            }
+
+            $currentFilePath = $document['file_path'];
+
+            if (strpos($currentFilePath, 'assets/uploads/facultyResearch/') === false) {
+                return redirect()->back()->withInput()->with('error', 'Invalid file path.');
             }
 
             $data = [
@@ -280,32 +310,7 @@ class FacultyResearch extends BaseController
                 'tags'    => esc(trim($this->request->getPost('tags'))),
             ];
 
-            if (empty($userId)) {
-                return redirect()->back()->withInput()->with('error', 'Invalid account.');
-            }
-
-            // Check if the document exists
-            $document = $documentModel->find($documentId);
-            if (!$document) {
-                return redirect()->back()->withInput()->with('error', 'Document not found.');
-            }
-            log_message('info', 'Document found: ' . print_r($document, true));
-
-            // Check if the user is authorized to update the document
-            if ($document['user_id'] !== $userId) {
-                return redirect()->back()->withInput()->with('error', 'You are not authorized to update this document.');
-            }
-
-            // Get the document's current file path
-            $currentFilePath = $document['file_path'];
-            log_message('info', 'OLD DOCUMENT PATH: ' . print_r($currentFilePath, true));
-
-            // Check if the current file path is in folder
-            if (strpos($currentFilePath, 'assets/uploads/facultyResearch/') === false) {
-                return redirect()->back()->withInput()->with('error', 'Invalid file path.');
-            }
-
-            // Handle file
+            // Handle file upload
             $file = $this->request->getFile('thesis_file');
             if ($file && $file->isValid() && !$file->hasMoved()) {
                 $fileName = $file->getRandomName();
@@ -318,7 +323,6 @@ class FacultyResearch extends BaseController
                 if ($file->move($targetPath, $fileName)) {
                     $filePath = 'assets/uploads/facultyResearch/' . $fileName;
                     $data['file_path'] = $filePath;
-                    log_message('info', 'Uploaded to: ' . $filePath);
 
                     if (file_exists(ROOTPATH . 'public/' . $currentFilePath)) {
                         unlink(ROOTPATH . 'public/' . $currentFilePath);
@@ -328,80 +332,38 @@ class FacultyResearch extends BaseController
                 }
             }
 
-            try {
-                $documentModel->update($documentId, $data);
-                logAction('EDIT_FACULTY_RESEARCH', 'DOCUMENT', $documentId, 'Faculty research edited successfully');
-                return redirect()->back()->with('success', 'Document info updated successfully');
-            } catch (\Exception $e) {
-                return redirect()->back()->withInput()->with('error', 'Error while updating document');
+            // If status is 'revise', also resubmit
+            if ($document['status'] === 'revise') {
+                $data['status'] = 'submitted';
             }
-        } else if ($action === 'resubmit') {
-            // If userId is not set, redirect back with error
-            if (empty($userId)) {
-                return redirect()->back()->withInput()->with('error', 'Invalid account.');
-            }
-
-            $rules = [
-                'status' => 'required|in_list[submitted,endorsed,published,revise]',
-                'remarks' => [
-                    'rules' => 'required|regex_match[/^[a-zA-Z0-9\s.,!?()-]*$/]',
-                    'errors' => [
-                        'regex_match' => 'Remarks can only include letters, numbers, and basic punctuation.'
-                    ]
-                ],
-            ];
-
-            if (!$this->validate($rules)) {
-                return redirect()->back()->withInput()->with('error', $this->validator->getErrors());
-            }
-
-            // Check if document exists
-            $document = $documentModel->find($documentId);
-            if (!$document) {
-                return redirect()->back()->withInput()->with('error', 'Document not found.');
-            }
-
-            // Check if the user is authorized to resubmit the document
-            if ($document['user_id'] !== $userId) {
-                return redirect()->back()->withInput()->with('error', 'Account is not authorized.');
-            }
-
-            $remarks = strip_tags(trim($this->request->getPost('remarks')));
-            $remarks = htmlspecialchars($remarks, ENT_QUOTES, 'UTF-8');
-
-            // Check if the document is in 'revise' status
-            if ($document['status'] !== 'revise') {
-                return redirect()->back()->withInput()->with('error', 'Document is not revise.');
-            }
-
-            // Update the document status
-            $data = [
-                'status' => 'submitted',
-            ];
 
             $db = \Config\Database::connect();
             $db->transBegin();
 
             try {
                 $documentModel->update($documentId, $data);
-                
-                $feedbacksModel->insert([
-                    'document_id' => $documentId,
-                    'user_id'     => $userId,
-                    'content'     => $remarks,
-                ]);
+
+                // Insert remarks only if resubmitting
+                if ($document['status'] === 'revise') {
+                    $remarks = strip_tags(trim($this->request->getPost('remarks')));
+                    $remarks = htmlspecialchars($remarks, ENT_QUOTES, 'UTF-8');
+                    $feedbacksModel->insert([
+                        'document_id' => $documentId,
+                        'user_id'     => $userId,
+                        'content'     => $remarks,
+                    ]);
+                }
 
                 if ($db->transStatus() === false) {
                     throw new \Exception('Transaction error');
                 }
-                
 
                 $db->transCommit();
-                logAction('RESUBMIT_FACULTY_RESEARCH', 'DOCUMENT', $documentId, 'Faculty research resubmitted successfully');
-                return redirect()->back()->with('success', 'Faculty research resubmitted successfully');
+                logAction('EDIT_FACULTY_RESEARCH', 'DOCUMENT', $documentId, 'Faculty research edited successfully');
+                return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();
-                return redirect()->back()->withInput()->with('error', 'Error while resubmitting document');
+                return redirect()->back()->withInput()->with('error', 'Error while updating document');
             }
         }
     }

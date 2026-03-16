@@ -204,23 +204,23 @@
                             <hr class="">
                             <!-- Submit Button -->
                             <div class="col-md-12 mb-2 d-flex justify-content-end gap-2">
-                                <a href="<?= base_url('documents/facultyResearch/download/' . $facultyResearch[0]['id']); ?>" class="btn btn-danger btn-sm px-5">
+                                <!-- <a href="<?= base_url('documents/facultyResearch/download/' . $facultyResearch[0]['id']); ?>" class="btn btn-danger btn-sm px-5">
                                     <i class="fas fa-download me-2"></i>Download
+                                </a> -->
+                                <a href="<?= base_url('documents/viewDocument/' . $facultyResearch[0]['id']); ?>" class="btn btn-danger btn-sm px-5" target="_blank">
+                                    <i class="fas fa-eye me-2"></i>View Document
                                 </a>
                                 <?php
                                 // If the current user ID is match with the adviser ID = user can save edit
                                 if ($session->get('user_id') == $facultyResearch[0]['adviser_id'] || $session->get('user_level') === 'librarian') {
                                     echo '<button type="submit" name="action" value="update" class="btn btn-danger btn-sm px-5">
-                                        <i class="fas fa-sync-alt me-2"></i>Update
+                                        <i class="fas fa-sync-alt me-2"></i>Save
                                         </button>';
                                 }
 
                                 if ($session->get('user_id') == $facultyResearch[0]['user_id'] && $facultyResearch[0]['status'] == 'revise' && $session->get('user_id') != $facultyResearch[0]['adviser_id']) {
                                     echo '<button type="submit" name="action" value="edit"  class="btn btn-danger btn-sm px-5">
-                                        <i class="fas fa-sync-alt me-2"></i>Save Edit
-                                        </button>';
-                                    echo '<button type="submit" name="action" value="resubmit"  class="btn btn-danger btn-sm px-5">
-                                        <i class="fas fas fa-save me-2"></i>Resubmit
+                                        <i class="fas fa-sync-alt me-2"></i>Save & Resubmit
                                         </button>';
                                 }
                                 ?>

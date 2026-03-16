@@ -191,11 +191,13 @@
 
        <!-- PDF Viewer -->
         <div class="pdf-viewer">
-            <?php if (!empty($document['file_path'])): ?>
-                <iframe src="<?= base_url('public/' . $document['file_path']) ?>#toolbar=0&navpanes=0&scrollbar=1"></iframe>
-            <?php else: ?>
-                <p style="color: #999; padding: 40px;">No PDF file available</p>
-            <?php endif; ?>
+            <iframe 
+                id="pdfIframe"
+                src="<?= base_url('pdfjs/web/viewer.html') ?>?file=<?= base_url('documents/pdf/' . $document['id']) ?>"
+                width="100%" 
+                height="700px"
+                style="border: none;">
+            </iframe>
         </div>
     </div>
 
@@ -205,6 +207,18 @@
             if (e.key === 'Escape') {
                 window.history.back();
             }
+        });
+
+        document.getElementById('pdfIframe').addEventListener('load', function() {
+            const iframeDoc = this.contentDocument || this.contentWindow.document;
+
+            const style = iframeDoc.createElement('style');
+            style.textContent = `
+                #editorModeButtons, #editorModeSeparator, #print, #download, .textLayer {
+                    display: none !important;
+                }
+            `;
+            iframeDoc.head.appendChild(style);
         });
     </script>
 </body>

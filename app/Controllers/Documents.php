@@ -148,6 +148,26 @@ class Documents extends BaseController
             . view('template/footer', $data);
     }
 
+    public function servePdf($id) {
+        $documentModel = new Document();
+        $document = $documentModel->find($id);
+
+        if (!$document) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Document not found');
+        }
+
+        $filePath = ROOTPATH . 'public/' . $document['file_path'];
+
+        if (!file_exists($filePath)) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('File not found');
+        }
+
+        return $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'inline; filename="' . basename($filePath) . '"')
+            ->setBody(file_get_contents($filePath));
+    }
+
     public function viewDocument($id) {
         $documentModel = new Document();
         $document = $documentModel->find($id);

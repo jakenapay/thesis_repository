@@ -177,7 +177,8 @@
 
                                     <div class="col-md-6 mb-4">
                                         <label class="form-label">Status<span class="text-danger"> *</span></label>
-                                        <select name="status" class="form-control form-control-sm" required>
+                                        <select name="status" class="form-control form-control-sm" required
+                                        <?=  ($current_status == 'revise') ? 'disabled' : '' ?>>
                                             <?php foreach ($options as $opt): ?>
                                                 <option value="<?= $opt ?>" <?= ($current_status == $opt) ? 'selected' : '' ?>>
                                                     <?= $status_labels[$opt] ?> <?= ($current_status == $opt) ? '(Current)' : '' ?>
@@ -189,7 +190,8 @@
                                     <!-- Remarks-->
                                     <div class="col-md-6 mb-4">
                                         <label class="form-label" for="remarks">Feedbacks<span class="text-danger"> *</span></label>
-                                        <textarea name="remarks" id="remarks" class="form-control form-control-sm"></textarea>
+                                        <textarea name="remarks" id="remarks" class="form-control form-control-sm"
+                                        <?=  ($current_status == 'revise') ? 'disabled' : '' ?>></textarea>
                                     </div>
                                 </div>
 
@@ -213,8 +215,9 @@
                                 <?php
                                 // If the current user ID is match with the adviser ID = user can save edit
                                 if ($session->get('user_id') == $graduateThesis[0]['adviser_id'] || $session->get('user_level') === 'librarian') {
-                                    echo '<button type="submit" name="action" value="update" class="btn btn-danger btn-sm px-5">
-                                        <i class="fas fa-sync-alt me-2"></i>Save
+                                    $disabledAttr = ($current_status === 'revise') ? 'disabled' : '';
+                                    echo '<button type="submit" name="action" value="update" class="btn btn-danger btn-sm px-5" ' . $disabledAttr . '>
+                                            <i class="fas fa-sync-alt me-2"></i>Save
                                         </button>';
                                 }
 

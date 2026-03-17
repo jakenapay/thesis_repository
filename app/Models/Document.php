@@ -83,9 +83,9 @@ class Document extends Model
             return $query->where('documents.status', $status)
                         ->findAll();
         } else if ($status === 'submitted' && $adviser_id !== null) { // Adviser/Faculty
-            return $query->where('documents.status', $status)
-                        ->where('documents.adviser_id', $adviser_id)
-                        ->findAll();
+            return $query->whereIn('documents.status', ['submitted', 'revise'])
+                 ->where('documents.adviser_id', $adviser_id)
+                 ->findAll();
         } else if ($status === 'submitted' && $user_id !== null) { // Masters
             return $query->whereIn('documents.status', ['published', 'submitted', 'revise'])
                         ->where('documents.user_id', $user_id)

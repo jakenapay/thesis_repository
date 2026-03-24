@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <div class="row d-flex min-vh-100">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <?php if (session()->getFlashdata('error')): ?>
                 <div class="alert alert-danger text-center"><?= session()->getFlashdata('error') ?></div>
             <?php endif; ?>
@@ -9,9 +9,14 @@
                 <div class="alert alert-success text-center"><?= session()->getFlashdata('success') ?></div>
             <?php endif; ?>
             <div class="card mb-3 p-0">
-                <div class="bg-red text-light card-header fw-bold">
-                    List of Users
+                <div class="bg-red text-light card-header fw-bold d-flex justify-content-between align-items-center">
+                    <span>List of Users</span>
+                    <!-- Plus icon button -->
+                    <a href="<?= base_url('/register') ?>" class="btn btn-sm text-light fw-bold" title="Add User">
+                        Create User  <i class="fas fa-plus text-white fw-bolder mx-2"></i>
+                    </a>
                 </div>
+
                 <div class="card-body table-responsive table-sm">
                     <table id="usersTable" class="table table-hover table-sm" style="width:100%">
                         <thead>
@@ -78,10 +83,6 @@
             </div>
 
         </div>
-        <!-- Right column: Sidebar -->
-        <div class="col-md-4 mb-3">
-            <?= view('template/sidebar') ?>
-        </div>
 
     </div>
 </div>
@@ -93,8 +94,8 @@
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-    $(document).ready(function() {
-        let usersTable = new DataTable('#usersTable');
+        $(document).ready(function() {
+            let usersTable = new DataTable('#usersTable');
+        });
     });
-
 </script>

@@ -26,7 +26,7 @@
                                         <td><?= esc($thesis['authors']); ?></td>
                                         <td><?= esc($thesis['department_name'] ?? ''); ?></td>
                                         <td>
-                                            <a href="<?= base_url('documents/graduateThesis/view/' . esc($thesis['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
+                                            <a href="<?= base_url('documents/viewDocument/' . esc($thesis['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -62,7 +62,7 @@
                                         <td><?= esc($dissertation['authors']); ?></td>
                                         <td><?= esc($dissertation['department_name'] ?? ''); ?></td>
                                         <td>
-                                            <a href="<?= base_url('documents/dissertations/view/' . esc($dissertation['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
+                                            <a href="<?= base_url('documents/viewDocument/' . esc($dissertation['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -98,7 +98,7 @@
                                         <td><?= esc($research['authors']); ?></td>
                                         <td><?= esc($research['department_name'] ?? ''); ?></td>
                                         <td>
-                                            <a href="<?= base_url('documents/facultyResearch/view/' . esc($research['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
+                                            <a href="<?= base_url('documents/viewDocument/' . esc($research['id'], 'url')); ?>" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>

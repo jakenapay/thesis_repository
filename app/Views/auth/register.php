@@ -89,36 +89,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mb-2">
-                                        <label class="form-label">Email Address</label>
-                                        <input type="email" class="form-control form-control-sm" name="email" required>
-                                    </div>
-
                                     <div class="row">
-                                        <div class="col-md-6 mb-2">
-                                            <label class="form-label">Password</label>
-                                            <input type="password" class="form-control form-control-sm" name="password" required>
-                                        </div>
-                                        <div class="col-md-6 mb-2">
-                                            <label class="form-label">Confirm Password</label>
-                                            <input type="password" class="form-control form-control-sm" name="confirm_password" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-2">
-                                            <label class="form-label">Academic Status</label>
-                                            <select class="form-select form-select-sm" name="academic_status" required>
-                                                <option value="">-- Select Academic Status --</option>
-                                                <?php if (isset($AcademicStatusData) && is_array($AcademicStatusData)): ?>
-                                                    <?php foreach ($AcademicStatusData as $status): ?>
-                                                        <option value="<?= esc($status['id']) ?>">
-                                                            <?= esc($status['status']) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php endif; ?>
-                                            </select>
-                                        </div>
                                         <div class="col-md-6 mb-2">
                                             <label class="form-label">Employment Role/Position</label>
                                             <select class="form-select form-select-sm" name="employment_status" id="employment_status" required>
@@ -132,7 +103,23 @@
                                                 <?php endif; ?>
                                             </select>
                                         </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label">Email Address</label>
+                                            <input type="email" class="form-control form-control-sm" name="email" required>
+                                        </div>
                                     </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label">Password</label>
+                                            <input type="password" class="form-control form-control-sm" name="password" required>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label">Confirm Password</label>
+                                            <input type="password" class="form-control form-control-sm" name="confirm_password" required>
+                                        </div>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
                                             <label class="form-label">College</label>
@@ -168,8 +155,8 @@
                                         <button type="submit" class="btn btn-danger btn">Register</button>
                                     </div>
                                     <div class="mt-3 text-center form-label">
-                                        Already have an account?
-                                        <a href="<?= base_url('login') ?>" class="text-decoration-underline text-light"> Login here</a>
+                                        Back to
+                                        <a href="<?= base_url('users') ?>" class="text-decoration-underline text-light">list</a>
                                     </div>
                                 </form>
                             </div>

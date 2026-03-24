@@ -70,10 +70,6 @@
                                     <div class="d-grid">
                                         <button type="submit" class="btn btn-danger btn">Login</button>
                                     </div><br>
-                                    <div class="mt-3 text-center form-label">
-                                        Don't have an account?
-                                        <a href="<?= base_url('register') ?>" class="text-decoration-underline text-light"> Register here</a>
-                                    </div>
                                 </form>
                             </div>
                         </div> <!-- End right side -->

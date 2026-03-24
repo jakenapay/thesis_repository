@@ -128,12 +128,6 @@
                 <h5 style="margin: 0;"><?= esc($document['title']) ?></h5>
             </div>
             <div class="toolbar-right">
-                <button class="btn-icon" onclick="window.print()" title="Print">
-                    <i class="fas fa-print"></i>
-                </button>
-                <a href="<?= base_url($document['file_path']) ?>" class="btn-icon" download title="Download">
-                    <i class="fas fa-download"></i>
-                </a>
             </div>
         </div>
 

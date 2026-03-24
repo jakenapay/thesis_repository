@@ -91,6 +91,11 @@ class Auth extends BaseController
 
     public function register()
     {
+        // If not admin, redirect to home
+        if (session()->get('user_level') !== 'admin') {
+            return redirect()->to('/home')->with('error', 'You do not have permission to access the registration page.');
+        }
+
         $AcademicStatusModel = new AcademicStatus();
         $AcademicStatusData = $AcademicStatusModel->findAll();
 

@@ -170,7 +170,10 @@ class Documents extends BaseController
 
     public function viewDocument($id) {
         $documentModel = new Document();
-        $document = $documentModel->find($id);
+        $document = $documentModel
+        ->select('documents.*, departments.name as department_name')
+        ->join('departments', 'departments.id = documents.department_id', 'left')
+        ->find($id);
 
         if (!$document) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Document not found');

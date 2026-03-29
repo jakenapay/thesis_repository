@@ -89,20 +89,6 @@
                                 </div>
 
 
-                                <br>
-                                <!-- Academic Status -->
-                                <div class="col-md-4 mb-4">
-                                    <label class="form-label">Academic Status</label>
-                                    <select name="academic_status" class="form-control form-control-sm" required>
-                                        <option value="">Select Academic Status</option>
-                                        <?php foreach ($academicStatusData as $academicStatus): ?>
-                                            <option value="<?= esc($academicStatus['id']); ?>"
-                                                <?= ($user['academic_status'] == $academicStatus['id']) ? 'selected' : ''; ?>>
-                                                <?= esc($academicStatus['status']); ?> <?= ($user['academic_status'] == $academicStatus['id']) ? '(Current)' : ''; ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
 
                                 <!-- Employment Status -->
                                 <div class="col-md-4 mb-4">

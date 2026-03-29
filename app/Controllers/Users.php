@@ -26,18 +26,15 @@ class Users extends BaseController
             return redirect()->to(base_url('login'));
         }
 
-        $AcademicStatusModel = new AcademicStatus();
         $jobTitleModel = new JobTitle();
         $departmentModel = new Department();
         $userModel = new User();
 
         // JOIN Query: Selects user data + related names from foreign keys
         $usersWithDetails = $userModel->select('users.*, 
-                                                academic_status.status AS academic_status_text, 
                                                 job_title.title AS job_title_text, 
                                                 departments.name AS department_name,
                                                 colleges.name AS college_name')
-                                    ->join('academic_status', 'academic_status.id = users.academic_status', 'left')
                                     ->join('job_title', 'job_title.id = users.employment_status', 'left')
                                     ->join('departments', 'departments.id = users.department_id', 'left')
                                     ->join('colleges', 'colleges.id = users.college', 'left')
@@ -45,7 +42,6 @@ class Users extends BaseController
 
         $data = [
             'session' => $session,
-            'AcademicStatusData' => $AcademicStatusModel->findAll(),
             'jobTitleData' => $jobTitleModel->findAll(),
             'departmentData' => $departmentModel->findAll(),
             'userData' => $usersWithDetails, 
@@ -63,18 +59,15 @@ class Users extends BaseController
         $departmentModel = new Department();
         $collegeModel = new CollegeModel();
         $jobTitleModel = new JobTitle();
-        $AcademicStatusModel = new AcademicStatus();
 
         if (!$session->has('user_id') || ($session->get('user_level') !== 'admin' )) {
             return redirect()->to(base_url('login'));
         }
 
         $user = $userModel->select('users.*, 
-                                academic_status.status AS academic_status_text, 
                                 job_title.title AS job_title_text, 
                                 departments.name AS department_name,
                                 colleges.name AS college_name')
-                        ->join('academic_status', 'academic_status.id = users.academic_status', 'left')
                         ->join('job_title', 'job_title.id = users.employment_status', 'left')
                         ->join('departments', 'departments.id = users.department_id', 'left')
                         ->join('colleges', 'colleges.id = users.college', 'left')
@@ -89,8 +82,6 @@ class Users extends BaseController
         $departmentData = $departmentModel->findAll();
         $collegeData = $collegeModel->findAll();
         $jobTitleData = $jobTitleModel->findAll();
-        $AcademicStatusData = $AcademicStatusModel->findAll();
-
 
         $data = [
             'session' => $session,
@@ -98,7 +89,6 @@ class Users extends BaseController
             'departmentData' => $departmentData,
             'collegeData' => $collegeData,
             'jobTitleData' => $jobTitleData,
-            'academicStatusData' => $AcademicStatusData,
         ];
 
         return view('template/header', $data)
@@ -131,7 +121,6 @@ class Users extends BaseController
             'suffix'            => 'permit_empty|alpha_space',
             // Check uniqueness of email, but ignore the current user's ID
             'email'             => "required|valid_email|is_unique[users.email,id,{$id}]", 
-            'academic_status'   => 'required',
             'employment_status' => 'required',
             'college'           => 'required',
             'department_id'     => 'required',
@@ -159,9 +148,6 @@ class Users extends BaseController
                 'required' => 'Email address is required.',
                 'valid_email' => 'Please provide a valid email address.',
                 'is_unique' => 'This email address is already registered in the system.',
-            ],
-            'academic_status' => [
-                'required' => 'Please select an academic status.',
             ],
             'employment_status' => [
                 'required' => 'Please select an employment status.',
@@ -209,7 +195,6 @@ class Users extends BaseController
             'last_name'         => $this->request->getPost('last_name'),
             'suffix'            => $this->request->getPost('suffix'),
             'email'             => $this->request->getPost('email'),
-            'academic_status'   => $this->request->getPost('academic_status'),
             'employment_status' => $this->request->getPost('employment_status'),
             'college'           => $this->request->getPost('college'),
             'department_id'     => $this->request->getPost('department_id'),

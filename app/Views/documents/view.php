@@ -114,6 +114,109 @@
             background-color: #dc3545;
             color: #fff;
         }
+
+        /* ── Edit & Save buttons ── */
+.btn-edit {
+    background-color: #0d6efd;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+.btn-edit:hover { background-color: #0b5ed7; }
+
+.btn-save {
+    background-color: #198754;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+.btn-save:hover { background-color: #157347; }
+
+.btn-edit:disabled,
+.btn-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Edit mode banner ── */
+.edit-banner {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background-color: #cfe2ff;
+    border: 1px solid #9ec5fe;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #084298;
+}
+.edit-banner.visible { display: flex; }
+
+/* ── Inputs look like plain text when disabled ── */
+.edit-input,
+.edit-select,
+.edit-textarea {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 0.95em;
+    color: #666;
+    background: transparent;
+    border: 1.5px solid transparent;
+    border-radius: 4px;
+    padding: 4px 6px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    cursor: default;
+    box-sizing: border-box;
+}
+.edit-input:not(:disabled),
+.edit-select:not(:disabled),
+.edit-textarea:not(:disabled) {
+    background: #f8f9fa;
+    border-color: #86b7fe;
+    cursor: text;
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
+}
+.edit-input:not(:disabled):focus,
+.edit-select:not(:disabled):focus,
+.edit-textarea:not(:disabled):focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.2);
+}
+
+/* ── Status select — badge style when disabled ── */
+#field-status:disabled {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 3px;
+    font-size: 0.85em;
+    padding: 4px 8px;
+    font-weight: 600;
+    cursor: default;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    width: auto;
+}
+#field-status[data-status="submitted"]:disabled  { background-color: #ffc107; color: #000; }
+#field-status[data-status="endorsed"]:disabled   { background-color: #17a2b8; color: #fff; }
+#field-status[data-status="published"]:disabled  { background-color: #28a745; color: #fff; }
+#field-status[data-status="revise"]:disabled     { background-color: #dc3545; color: #fff; }
     </style>
 </head>
 <body>
@@ -128,6 +231,14 @@
                 <h5 style="margin: 0;"><?= esc($document['title']) ?></h5>
             </div>
             <div class="toolbar-right">
+                <?php if (session()->get('user_level') === 'admin'): ?>
+                    <button class="btn-edit" id="btn-edit" onclick="enterEditMode()">
+                        <i class="fas fa-pen-to-square"></i> Edit
+                    </button>
+                    <button class="btn-save" id="btn-save" onclick="saveDocument()">
+                        <i class="fas fa-floppy-disk"></i> Save
+                    </button>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -202,6 +313,10 @@
                 window.history.back();
             }
         });
+
+        var editableFields = Array.from(
+            document.querySelectorAll('.edit-input, .edit-select, .edit-textarea')
+        );
 
         document.getElementById('pdfIframe').addEventListener('load', function() {
             const iframeDoc = this.contentDocument || this.contentWindow.document;

@@ -29,7 +29,6 @@
                                 <th>Last Name</th>
                                 <th>Suffix</th>
                                 <th>Email</th>
-                                <th>Academic Status</th>
                                 <th>Employment Status</th>
                                 <th>College</th>
                                 <th>Department</th>
@@ -58,7 +57,6 @@
                                         <td><?= esc($user['last_name']); ?></td>
                                         <td><?= esc($user['suffix']); ?></td>
                                         <td><?= esc($user['email']); ?></td>
-                                        <td class="text-capitalize"><?= esc($user['academic_status_text']); ?></td>
                                         <td class="text-capitalize"><?= esc($user['job_title_text']); ?></td>
                                         <!-- <td class="text-capitalize"><?= esc($user['job_title_text']); ?></td> -->
                                         <td class="text-capitalize"><?= esc($user['college_name']); ?></td>

@@ -72,7 +72,6 @@ class Auth extends BaseController
             'last_name'         => $user['last_name'],
             'suffix'            => $user['suffix'],
             'employment_status' => $user['employment_status'],
-            'academic_status'   => $user['academic_status'],
             'college'           => $user['college'],
             'department'        => $user['department_id'],
             'agreed_terms'      => $user['agreed_terms'],
@@ -95,10 +94,7 @@ class Auth extends BaseController
         if (session()->get('user_level') !== 'admin') {
             return redirect()->to('/home')->with('error', 'You do not have permission to access the registration page.');
         }
-
-        $AcademicStatusModel = new AcademicStatus();
-        $AcademicStatusData = $AcademicStatusModel->findAll();
-
+       
         $jobTitleModel = new JobTitle();
         $jobTitleData = $jobTitleModel->findAll();
 
@@ -112,7 +108,6 @@ class Auth extends BaseController
 
         $data = [
             'session' => $session,
-            'AcademicStatusData' => $AcademicStatusData,
             'jobTitleData' => $jobTitleData,
             'departmentsData' => $departmentsData,
             'collegesData' => $collegesData,
@@ -132,7 +127,6 @@ class Auth extends BaseController
             'suffix'            => 'permit_empty|max_length[10]|alpha',
             'email'             => 'required|valid_email|is_unique[users.email]',
             'password'          => 'required|min_length[8]|max_length[255]',
-            'academic_status'   => 'required|alpha_numeric_space',
             'employment_status' => 'required|alpha_numeric_space',
             'college'           => 'required|alpha_numeric_space',
             'department'        => 'required|alpha_numeric_space',
@@ -164,7 +158,6 @@ class Auth extends BaseController
             'suffix'            => trim($request->getPost('suffix')),
             'email'             => trim($request->getPost('email')),
             'password'          => password_hash(trim($request->getPost('password')), PASSWORD_DEFAULT),
-            'academic_status'   => trim($request->getPost('academic_status')),
             'employment_status' => trim($request->getPost('employment_status')),
             'college'           => trim($request->getPost('college')),
             'department_id'     => trim($request->getPost('department')),
@@ -192,7 +185,7 @@ class Auth extends BaseController
         logAction('LOGOUT', 'USER', $userId, 'User logged out');
 
         $this->session->destroy();
-        $this->session->remove(['user_id', 'email', 'first_name', 'middle_name', 'last_name', 'suffix', 'employment_status', 'academic_status', 'college', 'department', 'agreed_terms', 'user_level', 'is_adviser', 'logged_in', 'created_at', 'updated_at', 'profile_image']);
+        $this->session->remove(['user_id', 'email', 'first_name', 'middle_name', 'last_name', 'suffix', 'employment_status', 'college', 'department', 'agreed_terms', 'user_level', 'is_adviser', 'logged_in', 'created_at', 'updated_at', 'profile_image']);
         return redirect()->to('/login')->with('success', 'Logout successful!');
     }
 
@@ -208,7 +201,6 @@ class Auth extends BaseController
             'last_name'         => trim($this->request->getPost('last_name')),
             'suffix'            => trim($this->request->getPost('suffix')),
             'employment_status' => trim($this->request->getPost('employment_status')),
-            'academic_status'   => trim($this->request->getPost('academic_status')),
             'college'           => trim($this->request->getPost('college')),
             'department_id'        => trim($this->request->getPost('department')),
             'email'             => trim($this->request->getPost('email')),
@@ -230,7 +222,6 @@ class Auth extends BaseController
             'last_name'         => 'required|min_length[2]|max_length[50]|alpha_space',
             'suffix'            => 'permit_empty|max_length[10]|alpha',
             'email'             => 'required|valid_email',
-            'academic_status'   => 'required|alpha_numeric_space',
             'employment_status' => 'required|alpha_numeric_space',
             'college'           => 'required|alpha_numeric_space',
             'department'        => 'required|alpha_numeric_space',
@@ -276,7 +267,6 @@ class Auth extends BaseController
             'last_name'         => $data['last_name'],
             'suffix'            => $data['suffix'],
             'employment_status' => $data['employment_status'],
-            'academic_status'   => $data['academic_status'],
             'college'           => $data['college'],
             'department'        => $data['department_id'],
             'logged_in'         => true,

@@ -53,9 +53,7 @@ class Home extends BaseController
         // print_r($shortcutDocs);
         // echo '</pre>';
         // exit;
-        // Fetch employment_status and academic_status from the session
         $employmentStatusId = $session->get('employment_status');
-        $academicStatusId = $session->get('academic_status');
         $departmentId = $session->get('department');
         $collegeId = $session->get('college');
 
@@ -65,13 +63,6 @@ class Home extends BaseController
             $employmentStatusName = $employmentStatusData ? $employmentStatusData['status'] : null;
         } else {
             $employmentStatusName = null; // If no employment status ID in session, set to null
-        }
-
-        if ($academicStatusId) {
-            $academicStatusData = $AcademicStatusModel->find($academicStatusId);
-            $academicStatusName = $academicStatusData ? $academicStatusData['status'] : null;
-        } else {
-            $academicStatusName = null; // If no academic status ID in session, set to null
         }
 
         if ($departmentId) {
@@ -91,13 +82,11 @@ class Home extends BaseController
         // Set new session variables with the status names
         $session->set('department_name', $departmentName);
         $session->set('employment_status_status', $employmentStatusName);
-        $session->set('academic_status_status', $academicStatusName);
         $session->set('college_name', $collegeName);
         
         // Combine all data
         $data = [
             'session' => $session,
-            'AcademicStatusData' => $AcademicStatusData,
             'jobTitleData' => $jobTitleData,
             'departmentData' => $departmentData,
             'shortcutDocs' => $shortcutDocs,

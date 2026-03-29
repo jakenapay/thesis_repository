@@ -23,14 +23,12 @@ class Analytics extends BaseController
             return redirect()->to(base_url('login'));
         }
 
-        $AcademicStatusModel = new AcademicStatus();
         $jobTitleModel = new JobTitle();
         $departmentModel = new Department();
         $userModel = new User();
 
         $data = [
             'session' => $session,
-            'AcademicStatusData' => $AcademicStatusModel->findAll(),
             'jobTitleData' => $jobTitleModel->findAll(),
             'departmentData' => $departmentModel->findAll(),
             'userData' => $userModel->findAll(),

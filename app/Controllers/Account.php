@@ -19,10 +19,6 @@ class Account extends BaseController
 
     public function index()
     {
-        // Use the models to fetch data
-        $AcademicStatusModel = new AcademicStatus();
-        $AcademicStatusData = $AcademicStatusModel->findAll();
-
         $jobTitleModel = new JobTitle();
         $jobTitleData = $jobTitleModel->findAll();
 

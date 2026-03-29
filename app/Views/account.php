@@ -85,19 +85,6 @@
                                 </select>
                             </div>
 
-                            <!-- Academic Status -->
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Academic Status</label>
-                                <select class="form-control form-control-sm" name="academic_status" required>
-                                    <option value="" disabled <?= empty($session->get('academic_status')) ? 'selected' : '' ?>>Select Academic Status</option>
-                                    <?php foreach ($AcademicStatusData as $status): ?>
-                                        <option value="<?= esc($status['id']) ?>" <?= $session->get('academic_status') == $status['id'] ? 'selected' : '' ?>>
-                                            <?= esc($status['status']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
                             <!-- College -->
                             <div class="col-md-6 mb-2">
                                 <label class="form-label">College</label>

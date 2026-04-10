@@ -270,6 +270,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        const successAlert = document.querySelector('.alert-success');
+        if (successAlert) {
+            setTimeout(function() {
+                window.location.href = '<?= base_url('/'); ?>';
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+        
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);

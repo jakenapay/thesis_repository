@@ -61,6 +61,52 @@ $displayPath = match ($path) {
     </form>
   </div>
 </div>
+<<<<<<< HEAD
+=======
+<?php } ?>
+
+<div class="card mt-3">
+  <div class="bg-red text-light card-header fw-bold">
+    Submit
+  </div>
+  <div class="card-body">
+    <!-- Category List -->
+    <div class="accordion" id="submitAccordion">
+      <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#submitResearch">
+        Submit Research
+        </button>
+      </h2>
+      <div id="submitResearch" class="accordion-collapse collapse show" data-bs-parent="#submitAccordion">
+        <div class="accordion-body p-0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><a href="<?= base_url('documents/facultyResearch'); ?>">Faculty Research</a></li>
+          <li class="list-group-item"><a href="<?= base_url('documents/graduateThesis'); ?>">Graduate Thesis</a></li>
+          <li class="list-group-item"><a href="<?= base_url('documents/dissertations'); ?>">Dissertations</a></li>
+        </ul>
+        </div>
+      </div>
+      </div>
+      <div class="accordion-item">
+      <!-- <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#anotherSubmission">
+        Another Submission
+        </button>
+      </h2> -->
+      <!-- <div id="anotherSubmission" class="accordion-collapse collapse" data-bs-parent="#submitAccordion">
+        <div class="accordion-body p-0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><a href="">Option 1</a></li>
+          <li class="list-group-item"><a href="">Option 2</a></li>
+        </ul>
+        </div>
+      </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+>>>>>>> 9fb9c922ea9dc448939743a2b74e2eac8a33661e
 
 <!-- Search Results Modal -->
 <div class="modal fade" id="searchModal" tabindex="-1">

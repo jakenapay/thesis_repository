@@ -172,7 +172,7 @@
                 return res.json();
             })
             .then(function(data) {
-                btn.disabled = false;
+                updateAiCheckLimitState(btn, data.requests_remaining);
 
                 // The CSRF token rotates on every request to this route; pick up
                 // the new one so the next click on this page still works.
@@ -192,6 +192,34 @@
             });
     }
 
+    function updateAiCheckLimitState(btn, remaining) {
+        const wrapper = btn.closest('[data-ai-check]');
+        const existingIcon = wrapper.querySelector('[data-ai-check-limit-icon]');
+
+        if (existingIcon) {
+            const existingTooltip = bootstrap.Tooltip.getInstance(existingIcon);
+            if (existingTooltip) {
+                existingTooltip.dispose();
+            }
+            existingIcon.remove();
+        }
+
+        if (typeof remaining !== 'number' || remaining > 0) {
+            btn.disabled = false;
+            return;
+        }
+
+        btn.disabled = true;
+
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-circle-info text-warning ms-1';
+        icon.setAttribute('data-ai-check-limit-icon', '');
+        icon.setAttribute('data-bs-toggle', 'tooltip');
+        icon.setAttribute('title', 'Requests left: 0. Try again in a while.');
+        btn.insertAdjacentElement('afterend', icon);
+        new bootstrap.Tooltip(icon);
+    }
+
     function renderAiCheckError(badgeBox, resultBox, message) {
         badgeBox.innerHTML = '<span class="text-danger small"><i class="fas fa-exclamation-circle me-1"></i>' + escapeAiCheckHtml(message) + '</span>';
         resultBox.innerHTML = '';
@@ -202,7 +230,7 @@
         const badgeIcon = data.passed ? 'fa-check-circle' : 'fa-exclamation-triangle';
         const badgeText = data.passed ? 'Passed' : 'Needs Revision';
 
-        badgeBox.innerHTML = '<span class="' + badgeClass + ' fw-bold small"><i class="fas ' + badgeIcon + ' me-1"></i>' + badgeText + ' (' + data.overall + '/100)</span>';
+        badgeBox.innerHTML = '<span class="' + badgeClass + ' fw-bold small"><i class="fas ' + badgeIcon + ' me-1"></i>' + badgeText + ' (' + data.overall + '% Human content)</span>';
 
         if (!Array.isArray(data.chapters) || data.chapters.length === 0) {
             resultBox.innerHTML = '';
@@ -212,7 +240,7 @@
         let listHtml = '<ul class="list-unstyled mb-0 mt-1">';
         data.chapters.forEach(function(ch) {
             const chClass = ch.passed ? 'text-success' : 'text-danger';
-            listHtml += '<li class="' + chClass + '">' + escapeAiCheckHtml(ch.title) + ': ' + ch.score + '/100';
+            listHtml += '<li class="' + chClass + '">' + escapeAiCheckHtml(ch.title) + ': ' + ch.score + '% Human content';
             if (!ch.passed && ch.note) {
                 listHtml += ' &mdash; <span class="text-muted">' + escapeAiCheckHtml(ch.note) + '</span>';
             }

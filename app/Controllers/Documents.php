@@ -225,6 +225,10 @@ class Documents extends BaseController
         ]);
     }
 
+    // 20 checks per 10 minutes per user — each call costs real OpenRouter usage.
+    private const AI_CHECK_LIMIT = 20;
+    private const AI_CHECK_WINDOW_SECONDS = 600;
+
     public function checkAiContent()
     {
         // The csrf filter (scoped to this route) regenerates the token on every
@@ -241,42 +245,50 @@ class Documents extends BaseController
             ]);
         }
 
-        $throttler = \Config\Services::throttler();
+        $cache = \Config\Services::cache();
+        $key = 'ai_check_' . $userId;
+        $count = (int) ($cache->get($key) ?? 0);
 
-        // 5 checks per 10 minutes per user — each call costs real OpenRouter usage.
-        if (!$throttler->check('ai_check_' . $userId, 5, 600)) {
+        if ($count >= self::AI_CHECK_LIMIT) {
             return $this->response->setStatusCode(429)
-                ->setHeader('Retry-After', (string) $throttler->getTokenTime())
+                ->setHeader('Retry-After', (string) self::AI_CHECK_WINDOW_SECONDS)
                 ->setJSON([
-                    'success'   => false,
-                    'message'   => 'You\'re checking documents too frequently. Please wait a bit and try again.',
-                    'csrf_hash' => $csrfHash,
+                    'success'            => false,
+                    'message'            => 'You\'re checking documents too frequently. Please wait a bit and try again.',
+                    'csrf_hash'          => $csrfHash,
+                    'requests_remaining' => 0,
                 ]);
         }
+
+        $cache->save($key, $count + 1, self::AI_CHECK_WINDOW_SECONDS);
+        $remaining = self::AI_CHECK_LIMIT - ($count + 1);
 
         $file = $this->request->getFile('thesis_file');
 
         if (!$file || !$file->isValid()) {
             return $this->response->setJSON([
-                'success'   => false,
-                'message'   => 'Please choose a PDF file first.',
-                'csrf_hash' => $csrfHash,
+                'success'            => false,
+                'message'            => 'Please choose a PDF file first.',
+                'csrf_hash'          => $csrfHash,
+                'requests_remaining' => $remaining,
             ]);
         }
 
         if ($file->getMimeType() !== 'application/pdf') {
             return $this->response->setJSON([
-                'success'   => false,
-                'message'   => 'Only PDF files can be checked.',
-                'csrf_hash' => $csrfHash,
+                'success'            => false,
+                'message'            => 'Only PDF files can be checked.',
+                'csrf_hash'          => $csrfHash,
+                'requests_remaining' => $remaining,
             ]);
         }
 
         if ($file->getSizeByUnit('mb') > 10) {
             return $this->response->setJSON([
-                'success'   => false,
-                'message'   => 'File is too large to check (max 10MB).',
-                'csrf_hash' => $csrfHash,
+                'success'            => false,
+                'message'            => 'File is too large to check (max 10MB).',
+                'csrf_hash'          => $csrfHash,
+                'requests_remaining' => $remaining,
             ]);
         }
 
@@ -284,14 +296,19 @@ class Documents extends BaseController
             $checker = new AiContentChecker();
             $result = $checker->checkFile($file->getTempName());
 
-            return $this->response->setJSON(['success' => true, 'csrf_hash' => $csrfHash] + $result);
+            return $this->response->setJSON([
+                'success'            => true,
+                'csrf_hash'          => $csrfHash,
+                'requests_remaining' => $remaining,
+            ] + $result);
         } catch (\Throwable $e) {
             log_message('error', 'AI Content Check Error: ' . $e->getMessage());
 
             return $this->response->setJSON([
-                'success'   => false,
-                'csrf_hash' => $csrfHash,
-                'message' => $e->getMessage() ?: 'AI check failed. Please try again.',
+                'success'            => false,
+                'csrf_hash'          => $csrfHash,
+                'requests_remaining' => $remaining,
+                'message'            => $e->getMessage() ?: 'AI check failed. Please try again.',
             ]);
         }
     }

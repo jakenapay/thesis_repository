@@ -8,13 +8,17 @@ class AiContentChecker
 {
     private const MAX_CHAPTERS = 12;
     private const CHARS_PER_CHAPTER = 3000;
-    private const PASS_THRESHOLD = 70;
+    private const PASS_THRESHOLD = 50;
 
     // Retried on 429/502/503/504 only — these are transient (the provider asks
     // callers to "retry shortly"), unlike 401/400 which won't fix themselves.
+    // Free-tier OpenRouter models (e.g. "...:free") share one rate-limit pool
+    // across every user of that model, so a 429 here is often unrelated to our
+    // own usage and tends to clear within a handful of seconds — worth several
+    // escalating retries before surfacing an error to the user.
     private const RETRYABLE_STATUS_CODES = [429, 502, 503, 504];
-    private const MAX_ATTEMPTS = 2;
-    private const RETRY_DELAY_SECONDS = 3;
+    private const MAX_ATTEMPTS = 4;
+    private const RETRY_DELAY_SECONDS = [2, 4, 8];
 
     private const SYSTEM_PROMPT = <<<'PROMPT'
 You are an academic writing analyst helping a university thesis library spot chapters that read as AI-generated rather than student-written.
@@ -24,7 +28,7 @@ For each chapter excerpt you are given, return a "humanness score" from 0 to 100
 - 0 means the writing clearly reads as generic AI output (uniform sentence rhythm, generic transitions like "in conclusion" or "it is important to note", padded phrasing, lack of specific detail).
 
 Respond with STRICT JSON ONLY, no markdown fences, no commentary, in exactly this shape:
-{"chapters":[{"title":"<chapter title as given>","score":<integer 0-100>,"note":"<advice, max 25 words, empty string if score >= 70>"}]}
+{"chapters":[{"title":"<chapter title as given>","score":<integer 0-100>,"note":"<advice, max 25 words, empty string if score >= 50>"}]}
 
 The chapters array must have exactly one entry per chapter excerpt provided, in the same order.
 PROMPT;
@@ -176,42 +180,38 @@ PROMPT;
             $isRetryable = in_array($status, self::RETRYABLE_STATUS_CODES, true);
 
             if (!$isRetryable || $attempt === self::MAX_ATTEMPTS) {
-                throw new \RuntimeException($this->describeError($status, $body));
+                throw new \RuntimeException($this->describeError($status));
             }
 
-            sleep(self::RETRY_DELAY_SECONDS);
+            sleep(self::RETRY_DELAY_SECONDS[$attempt - 1]);
         }
 
         // Unreachable, but keeps static analysis happy about the return type.
         throw new \RuntimeException('The AI check service returned an error. Please try again later.');
     }
 
-    private function describeError(int $status, string $body): string
+    /**
+     * Returns a plain-language message for the end user (a student/adviser/
+     * librarian checking a thesis, not whoever manages the deployment), so it
+     * deliberately avoids exposing config/provider details like env var names
+     * or raw API error text. The full technical detail (status + raw body)
+     * is already captured by the log_message() call in callOpenRouter().
+     */
+    private function describeError(int $status): string
     {
-        $decoded = json_decode($body, true);
-        $message = $decoded['error']['message'] ?? null;
-        // OpenRouter often wraps the actually-useful detail in error.metadata.raw
-        // (e.g. free-model rate limits) behind a generic error.message like
-        // "Provider returned error" — check both.
-        $detail = $decoded['error']['metadata']['raw'] ?? $message;
-
         if ($status === 401) {
-            return 'The AI check service rejected the configured API key. Check OPENROUTER_API_KEY in .env.';
+            return 'The AI check service is temporarily unavailable. Please contact the system administrator.';
         }
 
         if ($status === 429) {
-            $isFreeModelLimit = is_string($detail) && str_contains($detail, 'rate-limited upstream');
-
-            return $isFreeModelLimit
-                ? 'The selected AI model is a free-tier model and is temporarily rate-limited by the provider. Try again in a minute, or switch OPENROUTER_MODEL in .env to a non-free model for more reliable results.'
-                : 'The AI check service is rate-limiting requests right now. Please try again shortly.';
+            return 'The AI checker is busy right now. Please wait a few minutes and try again.';
         }
 
         if ($status >= 500) {
             return 'The AI check service is temporarily unavailable. Please try again shortly.';
         }
 
-        return 'The AI check service returned an error' . (is_string($message) ? (': ' . $message) : '') . '.';
+        return 'Something went wrong while checking this document. Please try again, or contact the system administrator if this keeps happening.';
     }
 
     private function parseResponse(string $content, array $chapters): array

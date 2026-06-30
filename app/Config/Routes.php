@@ -66,6 +66,7 @@ $routes->group('', ['filter' => 'logged_in'], function ($routes) {
 
     $routes->get('documents/pdf/(:num)', 'Documents::servePdf/$1');
     $routes->get('documents/viewDocument/(:num)', 'Documents::viewDocument/$1');
+    $routes->post('documents/checkAiContent', 'Documents::checkAiContent');
     $routes->post('search', 'Documents::search');
     $routes->get('exportAnalytics', 'Analytics::exportAnalytics');
 

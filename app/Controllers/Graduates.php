@@ -111,7 +111,9 @@ class Graduates extends BaseController
             'tags'          => $request->getPost('tags'),
             'adviser_id'    => $request->getPost('adviser_id')
         ]);
-        logAction('CREATE_GRADUATE_THESIS', 'DOCUMENT', $documentModel->getInsertID(), 'User created a new graduate thesis: ' . $request->getPost('thesis_title'));
+        $newDocumentId = $documentModel->getInsertID();
+        logAction('CREATE_GRADUATE_THESIS', 'DOCUMENT', $newDocumentId, 'User created a new graduate thesis: ' . $request->getPost('thesis_title'));
+        notifyThesisSubmitted($newDocumentId);
         return redirect()->to('documents/graduateThesis')->with('success', 'Thesis uploaded successfully.');
     }
 
@@ -243,6 +245,13 @@ class Graduates extends BaseController
 
                 $db->transCommit();
                 logAction('UPDATE_GRADUATE_THESIS', 'DOCUMENT', $documentId, 'Graduate thesis updated successfully');
+
+                if (session()->get('user_level') === 'librarian') {
+                    notifyLibrarianDecision($documentId, $status, $remarks);
+                } else {
+                    notifyAdviserDecision($documentId, $status, $remarks);
+                }
+
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();
@@ -359,6 +368,11 @@ class Graduates extends BaseController
 
                 $db->transCommit();
                 logAction('EDIT_GRADUATE_THESIS', 'DOCUMENT', $documentId, 'Graduate thesis edited successfully');
+
+                if ($document['status'] === 'revise') {
+                    notifyStudentResubmission($documentId, $remarks);
+                }
+
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();

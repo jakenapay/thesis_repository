@@ -112,7 +112,9 @@ class FacultyResearch extends BaseController
             'tags'          => $request->getPost('tags'),
             'adviser_id'    => $request->getPost('adviser_id')
         ]);
-        logAction('CREATE_FACULTY_RESEARCH', 'DOCUMENT', $documentModel->getInsertID(), 'User created a new faculty research: ' . $request->getPost('thesis_title'));
+        $newDocumentId = $documentModel->getInsertID();
+        logAction('CREATE_FACULTY_RESEARCH', 'DOCUMENT', $newDocumentId, 'User created a new faculty research: ' . $request->getPost('thesis_title'));
+        notifyThesisSubmitted($newDocumentId);
         return redirect()->to('documents/facultyResearch')->with('success', 'Faculty research uploaded successfully.');
     }
 
@@ -246,6 +248,13 @@ class FacultyResearch extends BaseController
                 }
 
                 $db->transCommit();
+
+                if (session()->get('user_level') === 'librarian') {
+                    notifyLibrarianDecision($documentId, $status, $remarks);
+                } else {
+                    notifyAdviserDecision($documentId, $status, $remarks);
+                }
+
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();
@@ -360,6 +369,11 @@ class FacultyResearch extends BaseController
 
                 $db->transCommit();
                 logAction('EDIT_FACULTY_RESEARCH', 'DOCUMENT', $documentId, 'Faculty research edited successfully');
+
+                if ($document['status'] === 'revise') {
+                    notifyStudentResubmission($documentId, $remarks);
+                }
+
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();

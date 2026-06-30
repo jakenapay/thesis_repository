@@ -84,7 +84,16 @@
                                 <!-- Thesis File -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">Thesis File<span class="text-danger"> *</span></label>
-                                    <input type="file" class="form-control form-control-sm" name="thesis_file" required accept=".pdf">
+                                    <input type="file" class="form-control form-control-sm" id="thesis_file" name="thesis_file" required accept=".pdf">
+                                    <div class="mt-2" data-ai-check>
+                                        <div class="d-flex align-items-center flex-wrap gap-2">
+                                            <button type="button" class="btn btn-outline-danger btn-sm" data-ai-check-btn data-target="#thesis_file">
+                                                <i class="fas fa-robot me-1"></i>Check AI Content
+                                            </button>
+                                            <span data-ai-check-badge></span>
+                                        </div>
+                                        <div class="mt-1" data-ai-check-result></div>
+                                    </div>
                                 </div>
 
                                 <!-- Thesis Title -->

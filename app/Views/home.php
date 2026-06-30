@@ -108,7 +108,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
-                        <?php if ($session->get('user_level') != 'librarian'): ?>
+                        <?php if ($session->get('user_level') != 'librarian' && $session->get('user_level') != 'admin'): ?>
                             <div class="col-6 mb-3">
                                 <a href="<?= base_url('documents/graduateThesis/'); ?>" class="btn bg-red w-100 h-100 p-3 border no-hover-white">
                                     <i class="fas fa-graduation-cap fa-2x mb-2 text-white"></i>

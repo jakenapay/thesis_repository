@@ -42,13 +42,6 @@ $displayPath = match ($path) {
 <?php } ?>
 
 
-<?php 
-$session = session();
-$userLevel = $session->get("user_level");
-$isAdviser = $session->get("is_adviser");
-
-if (!($userLevel === 'masters' ) || ( $userLevel === 'faculty' && $isAdviser == 1)) {
-?>
 <div class="card">
   <!-- Header and Quote -->
   <div class="bg-red text-light card-header fw-bold">
@@ -58,24 +51,14 @@ if (!($userLevel === 'masters' ) || ( $userLevel === 'faculty' && $isAdviser == 
 
     <!-- Search Bar -->
     <form id="searchForm" class="d-flex mb-3" role="search">
-      <input class="form-control me-2" type="search" id="searchDocsInput" name="searchDocs" placeholder="Authors, Tags, Title..." aria-label="Search" required>
+      <select class="form-select me-2" id="searchDocsType" name="searchType" style="max-width: 110px;">
+        <option value="authors">Authors</option>
+        <option value="tags">Tags</option>
+        <option value="title" selected>Title</option>
+      </select>
+      <input class="form-control me-2" type="search" id="searchDocsInput" name="searchDocs" placeholder="Search..." aria-label="Search" required>
       <button class="btn btn-danger" type="button" id="searchBtn"><i class="fas fa-search"></i></button>
     </form>
-  </div>
-</div>
-<?php } ?>
-
-<div class="card mt-3">
-  <div class="bg-red text-light card-header fw-bold">
-    Submit
-  </div>
-  <div class="card-body">
-    <!-- Category List -->
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><a href="">Submit Research</a></li>
-      <li class="list-group-item"><a href="">Another Submission</a></li>
-      <li class="list-group-item"><a href="">Consent Form</a></li>
-    </ul>
   </div>
 </div>
 
@@ -95,6 +78,7 @@ if (!($userLevel === 'masters' ) || ( $userLevel === 'faculty' && $isAdviser == 
               <th>Type</th>
               <th>Title</th>
               <th>Author</th>
+              <th>Tags</th>
               <th>Adviser</th>
               <th>Department</th>
               <th>Status</th>

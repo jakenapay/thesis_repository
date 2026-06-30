@@ -106,5 +106,6 @@ class Filters extends BaseFilters
      */
     public array $filters = [
         'logged_in' => ['before' => ['documents/*', 'profile/*', 'home/', 'account/']],
+        'csrf'      => ['before' => ['documents/checkAiContent']],
     ];
 }

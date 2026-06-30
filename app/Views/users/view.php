@@ -93,10 +93,10 @@
                                 <!-- Employment Status -->
                                 <div class="col-md-4 mb-4">
                                     <label class="form-label">Employment Status</label>
-                                    <select name="employment_status" class="form-control form-control-sm" required>
+                                    <select name="employment_status" id="employmentStatusSelect" class="form-control form-control-sm" required>
                                         <option value="">Select Employment Status</option>
                                         <?php foreach ($jobTitleData as $jobTitle): ?>
-                                            <option value="<?= esc($jobTitle['id']); ?>"
+                                            <option value="<?= esc($jobTitle['id']); ?>" data-title="<?= esc($jobTitle['title']); ?>"
                                                 <?= ($user['employment_status'] == $jobTitle['id']) ? 'selected' : ''; ?>>
                                                 <?= esc($jobTitle['title']); ?> <?= ($user['employment_status'] == $jobTitle['id']) ? '(Current)' : ''; ?>
                                             </option>
@@ -135,7 +135,7 @@
                                 <!-- User level -->
                                 <div class="col-md-4 mb-4">
                                     <label class="form-label">User Level</label>
-                                    <select name="user_level" class="form-control form-control-sm" required>
+                                    <select name="user_level" id="userLevelSelect" class="form-control form-control-sm" required>
                                         <option value="admin" <?= ($user['user_level'] == 'admin') ? 'selected' : ''; ?>>Admin <?= ($user['user_level'] == 'admin') ? '(Current)' : ''; ?></option>
                                         <option value="masters" <?= ($user['user_level'] == 'masters') ? 'selected' : ''; ?>>Masters <?= ($user['user_level'] == 'masters') ? '(Current)' : ''; ?></option>
                                         <option value="faculty" <?= ($user['user_level'] == 'faculty') ? 'selected' : ''; ?>>Faculty <?= ($user['user_level'] == 'faculty') ? '(Current)' : ''; ?></option>
@@ -204,6 +204,18 @@
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        var employmentStatusSelect = document.getElementById('employmentStatusSelect');
+        var userLevelSelect = document.getElementById('userLevelSelect');
+
+        employmentStatusSelect.addEventListener('change', function() {
+            var selectedOption = employmentStatusSelect.options[employmentStatusSelect.selectedIndex];
+            var title = selectedOption.dataset.title || '';
+
+            if (title.trim().toLowerCase() === 'adviser access') {
+                userLevelSelect.value = 'faculty';
+            }
         });
     });
 </script>

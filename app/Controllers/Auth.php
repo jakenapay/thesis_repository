@@ -52,17 +52,20 @@ class Auth extends BaseController
 
         $userModel = new User();
         $user = $userModel->where('email', $email)->first();
-        if (!$user) {
-            return redirect()->back()->withInput()->with('error', 'Invalid email or password.');
-        }
 
-        if (!password_verify($password, $user['password'])) {
+        if (!$user || !password_verify($password, $user['password'])) {
+            if ($this->registerFailedLoginAttempt($email, $user)) {
+                return redirect()->back()->withInput()->with('error', 'Too many failed login attempts. Your account has been locked for security. Please contact the administrator to reactivate it.');
+            }
+
             return redirect()->back()->withInput()->with('error', 'Invalid email or password.');
         }
 
         if ($user['status'] == 0) {
             return redirect()->back()->withInput()->with('error', 'Your account is inactive. Please contact the administrator or librarian.');
         }
+
+        $this->clearFailedLoginAttempts($email);
 
         $this->session->set([
             'user_id'           => $user['id'],
@@ -86,6 +89,44 @@ class Auth extends BaseController
         
         logAction('LOGIN', 'USER', $user['id'], 'User logged in successfully');
         return redirect()->to('/home')->with('success', 'Login successful!');
+    }
+
+    /**
+     * Tracks a failed login attempt for the given email. If the account
+     * accumulates 10 failures within a 5-minute window, it's locked
+     * (status = 0) so it behaves the same as an admin-deactivated account.
+     *
+     * @return bool true if this attempt caused the account to be locked
+     */
+    private function registerFailedLoginAttempt(string $email, ?array $user): bool
+    {
+        $cache = \Config\Services::cache();
+        $key = 'login_attempts_' . md5(strtolower($email));
+
+        $attempts = (int) ($cache->get($key) ?? 0) + 1;
+        $cache->save($key, $attempts, 300); // 5 minutes
+
+        logAction('LOGIN_FAILED', 'USER', $user['id'] ?? null, 'Failed login attempt #' . $attempts . ' for ' . $email);
+
+        if ($attempts < 10 || !$user) {
+            return false;
+        }
+
+        $userModel = new User();
+        $userModel->update($user['id'], ['status' => 0]);
+        $cache->delete($key);
+
+        logAction('ACCOUNT_LOCKED', 'USER', $user['id'], 'Account locked after 10 failed login attempts within 5 minutes');
+
+        return true;
+    }
+
+    /**
+     * Clears the failed-attempt counter for an email after a successful login.
+     */
+    private function clearFailedLoginAttempts(string $email): void
+    {
+        \Config\Services::cache()->delete('login_attempts_' . md5(strtolower($email)));
     }
 
     public function register()
@@ -134,21 +175,21 @@ class Auth extends BaseController
         ];
 
         if ($request->getPost('password') !== $request->getPost('confirm_password')) {
-            return redirect()->back()->withInput()->with('error', 'Passwords do not match.');
+            return redirect()->to('/register')->withInput()->with('error', 'Passwords do not match.');
         }
 
         if (!$this->validate($validationRules)) {
-            return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
+            return redirect()->to('/register')->withInput()->with('error', $this->validator->listErrors());
         }
 
         $userModel = new User();
         $existingUser = $userModel->where('email', $request->getPost('email'))->first();
         if ($existingUser) {
-            return redirect()->back()->withInput()->with('error', 'Email already exists.');
+            return redirect()->to('/register')->withInput()->with('error', 'Email already exists.');
         }
 
         if (!$request->getPost('agree')) {
-            return redirect()->back()->withInput()->with('error', 'You must agree to the terms and conditions.');
+            return redirect()->to('/register')->withInput()->with('error', 'You must agree to the terms and conditions.');
         }
 
         $data = [
@@ -172,8 +213,9 @@ class Auth extends BaseController
         $newUserId = $userModel->insertID(); // ADD THIS LINE - Get the inserted ID
 
         logAction('USER_REGISTERED', 'USER', $newUserId, 'New user registered: ' . $data['email']);
+        notifyUserRegistered($newUserId);
 
-        return redirect()->to('/login')->with('success', 'Registration successful!');
+        return redirect()->to('/users')->with('success', 'Registration successful!');
     }
     
     public function logout()

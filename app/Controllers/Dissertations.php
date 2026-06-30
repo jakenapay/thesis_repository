@@ -112,7 +112,9 @@ class Dissertations extends BaseController
             'tags'          => $request->getPost('tags'),
             'adviser_id'    => $request->getPost('adviser_id')
         ]);
-        logAction('CREATE_DISSERTATION', 'DOCUMENT', $documentModel->getInsertID(), 'User created a new dissertation: ' . $request->getPost('thesis_title'));
+        $newDocumentId = $documentModel->getInsertID();
+        logAction('CREATE_DISSERTATION', 'DOCUMENT', $newDocumentId, 'User created a new dissertation: ' . $request->getPost('thesis_title'));
+        notifyThesisSubmitted($newDocumentId);
         return redirect()->to('documents/dissertations')->with('success', 'Thesis uploaded successfully.');
     }
 
@@ -249,6 +251,13 @@ class Dissertations extends BaseController
 
                 $db->transCommit();
                 logAction('UPDATE_DOCUMENT', 'DOCUMENT', $documentId, 'Document updated successfully');
+
+                if (session()->get('user_level') === 'librarian') {
+                    notifyLibrarianDecision($documentId, $status, $remarks);
+                } else {
+                    notifyAdviserDecision($documentId, $status, $remarks);
+                }
+
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();
@@ -365,6 +374,11 @@ class Dissertations extends BaseController
 
                 $db->transCommit();
                 logAction('EDIT_DISSERTATION', 'DOCUMENT', $documentId, 'Dissertation edited successfully');
+
+                if ($document['status'] === 'revise') {
+                    notifyStudentResubmission($documentId, $remarks);
+                }
+
                 return redirect()->back()->with('success', 'Document updated successfully');
             } catch (\Exception $e) {
                 $db->transRollback();

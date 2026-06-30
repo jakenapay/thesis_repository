@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Thesis Repository</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta(); ?>
   <!-- Bootstrap CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('/assets/css/style.css'); ?>">
@@ -12,7 +13,7 @@
   <!-- Font Awesome CDN -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
-  <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -53,10 +54,12 @@
               <a class="nav-link nav-links <?= strpos($path, 'users') !== false ? 'active' : '' ?>" href="<?= base_url('users') ?>">Users</a>
             </li>
           <?php endif; ?>
-          <?php if ( $session->get('user_level') == 'admin' || $session->get('user_level') == 'librarian' ) : ?>
+          <?php if ( $session->get('user_level') == 'admin') : ?>
             <li class="nav-item">
               <a class="nav-link nav-links <?= strpos($path, 'logs') !== false ? 'active' : '' ?>" href="<?= base_url('logs') ?>">Logs</a>
             </li>
+          <?php endif; ?>
+          <?php if ( $session->get('user_level') == 'admin' || $session->get('user_level') == 'librarian' ) : ?>
             <li class="nav-item">
               <a class="nav-link nav-links <?= strpos($path, 'analytics') !== false ? 'active' : '' ?>" href="<?= base_url('analytics') ?>">Analytics</a>
             </li>
@@ -65,3 +68,5 @@
       </div>
     </div>
   </nav>
+
+  <div class="flex-grow-1">

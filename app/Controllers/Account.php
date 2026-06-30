@@ -28,6 +28,9 @@ class Account extends BaseController
         $collegeModel = new CollegeModel();
         $collegeData = $collegeModel->findAll();
 
+        $AcademicStatusModel = new AcademicStatus();
+        $AcademicStatusData = $AcademicStatusModel->findAll();
+
         // Get session data
         $session = session();
 

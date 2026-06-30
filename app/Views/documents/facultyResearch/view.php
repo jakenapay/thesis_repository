@@ -131,8 +131,19 @@
                                 <!-- Thesis File -->
                                 <div class="col-md-6 mb-4">
                                     <label class="form-label">File <?= ($session->get('user_id') == $facultyResearch[0]['user_id']) ? '<small class="text-muted text-red">(optional)</small>' : ''; ?></label>
-                                    <input type="file" class="form-control form-control-sm" name="thesis_file" accept=".pdf"
+                                    <input type="file" class="form-control form-control-sm" id="thesis_file" name="thesis_file" accept=".pdf"
                                         <?= ($session->get('user_id') == $facultyResearch[0]['user_id'] && $facultyResearch[0]['status'] == 'revise' && $session->get('user_id') != $facultyResearch[0]['adviser_id']) ? '' : 'disabled'; ?>>
+                                    <?php if ($session->get('user_id') == $facultyResearch[0]['user_id'] && $facultyResearch[0]['status'] == 'revise' && $session->get('user_id') != $facultyResearch[0]['adviser_id']): ?>
+                                        <div class="mt-2" data-ai-check>
+                                            <div class="d-flex align-items-center flex-wrap gap-2">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" data-ai-check-btn data-target="#thesis_file">
+                                                    <i class="fas fa-robot me-1"></i>Check AI Content
+                                                </button>
+                                                <span data-ai-check-badge></span>
+                                            </div>
+                                            <div class="mt-1" data-ai-check-result></div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
 
                                 <!-- Accept Terms

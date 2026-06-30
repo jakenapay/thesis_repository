@@ -78,6 +78,7 @@ if (!function_exists('getActionBadgeClass')) {
             'LOGIN' => 'bg-success',
             'LOGOUT' => 'bg-info',
             'LOGIN_FAILED' => 'bg-danger',
+            'ACCOUNT_LOCKED' => 'bg-danger',
             'USER_REGISTERED' => 'bg-primary',
             'UPLOAD_DOCUMENT' => 'bg-primary',
             'CREATE_GRADUATE_THESIS' => 'bg-primary',

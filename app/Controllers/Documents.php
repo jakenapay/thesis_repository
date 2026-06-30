@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\Document;
+use App\Libraries\AiContentChecker;
 
 class Documents extends BaseController
 {
@@ -194,7 +195,8 @@ class Documents extends BaseController
     public function search()
     {
         $searchQuery = $this->request->getPost('searchDocs');
-        
+        $searchType = $this->request->getPost('searchType');
+
         if (empty($searchQuery)) {
             return $this->response->setJSON([
                 'success' => false,
@@ -202,22 +204,96 @@ class Documents extends BaseController
             ]);
         }
 
+        $searchableColumns = [
+            'authors' => 'documents.authors',
+            'tags'    => 'documents.tags',
+            'title'   => 'documents.title',
+        ];
+        $searchColumn = $searchableColumns[$searchType] ?? 'documents.title';
+
         $documentModel = new Document();
-        
-        $searchResults = $documentModel->select('documents.id, documents.title, documents.authors, documents.status, documents.type, documents.adviser_id, documents.department_id, users.first_name, users.last_name, users.middle_name, departments.name as department_name, CONCAT(users.first_name, " ", users.middle_name, " ", users.last_name) as adviser_name')
+
+        $searchResults = $documentModel->select('documents.id, documents.title, documents.authors, documents.tags, documents.status, documents.type, documents.adviser_id, documents.department_id, users.first_name, users.last_name, users.middle_name, departments.name as department_name, CONCAT(users.first_name, " ", users.middle_name, " ", users.last_name) as adviser_name')
                                     ->join('users', 'users.id = documents.adviser_id', 'left')
                                     ->join('departments', 'departments.id = documents.department_id', 'left')
-                                    ->groupStart()
-                                    ->like('documents.title', $searchQuery)
-                                    ->orLike('documents.authors', $searchQuery)
-                                    ->orLike('documents.tags', $searchQuery)
-                                    ->groupEnd()
+                                    ->like($searchColumn, $searchQuery)
                                     ->findAll();
 
         return $this->response->setJSON([
             'success' => true,
             'data' => $searchResults
         ]);
+    }
+
+    public function checkAiContent()
+    {
+        // The csrf filter (scoped to this route) regenerates the token on every
+        // call, so the client needs the new hash back to use on its next request.
+        $csrfHash = csrf_hash();
+
+        $userId = session()->get('user_id');
+
+        if (!$userId) {
+            return $this->response->setStatusCode(401)->setJSON([
+                'success'   => false,
+                'message'   => 'You must be logged in to use this check.',
+                'csrf_hash' => $csrfHash,
+            ]);
+        }
+
+        $throttler = \Config\Services::throttler();
+
+        // 5 checks per 10 minutes per user — each call costs real OpenRouter usage.
+        if (!$throttler->check('ai_check_' . $userId, 5, 600)) {
+            return $this->response->setStatusCode(429)
+                ->setHeader('Retry-After', (string) $throttler->getTokenTime())
+                ->setJSON([
+                    'success'   => false,
+                    'message'   => 'You\'re checking documents too frequently. Please wait a bit and try again.',
+                    'csrf_hash' => $csrfHash,
+                ]);
+        }
+
+        $file = $this->request->getFile('thesis_file');
+
+        if (!$file || !$file->isValid()) {
+            return $this->response->setJSON([
+                'success'   => false,
+                'message'   => 'Please choose a PDF file first.',
+                'csrf_hash' => $csrfHash,
+            ]);
+        }
+
+        if ($file->getMimeType() !== 'application/pdf') {
+            return $this->response->setJSON([
+                'success'   => false,
+                'message'   => 'Only PDF files can be checked.',
+                'csrf_hash' => $csrfHash,
+            ]);
+        }
+
+        if ($file->getSizeByUnit('mb') > 10) {
+            return $this->response->setJSON([
+                'success'   => false,
+                'message'   => 'File is too large to check (max 10MB).',
+                'csrf_hash' => $csrfHash,
+            ]);
+        }
+
+        try {
+            $checker = new AiContentChecker();
+            $result = $checker->checkFile($file->getTempName());
+
+            return $this->response->setJSON(['success' => true, 'csrf_hash' => $csrfHash] + $result);
+        } catch (\Throwable $e) {
+            log_message('error', 'AI Content Check Error: ' . $e->getMessage());
+
+            return $this->response->setJSON([
+                'success'   => false,
+                'csrf_hash' => $csrfHash,
+                'message' => $e->getMessage() ?: 'AI check failed. Please try again.',
+            ]);
+        }
     }
 
 }

@@ -32,7 +32,7 @@ abstract class BaseController extends Controller
      *
      * @var array
      */
-    protected $helpers = ['Logger_helper'];
+    protected $helpers = ['Logger_helper', 'Mailer_helper'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.

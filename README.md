@@ -50,7 +50,7 @@ This system serves as a comprehensive platform for:
    - Open phpMyAdmin (`http://localhost/phpmyadmin`)
    - Create a new database:
      - Click "New" in the left sidebar
-     - Enter database name: `lpu_thesis_repository`
+     - Enter database name: `thesis_repository_v2`
      - Click "Create"
    - Import the SQL file:
      - Select your newly created database
@@ -124,6 +124,7 @@ thesis_repository/
 - **Search & Browse:** Easy discovery of research works
 - **Analytics:** Track document views and downloads
 - **Department-based Organization:** Documents organized by academic departments
+- **Email Notifications & AI Content Check:** see [FEATURES.md](FEATURES.md) for setup and details
 
 ---
 
